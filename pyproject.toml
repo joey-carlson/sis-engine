@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spar-tool-engine"
+version = "0.1.0"
+description = "SPAR procedural engine (v0.1) - encounter complications core"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["spar_engine*"]
+exclude = ["data*", "streamlit_harness*", "tests*", "docs*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
