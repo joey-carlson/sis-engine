@@ -90,7 +90,7 @@ Enable JSON-based scenario definition, import, execution, and result export in t
 ### Design Notes
 - **schema_version**: Added per designer feedback to avoid future pain when extending the format. Currently "1.0", future scenarios can validate compatibility.
 - **output_basename**: Added per designer feedback to provide consistent basename when generating multiple output files (JSON + markdown summaries). If omitted, system auto-generates from scenario name. Automatically sanitized to remove path separators.
-- **base_seed**: Supports both integer values (for reproducible testing) and string "random" (for time-based randomness). When set to "random", generates a unique seed based on current timestamp. Each run still gets base_seed + run_index offset for determinism within the scenario execution.
+- **base_seed**: Supports both integer values (for reproducible testing) and string "random" (for pseudorandom generation). When set to "random", uses Python's Mersenne Twister algorithm (via `random.randint()`) to generate high-quality pseudorandom integers across the full range (0-999,999,999). Each run still gets base_seed + run_index offset for determinism within the scenario execution.
 
 ## UI Components
 
