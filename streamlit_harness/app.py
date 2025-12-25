@@ -878,42 +878,43 @@ def main() -> None:
                 scenario_changed = st.session_state.last_loaded_scenario != scenario_name
                 
                 if scenario_changed:
+                    # Reset manual edit flag when loading a new scenario
+                    st.session_state.output_path_manually_edited = False
+                    
                     # Update the last loaded scenario tracker
                     st.session_state.last_loaded_scenario = scenario_name
                     
-                    # Only regenerate filename if user hasn't manually edited the path
-                    if not st.session_state.output_path_manually_edited:
-                        # New scenario selected - generate fresh filename with timestamp
-                        from datetime import datetime
-                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                        
-                        # Use output_basename if provided, otherwise sanitize scenario name
-                        # ALWAYS sanitize to remove path separators
-                        if "output_basename" in loaded_scenario and loaded_scenario["output_basename"]:
-                            basename = sanitize_basename(loaded_scenario["output_basename"])
-                        else:
-                            basename = sanitize_basename(scenario_name)
-                        
-                        # Truncate basename if total filename would be too long (>255 chars)
-                        # Keep timestamp intact, truncate basename if needed
-                        max_filename_length = 255
-                        path_prefix = "results/"
-                        extension = ".json"
-                        available_length = max_filename_length - len(path_prefix) - len(timestamp) - 1 - len(extension)  # -1 for underscore
-                        
-                        if len(basename) > available_length:
-                            basename = basename[:available_length]
-                        
-                        new_path = f"scenarios/results/{basename}_{timestamp}{extension}"
-                        
-                        # Update session state BEFORE widget is created (avoids warning)
-                        st.session_state.output_path_input = new_path
-                        st.session_state.scenario_output_path = new_path
-                        
-                        # Persist to config file
-                        config = load_config()
-                        config["scenario_output_path"] = new_path
-                        save_config(config)
+                    # New scenario selected - generate fresh filename with timestamp
+                    from datetime import datetime
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    
+                    # Use output_basename if provided, otherwise sanitize scenario name
+                    # ALWAYS sanitize to remove path separators
+                    if "output_basename" in loaded_scenario and loaded_scenario["output_basename"]:
+                        basename = sanitize_basename(loaded_scenario["output_basename"])
+                    else:
+                        basename = sanitize_basename(scenario_name)
+                    
+                    # Truncate basename if total filename would be too long (>255 chars)
+                    # Keep timestamp intact, truncate basename if needed
+                    max_filename_length = 255
+                    path_prefix = "results/"
+                    extension = ".json"
+                    available_length = max_filename_length - len(path_prefix) - len(timestamp) - 1 - len(extension)  # -1 for underscore
+                    
+                    if len(basename) > available_length:
+                        basename = basename[:available_length]
+                    
+                    new_path = f"scenarios/results/{basename}_{timestamp}{extension}"
+                    
+                    # Update session state BEFORE widget is created (avoids warning)
+                    st.session_state.output_path_input = new_path
+                    st.session_state.scenario_output_path = new_path
+                    
+                    # Persist to config file
+                    config = load_config()
+                    config["scenario_output_path"] = new_path
+                    save_config(config)
             
             st.caption(f"📁 Working directory: {Path.cwd()}")
             
