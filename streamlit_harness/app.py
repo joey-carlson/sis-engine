@@ -11,6 +11,8 @@ from collections import Counter
 import json
 from pathlib import Path
 from typing import Any, Dict, List
+import random
+import time
 
 import streamlit as st
 
@@ -98,6 +100,33 @@ def update_persistent_path(key: str, value: str) -> None:
 def sanitize_basename(basename: str) -> str:
     """Sanitize basename to remove path separators and other problematic characters."""
     return basename.lower().replace(' ', '_').replace('/', '_').replace('\\', '_')
+
+
+def generate_random_seed() -> int:
+    """Generate a random seed value for reproducible randomness."""
+    # Use time-based seed for true randomness
+    return int(time.time() * 1000) % (10**9)
+
+
+def resolve_seed_value(seed_input: Any) -> int:
+    """Resolve seed input to actual integer seed.
+    
+    Supports:
+    - Integer values (passed through)
+    - String "random" (generates time-based seed)
+    - None (generates time-based seed)
+    """
+    if isinstance(seed_input, int):
+        return seed_input
+    if isinstance(seed_input, str) and seed_input.lower() == "random":
+        return generate_random_seed()
+    if seed_input is None:
+        return generate_random_seed()
+    # Try to convert to int
+    try:
+        return int(seed_input)
+    except (ValueError, TypeError):
+        return generate_random_seed()
 
 
 def load_entries(pack_path: str):
@@ -330,10 +359,13 @@ def run_scenario_from_json(
     engine_state_class,
 ) -> Dict[str, Any]:
     """Execute a scenario definition and return results."""
+    # Resolve base_seed (supports "random" or integer)
+    resolved_base_seed = resolve_seed_value(scenario["base_seed"])
+    
     report: Dict[str, Any] = {
         "suite": scenario.get("name", "Custom scenario"),
         "batch_n": int(scenario["batch_size"]),
-        "base_seed": int(scenario["base_seed"]),
+        "base_seed": resolved_base_seed,
         "presets": scenario["presets"],
         "phases": scenario["phases"],
         "rarity_modes": scenario["rarity_modes"],
@@ -371,7 +403,7 @@ def run_scenario_from_json(
                     factions_present=[],
                     rarity_mode=rarity_mode,  # type: ignore
                 )
-                seed = int(scenario["base_seed"]) + run_idx
+                seed = resolved_base_seed + run_idx
                 result = run_batch(
                     scene=scene,
                     selection=selection,
@@ -704,7 +736,22 @@ def main() -> None:
             rarity_modes = ["calm", "normal", "spiky"]
 
         batchN = st.number_input("Batch size per run", min_value=10, max_value=500, value=int(hs.batch_n), step=10)
-        base_seed = st.number_input("Base seed", min_value=0, max_value=10**9, value=1000, step=1)
+        
+        # Base seed with random option
+        col_seed1, col_seed2 = st.columns([3, 1])
+        with col_seed1:
+            base_seed_input = st.text_input(
+                "Base seed",
+                value="1000",
+                help='Enter a number (0-999999999) or "random" for time-based seed'
+            )
+        with col_seed2:
+            if st.button("🎲", help="Generate random seed"):
+                base_seed_input = "random"
+                st.rerun()
+        
+        # Resolve seed value
+        base_seed = resolve_seed_value(base_seed_input)
 
         include_tags_suite = st.text_input("Include tags (CSV)", value=include_tags_text)
         exclude_tags_suite = st.text_input("Exclude tags (CSV)", value=exclude_tags_text)

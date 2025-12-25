@@ -12,7 +12,7 @@
   "rarity_modes": ["normal"],
   
   "batch_size": 200,
-  "base_seed": 1000,
+  "base_seed": "random",
   
   "include_tags": "",
   "exclude_tags": "",
@@ -31,7 +31,7 @@
     "phases": "Array of scene phases to test. Options: approach, engage, aftermath",
     "rarity_modes": "Array of rarity modes to test. Options: calm, normal, spiky",
     "batch_size": "Number of events to generate per preset/phase/mode combination",
-    "base_seed": "Base RNG seed. Each run gets base_seed + run_index for reproducibility",
+    "base_seed": "Base RNG seed. Can be an integer (0-999999999) or 'random' for time-based seed. Each run gets base_seed + run_index for reproducibility",
     "include_tags": "CSV of tags to require (empty = no filter). Useful for focused testing",
     "exclude_tags": "CSV of tags to exclude (empty = no filter). Useful for isolation testing",
     "tick_between": "Whether to tick state between events (true recommended for long batches)",
@@ -46,7 +46,17 @@
       "phases": ["engage"],
       "rarity_modes": ["normal"],
       "batch_size": 50,
-      "base_seed": 42
+      "base_seed": 42,
+      "note": "Uses fixed seed for reproducible testing"
+    },
+    "random_seed_scenario": {
+      "name": "Random Seed Test",
+      "presets": ["dungeon"],
+      "phases": ["engage"],
+      "rarity_modes": ["normal"],
+      "batch_size": 50,
+      "base_seed": "random",
+      "note": "Uses time-based random seed for non-reproducible variation"
     },
     "comprehensive_validation": {
       "name": "Full Phase Coverage Test",

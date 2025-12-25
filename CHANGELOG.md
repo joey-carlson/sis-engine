@@ -2,10 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+- **Random seed support for scenarios** - Added ability to use random (time-based) seeds in both UI and JSON scenarios. Base seed field now accepts either integer values (for reproducible testing) or string "random" (for time-based randomness). UI includes dice button (🎲) for easy random seed generation. JSON scenarios can specify `"base_seed": "random"` in template. Each run within a scenario still gets deterministic offset (base_seed + run_index) for reproducibility of individual runs. Enables both controlled reproducibility and quick non-deterministic variation testing.
+
 ### Fixed
 - **Scenario filename generation improvements** - Fixed two issues with automatic filename generation for JSON scenario exports: (1) Added `sanitize_basename()` function to properly clean path separators (/, \) from scenario names and output_basename fields, preventing unwanted subdirectory creation. (2) Fixed Streamlit widget state conflict warning by reordering session state updates to occur before widget creation. Filenames now properly sanitize characters like "/" into "_" (e.g., "Scenario A/B" becomes "scenario_a_b_TIMESTAMP.json") and update cleanly when switching between scenarios without warnings.
-
-### Added
 - **Cutoff tuning v2: Morphology-sensitive cap compression** - Enhanced Spiky mode with graduated cap reductions based on morphology score. High-morphology environments (tight spaces, poor visibility, low connectivity) now compress severity caps more aggressively, increasing cutoff frequency to target ranges: 5-10% for dungeon/ruins, 2-5% for wilderness. Implementation uses two-threshold system (morph >= 0.9: -1 cap, morph >= 1.4: -2 cap) to treat structural fragility as a cutoff multiplier while preserving Normal/Calm behavior.
 - **Adaptive weighting validation** - Validated adaptive weighting system effectiveness across all presets/modes. Enhanced penalty curve (v0.1 -> v0.2) with tiered recency penalties achieves target variety: dungeon/ruins max 14.5% (exceeds 15% stretch goal), wilderness 27.5% (within structural content limit). Comprehensive test suite added with severity band analysis tooling to diagnose content gaps vs implementation issues.
 - **Aftermath phase content expansion** - Added 10 minimal aftermath entries to address phase coverage gaps. Wilderness aftermath expanded from 3 to 6 events with non-attrition diversity (information, visibility, terrain tags). Sea aftermath added 2 dedicated entries. City, ruins, dungeon received 1-2 aftermath entries each. All entries use low severity bands (1-6) appropriate for aftermath consequences. Enables Presets × (Approach/Engage/Aftermath) × Normal suite completion at batch size 200.

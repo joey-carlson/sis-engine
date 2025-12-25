@@ -75,11 +75,11 @@ Enable JSON-based scenario definition, import, execution, and result export in t
 - `phases` (array of strings)
 - `rarity_modes` (array of strings)
 - `batch_size` (integer)
-- `base_seed` (integer)
+- `base_seed` (integer or string "random")
 
 ### Optional Fields
 - `schema_version` (string, default: "1.0") - Future-proofs format evolution
-- `output_basename` (string, optional) - Clean basename for output files (avoids messy path handling when saving multiple formats)
+- `output_basename` (string, optional) - Clean basename for output files. Characters like `/`, `\`, and spaces are automatically sanitized to `_` to prevent unwanted directory creation
 - `description` (string, default: "")
 - `include_tags` (string CSV, default: "")
 - `exclude_tags` (string CSV, default: "")
@@ -89,7 +89,8 @@ Enable JSON-based scenario definition, import, execution, and result export in t
 
 ### Design Notes
 - **schema_version**: Added per designer feedback to avoid future pain when extending the format. Currently "1.0", future scenarios can validate compatibility.
-- **output_basename**: Added per designer feedback to provide consistent basename when generating multiple output files (JSON + markdown summaries). If omitted, system auto-generates from scenario name.
+- **output_basename**: Added per designer feedback to provide consistent basename when generating multiple output files (JSON + markdown summaries). If omitted, system auto-generates from scenario name. Automatically sanitized to remove path separators.
+- **base_seed**: Supports both integer values (for reproducible testing) and string "random" (for time-based randomness). When set to "random", generates a unique seed based on current timestamp. Each run still gets base_seed + run_index offset for determinism within the scenario execution.
 
 ## UI Components
 
@@ -98,12 +99,14 @@ Enable JSON-based scenario definition, import, execution, and result export in t
 **Import Section** (new):
 - File uploader: "Upload scenario JSON"
 - Dropdown: "Or select from library"
-- Display: Loaded scenario details
+- Display: Loaded scenario details (shows resolved seed value if "random")
 - Validation: Show errors for invalid JSON
 
 **Configuration Section** (existing):
 - Keep current suite dropdown for hardcoded suites
 - Keep existing manual controls
+- Base seed input: Text field accepting integers or "random"
+- Random seed button (🎲): Quick way to generate random seed
 
 **Export Section** (unified):
 - Working directory display: Shows Path.cwd() for path context
