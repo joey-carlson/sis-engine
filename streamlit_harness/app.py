@@ -549,7 +549,9 @@ def main() -> None:
             
             # Library dropdown
             builtin_scenarios = get_builtin_scenarios()
-            scenario_names = ["-- Select from library --"] + [s["name"] for s in builtin_scenarios]
+            # Filter out scenarios without names and create dropdown list
+            valid_scenarios = [s for s in builtin_scenarios if "name" in s]
+            scenario_names = ["-- Select from library --"] + [s["name"] for s in valid_scenarios]
             selected_scenario_name = st.selectbox("Or select from library", scenario_names)
             
             # Load scenario
@@ -562,7 +564,7 @@ def main() -> None:
                 except Exception as e:
                     st.error(f"Failed to load scenario: {e}")
             elif selected_scenario_name != "-- Select from library --":
-                matching = [s for s in builtin_scenarios if s["name"] == selected_scenario_name]
+                matching = [s for s in valid_scenarios if s["name"] == selected_scenario_name]
                 if matching:
                     loaded_scenario = matching[0]
                     st.success(f"Loaded: {loaded_scenario['name']}")
