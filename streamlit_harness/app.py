@@ -99,7 +99,22 @@ def update_persistent_path(key: str, value: str) -> None:
 
 def sanitize_basename(basename: str) -> str:
     """Sanitize basename to remove path separators and other problematic characters."""
-    return basename.lower().replace(' ', '_').replace('/', '_').replace('\\', '_')
+    # Replace all potentially problematic characters
+    import re
+    # Remove or replace: spaces, slashes, backslashes, parentheses, commas, periods, etc.
+    sanitized = basename.lower()
+    # Replace spaces and path separators with underscores
+    sanitized = sanitized.replace(' ', '_').replace('/', '_').replace('\\', '_')
+    # Remove parentheses, commas, periods, and other special characters
+    sanitized = sanitized.replace('(', '').replace(')', '').replace(',', '')
+    sanitized = sanitized.replace('.', '').replace('×', 'x').replace(':', '')
+    # Remove any remaining characters that aren't alphanumeric or underscore
+    sanitized = re.sub(r'[^a-z0-9_]', '', sanitized)
+    # Collapse multiple underscores
+    sanitized = re.sub(r'_+', '_', sanitized)
+    # Remove leading/trailing underscores
+    sanitized = sanitized.strip('_')
+    return sanitized
 
 
 def generate_random_seed() -> int:
@@ -631,8 +646,15 @@ def main() -> None:
                 if "last_loaded_scenario" not in st.session_state:
                     st.session_state.last_loaded_scenario = None
                 
-                # Only regenerate filename if scenario has changed
-                if st.session_state.last_loaded_scenario != scenario_name:
+                # Only regenerate filename if scenario has changed AND user hasn't manually edited
+                # Check if user has manually edited the path by comparing to stored value
+                user_edited_path = (
+                    "scenario_output_path" in st.session_state and 
+                    "output_path_input" in st.session_state and
+                    st.session_state.scenario_output_path != st.session_state.output_path_input
+                )
+                
+                if st.session_state.last_loaded_scenario != scenario_name and not user_edited_path:
                     # New scenario selected - generate fresh filename with timestamp
                     from datetime import datetime
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -656,15 +678,16 @@ def main() -> None:
                     
                     new_path = f"{path_prefix}{basename}_{timestamp}{extension}"
                     
-                    # Update session state BEFORE widget is created (avoids warning)
-                    st.session_state.output_path_input = new_path
-                    st.session_state.scenario_output_path = new_path
-                    st.session_state.last_loaded_scenario = scenario_name
-                    
-                    # Persist to config file
-                    config = load_config()
-                    config["scenario_output_path"] = new_path
-                    save_config(config)
+                    # Only update if user hasn't manually modified the path
+                    if not user_edited_path:
+                        st.session_state.output_path_input = new_path
+                        st.session_state.scenario_output_path = new_path
+                        st.session_state.last_loaded_scenario = scenario_name
+                        
+                        # Persist to config file
+                        config = load_config()
+                        config["scenario_output_path"] = new_path
+                        save_config(config)
             
             st.caption(f"📁 Working directory: {Path.cwd()}")
             output_path = st.text_input(
