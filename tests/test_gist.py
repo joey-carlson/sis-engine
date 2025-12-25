@@ -7,7 +7,7 @@ from spar_engine.content import load_pack
 from spar_engine.severity import compute_severity_cap
 
 def test_gist_generate_events_deterministic_and_safe():
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     rng = TraceRNG(seed=123)
 
     scene = SceneContext(

@@ -1,7 +1,7 @@
 from spar_engine.content import load_pack, filter_entries
 
 def test_exclude_tags_filters_out_entries():
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     out = filter_entries(
         entries=entries,
         environment=["dungeon"],
@@ -14,7 +14,7 @@ def test_exclude_tags_filters_out_entries():
     assert all("mystic" not in e.tags for e in out)
 
 def test_recent_event_id_blocks_repeat():
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     some = entries[0].event_id
     out = filter_entries(
         entries=entries,

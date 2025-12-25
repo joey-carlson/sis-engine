@@ -18,7 +18,7 @@ from spar_engine.rng import TraceRNG
 # Load content once and cache it
 @st.cache_resource
 def load_content():
-    return load_pack("data/core_complications_v0_1.json")
+    return load_pack("data/core_complications.json")
 
 
 def main():

@@ -1,3 +1,6 @@
+*Last updated: 2025-12-25*
+
+
 # SPAR Engine Parking Lot
 
 This document contains ideas, features, and improvements that have been considered for future versions of the SPAR Engine. Items here are **not yet prioritized or scheduled** but serve as a record of potential enhancements.
@@ -114,4 +117,106 @@ Items move from parking lot to roadmap when:
 
 ---
 
-*Last updated: 2025-12-22*
+Content Ingestion & Community Loot Systems (Deferred)
+
+Community Loot Table as Content Pack Precedent
+
+Context:
+Reviewed an older community project (“The One Loot Table to Rule Them All”) that implements a large, shared loot table using a spreadsheet-backed dataset with filter views and lightweight rarity logic. This serves as a useful reference model for how large, community-driven content collections evolve over time.
+
+Key Takeaway:
+The spreadsheet functions as a content pack + tag system + filter UI, with clear parallels to the SPAR Engine’s content-entry model.
+
+⸻
+
+Future Feature: Spreadsheet / External Content Importer
+
+Idea:
+Design a future importer that converts spreadsheet-based datasets into SPAR-compatible content packs.
+
+Potential workflow:
+	1.	Ingest rows from a canonical “data sheet” (ignore UI/filter sheets).
+	2.	Map columns to engine schema:
+	•	Item name → title
+	•	Description → description / fiction prompt
+	•	Category / Properties / Requirements → normalized tag families
+	•	Rarity → severity band or adapter hint
+	•	Value → adapter-facing numeric (gp for D&D, Wealth Level for SPAR)
+	3.	Emit validated JSON content packs.
+
+Notes:
+	•	Importer should explicitly ignore spreadsheet UI logic and formulas.
+	•	Spreadsheet-based projects often accumulate entropy; importer must enforce schema hygiene.
+
+⸻
+
+Tag Hygiene & Schema Discipline (Lessons Learned)
+
+Observed issues in community loot tables:
+	•	Overloaded or inconsistent categories
+	•	“Misc” becoming a junk drawer
+	•	Near-duplicate tags drifting over time
+	•	Dominant outcomes when filters narrow the pool
+
+Parking-lot guidance for SPAR:
+	•	Tags must be normalized (lowercase, underscore, no synonyms).
+	•	Use tag families for properties and requirements (e.g., property:light, requires:attunement).
+	•	Every content entry should include:
+	•	At least one category-style tag
+	•	A rarity/severity signal
+	•	Optional source/author metadata
+
+This prevents long-term degradation seen in large spreadsheet-driven projects.
+
+⸻
+
+Adapter-Specific Interpretation of Loot Data
+
+Design intent:
+The same loot content pack should support multiple interpretations:
+	•	D&D Adapter
+	•	Rarity tiers
+	•	GP value
+	•	Attunement / usage requirements
+	•	SPAR Adapter
+	•	Wealth Level bands
+	•	Access gates (faction, region, certifications)
+	•	Narrative or logistical constraints instead of raw prices
+
+This reinforces the engine/adaptor separation and avoids duplicating content.
+
+⸻
+
+Community Contribution Model (Long-Term)
+
+Inspiration:
+The “Form Submissions” sheet in the community project is a strong pattern.
+
+Future ideas:
+	•	Allow structured community submissions of content entries.
+	•	Validate against schema + tag rules before inclusion.
+	•	Track author/source metadata for attribution.
+	•	Treat UI/filter views as disposable; data schema is canonical.
+
+⸻
+
+Status
+
+Deferred.
+This work is explicitly not part of current tuning or engine stability milestones.
+
+Prerequisites before revisiting:
+	•	Cutoff tuning finalized
+	•	Adaptive weighting validated
+	•	Content coverage stabilized for core environments
+
+This item should be revisited when:
+	•	Content scale becomes a bottleneck
+	•	Community contribution is a goal
+	•	Tooling focus shifts from engine correctness to ecosystem growth
+
+⸻
+
+If you want, next time we touch this area I can also:
+	•	extract a formal “Importer Target Schema” from this parking-lot entry, or
+	•	draft a Loot Pack v0.1 spec (D&D-first or SPAR-first) without implementing it yet.

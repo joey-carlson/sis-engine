@@ -125,7 +125,7 @@ def generate_event(
     band_compatible = [e for e in candidates if e.severity_band[0] <= severity <= e.severity_band[1]]
     pool = band_compatible if band_compatible else candidates
 
-    # Adaptive weighting (v0.1): reduce "sticky" outcomes without hard-banning them.
+    # Adaptive weighting (v0.2): reduce "sticky" outcomes without hard-banning them.
     recent = list(state.recent_event_ids or [])
     recency_index = {eid: i for i, eid in enumerate(recent)}  # 0 = most recent
     weights = []
@@ -133,7 +133,20 @@ def generate_event(
         w = float(e.weight)
         if e.event_id in recency_index:
             i = recency_index[e.event_id]
-            penalty = 1.0 + (4.0 / (1.0 + i))  # 0 -> /5, 1 -> /3, 2 -> /2.33 ...
+            # Tiered penalty based on recency position
+            # Stronger penalties for very recent, gentler for older
+            if i == 0:
+                penalty = 10.0  # just occurred
+            elif i == 1:
+                penalty = 6.0
+            elif i == 2:
+                penalty = 4.0
+            elif i <= 4:
+                penalty = 3.0
+            elif i <= 6:
+                penalty = 2.0
+            else:
+                penalty = 1.5  # old but still in window
             w = w / penalty
         weights.append(w)
 

@@ -9,7 +9,7 @@ from spar_engine.models import Constraints, ScenePhase
 
 def test_content_availability_by_preset_phase():
     """Test that each preset/phase combination has sufficient content."""
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     
     presets = {
         "dungeon": {"env": ["dungeon"], "confinement": 0.8, "connectivity": 0.3, "visibility": 0.6},
@@ -67,7 +67,7 @@ def test_content_availability_by_preset_phase():
 
 def test_aftermath_content_by_environment():
     """Specifically check aftermath phase content for each environment."""
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     
     print("\nAftermath Phase Content by Environment:")
     print("=" * 70)

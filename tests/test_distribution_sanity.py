@@ -6,7 +6,7 @@ from spar_engine.rng import TraceRNG
 from spar_engine.content import load_pack
 
 def test_distribution_sanity_normal_mode_majority_low():
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     rng = TraceRNG(seed=999)
 
     scene = SceneContext(

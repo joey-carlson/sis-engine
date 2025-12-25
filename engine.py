@@ -76,7 +76,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Comma-separated tags; entry must match at least one.",
     )
     p.add_argument("--exclude-tags", default="", help="Comma-separated tags to exclude.")
-    p.add_argument("--pack", default="data/core_complications_v0_1.json", help="Path to a JSON content pack.")
+    p.add_argument("--pack", default="data/core_complications.json", help="Path to a JSON content pack.")
     p.add_argument("--event-id", default="", help="Force a specific event_id (must exist in pack).")
     p.add_argument("--event", default="", help="Alias for --event-id.")
 

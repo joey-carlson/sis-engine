@@ -683,10 +683,17 @@ def main() -> None:
         run_suite = st.button("Run suite", type="primary")
         
         # Save current settings as template
-        st.caption("**Save Current Settings as Template**")
+        st.subheader("Save Current Settings as Template")
         
-        # Generate default path from current suite name
+        # Generate default path with timestamp for current suite
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         default_basename = suite.lower().replace(' ', '_').replace('×', 'x').replace('(', '').replace(')', '')
+        default_template_path = f"scenarios/{default_basename}_{timestamp}.json"
+        
+        # Update persistent config with new default
+        if st.session_state.template_save_path != default_template_path:
+            update_persistent_path("template_save_path", default_template_path)
         
         st.caption(f"📁 Working directory: {Path.cwd()}")
         template_path = st.text_input(
@@ -824,15 +831,18 @@ def main() -> None:
                 )
             st.dataframe(rows, use_container_width=True, hide_index=True)
             
-            st.caption("**Save Report**")
+            st.subheader("Save Report")
             
-            # Generate default path from suite name
+            # Generate default path with timestamp from suite name
             if report:
                 from datetime import datetime
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 suite_basename = report.get("suite", "suite_report").lower().replace(' ', '_').replace('×', 'x').replace('(', '').replace(')', '')
-                new_path = f"results/{suite_basename}_{timestamp}.json"
-                update_persistent_path("report_save_path", new_path)
+                default_report_path = f"results/{suite_basename}_{timestamp}.json"
+                
+                # Update persistent config with new default
+                if st.session_state.report_save_path != default_report_path:
+                    update_persistent_path("report_save_path", default_report_path)
             
             st.caption(f"📁 Working directory: {Path.cwd()}")
             report_path = st.text_input(

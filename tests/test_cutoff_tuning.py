@@ -26,7 +26,7 @@ def count_cutoffs(
     seed: int = 42,
 ) -> tuple[int, float]:
     """Generate events and count cutoff rate."""
-    entries = load_pack("data/core_complications_v0_1.json")
+    entries = load_pack("data/core_complications.json")
     
     cutoff_count = 0
     for i in range(num_samples):

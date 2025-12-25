@@ -12,8 +12,8 @@ This project is governed by a small set of documents. If you are new to the repo
 
 ## Tooling
 
-3. **Streamlit Harness v0.1 Requirements & Architecture** (`/docs/Streamlit_Harness_v0.1_Requirements_Architecture.md`)  
-   Defines the debug-first harness used to tune and validate engine behavior.
+3. **Streamlit Harness Requirements & Architecture** (`/docs/Streamlit_Harness_Requirements_Architecture.md`)
+   Defines the debug-first harness used to tune and validate engine behavior. Version history tracked in file header.
 
 ## Context
 

@@ -34,6 +34,22 @@ This document serves the same role as a ClineRules file: it defines how work is 
   - v1.x = stable / referenceable
   - v2.x+ = breaking revisions
 
+### File Versioning Policy
+- **Never use version numbers in filenames** (e.g., avoid `file_v2.md`, `data_v0_1.json`)
+- Version information must be tracked in:
+  - **File headers**: Use HTML comments for markdown, docstrings for Python
+  - **Content pack metadata**: Use dedicated README files in data/ directories
+  - **Project-level changes**: Use CHANGELOG.md
+- Format for version history headers:
+  ```html
+  <!--
+  Version History:
+  - v2.0 (2025-12-25): Description of changes
+  - v1.0 (2025-12-22): Initial version
+  -->
+  ```
+- Rationale: Version numbers in filenames create file proliferation, complicate references, and obscure current state. Header versioning keeps repos clean and maintainable.
+
 ---
 
 ## 02 – Core SPAR Engine Design Rules
@@ -159,4 +175,3 @@ This document serves the same role as a ClineRules file: it defines how work is 
 > The engine should create pressure, texture, and consequence.  
 > Players create solutions.  
 > Systems interpret outcomes.
-

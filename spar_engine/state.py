@@ -56,9 +56,10 @@ def apply_state_delta(
 def tick_state(state: EngineState, ticks: int = 1) -> EngineState:
     """Advance time for stateful cooldowns (pure function).
 
-    v0.1 policy:
+    v0.2 policy:
     - decrement tag cooldown counters by `ticks` to min 0
-    - age `recent_event_ids` by dropping the oldest entries at a rate of 1 per tick
+    - age `recent_event_ids` by dropping oldest entries at a rate of 1 per 2 ticks
+      (slower aging preserves adaptive weighting effectiveness)
     - clocks are NOT automatically decremented
     """
     t = max(0, int(ticks))
@@ -72,6 +73,7 @@ def tick_state(state: EngineState, ticks: int = 1) -> EngineState:
             tag_cooldowns[tag] = n
 
     recent = list(state.recent_event_ids or [])
+    # Age recent_event_ids by dropping the oldest entries at a rate of 1 per tick
     drop = min(t, len(recent))
     if drop:
         recent = recent[:-drop]

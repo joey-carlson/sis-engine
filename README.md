@@ -35,7 +35,7 @@ from spar_engine.models import SceneContext, Constraints, EngineState, Selection
 from spar_engine.rng import TraceRNG
 from spar_engine.content import load_pack
 
-entries = load_pack("data/core_complications_v0_1.json")
+entries = load_pack("data/core_complications.json")
 
 rng = TraceRNG(seed=123)
 
