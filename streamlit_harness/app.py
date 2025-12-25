@@ -595,10 +595,9 @@ def run_campaign_scenario(
             "batch_size": int(step_batch_size),
             "summary": result["summary"],
             "state_snapshot": {
-                "tension_clock": shared_state.tension_clock,
-                "heat_clock": shared_state.heat_clock,
+                "clocks": dict(shared_state.clocks),
                 "tag_cooldowns_count": len(shared_state.tag_cooldowns),
-                "recent_ids_count": len(shared_state.recent_ids),
+                "recent_ids_count": len(shared_state.recent_event_ids),
             },
             "events": result.get("events"),  # Include if verbose
             "events_sample": result.get("events_sample"),  # Include if not verbose
