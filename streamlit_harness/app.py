@@ -739,31 +739,31 @@ def main() -> None:
         
         # Initialize base_seed_value in session state if not present
         if "base_seed_value" not in st.session_state:
-            st.session_state.base_seed_value = "1000"
+            st.session_state.base_seed_value = 1000
         
         # Base seed with random option
         col_seed1, col_seed2 = st.columns([3, 1])
-        with col_seed1:
-            base_seed_input = st.text_input(
-                "Base seed",
-                value=st.session_state.base_seed_value,
-                help='Enter a number (0-999999999) or "random" for time-based seed',
-                key="base_seed_input"
-            )
-            # Update session state when user types
-            if base_seed_input != st.session_state.base_seed_value:
-                st.session_state.base_seed_value = base_seed_input
         
+        # Check if dice button was clicked
         with col_seed2:
             if st.button("🎲", help="Generate random seed"):
                 # Generate and store the actual random integer
-                random_seed = generate_random_seed()
-                st.session_state.base_seed_value = str(random_seed)
-                st.session_state.base_seed_input = str(random_seed)
+                st.session_state.base_seed_value = generate_random_seed()
                 st.rerun()
         
-        # Resolve seed value
-        base_seed = resolve_seed_value(base_seed_input)
+        with col_seed1:
+            # Use number_input to show the current seed value
+            base_seed = st.number_input(
+                "Base seed",
+                min_value=0,
+                max_value=10**9,
+                value=st.session_state.base_seed_value,
+                step=1,
+                help="Click dice button for random seed, or enter a number (0-999999999)"
+            )
+            # Update session state when user changes value
+            if base_seed != st.session_state.base_seed_value:
+                st.session_state.base_seed_value = base_seed
 
         include_tags_suite = st.text_input("Include tags (CSV)", value=include_tags_text)
         exclude_tags_suite = st.text_input("Exclude tags (CSV)", value=exclude_tags_text)
