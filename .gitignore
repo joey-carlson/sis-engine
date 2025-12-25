@@ -22,3 +22,6 @@ htmlcov/
 __MACOSX/
 .vscode/
 .idea/
+
+# Streamlit harness config (personal preferences)
+.streamlit_harness_config.json

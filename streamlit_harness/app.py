@@ -23,7 +23,32 @@ from spar_engine.state import apply_state_delta, tick_state
 from streamlit_harness.harness_state import HarnessState
 
 
-DEFAULT_PACK = "data/core_complications_v0_1.json"
+DEFAULT_PACK = "data/core_complications.json"
+SCENARIOS_DIR = Path("scenarios")
+CONFIG_FILE = Path(".streamlit_harness_config.json")
+
+
+def load_config() -> Dict[str, Any]:
+    """Load persistent configuration from disk."""
+    if CONFIG_FILE.exists():
+        try:
+            return json.loads(CONFIG_FILE.read_text())
+        except Exception:
+            pass
+    # Return defaults if config doesn't exist or is invalid
+    return {
+        "scenario_output_path": "results/scenario_output.json",
+        "template_save_path": "scenarios/my_scenario.json",
+        "report_save_path": "results/suite_report.json",
+    }
+
+
+def save_config(config: Dict[str, Any]) -> None:
+    """Save persistent configuration to disk."""
+    try:
+        CONFIG_FILE.write_text(json.dumps(config, indent=2))
+    except Exception:
+        pass  # Fail silently - don't disrupt UX if config save fails
 
 
 def split_csv(v: str) -> List[str]:
@@ -50,6 +75,24 @@ def get_hs() -> HarnessState:
     if "hs" not in st.session_state or not isinstance(st.session_state.hs, HarnessState):
         st.session_state.hs = HarnessState()
     return st.session_state.hs
+
+
+def init_persistent_paths() -> None:
+    """Initialize persistent path state from config file."""
+    if "paths_initialized" not in st.session_state:
+        config = load_config()
+        st.session_state.scenario_output_path = config.get("scenario_output_path", "results/scenario_output.json")
+        st.session_state.template_save_path = config.get("template_save_path", "scenarios/my_scenario.json")
+        st.session_state.report_save_path = config.get("report_save_path", "results/suite_report.json")
+        st.session_state.paths_initialized = True
+
+
+def update_persistent_path(key: str, value: str) -> None:
+    """Update a persistent path in both session state and config file."""
+    st.session_state[key] = value
+    config = load_config()
+    config[key] = value
+    save_config(config)
 
 
 def load_entries(pack_path: str):
@@ -169,8 +212,11 @@ def run_batch(
     events: List[Dict[str, Any]] = []
 
     for idx in range(int(n)):
-        if idx > 0 and tick_between and int(ticks_between) > 0:
-            state = tick_state(state, ticks=int(ticks_between))
+        if idx > 0:
+            # Always tick at least 1 to prevent cooldown accumulation
+            # Without ticking, tag cooldowns never expire and content exhausts quickly
+            tick_amount = max(1, int(ticks_between) if tick_between else 1)
+            state = tick_state(state, ticks=tick_amount)
 
         rng.trace.clear()
         ev = generate_event(scene, state, selection, entries, rng)
@@ -225,8 +271,127 @@ def report_to_markdown(report: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def load_scenario_json(file_content: str) -> Dict[str, Any]:
+    """Load and validate a scenario JSON."""
+    try:
+        scenario = json.loads(file_content)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON: {e}")
+    
+    # Validate required fields
+    required = ["name", "presets", "phases", "rarity_modes", "batch_size", "base_seed"]
+    missing = [f for f in required if f not in scenario]
+    if missing:
+        raise ValueError(f"Missing required fields: {', '.join(missing)}")
+    
+    return scenario
+
+
+def get_builtin_scenarios() -> List[Dict[str, Any]]:
+    """Load all built-in scenarios from scenarios/ directory."""
+    scenarios = []
+    if not SCENARIOS_DIR.exists():
+        return scenarios
+    
+    for json_file in SCENARIOS_DIR.glob("*.json"):
+        try:
+            content = json_file.read_text()
+            scenario = json.loads(content)
+            scenario["_source_file"] = str(json_file)
+            scenarios.append(scenario)
+        except Exception:
+            continue  # Skip invalid files
+    
+    return sorted(scenarios, key=lambda s: s.get("name", ""))
+
+
+def save_report_to_path(report: Dict[str, Any], path: str) -> tuple[bool, str]:
+    """Save report JSON to specified file path.
+    
+    Returns: (success: bool, message: str)
+    """
+    try:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(report, indent=2))
+        return True, f"Report saved to {path}"
+    except Exception as e:
+        return False, f"Failed to save: {str(e)}"
+
+
+def run_scenario_from_json(
+    scenario: Dict[str, Any],
+    entries,
+    engine_state_class,
+) -> Dict[str, Any]:
+    """Execute a scenario definition and return results."""
+    report: Dict[str, Any] = {
+        "suite": scenario.get("name", "Custom scenario"),
+        "batch_n": int(scenario["batch_size"]),
+        "base_seed": int(scenario["base_seed"]),
+        "presets": scenario["presets"],
+        "phases": scenario["phases"],
+        "rarity_modes": scenario["rarity_modes"],
+        "include_tags": scenario.get("include_tags", ""),
+        "exclude_tags": scenario.get("exclude_tags", ""),
+        "tick_between": scenario.get("tick_between", True),
+        "ticks_between": scenario.get("ticks_between", 1),
+        "verbose": scenario.get("verbose", False),
+        "runs": [],
+    }
+    
+    run_idx = 0
+    for preset_name in scenario["presets"]:
+        pv = scene_preset_values(preset_name)
+        for phase in scenario["phases"]:
+            for rarity_mode in scenario["rarity_modes"]:
+                run_idx += 1
+                scene = SceneContext(
+                    scene_id=f"scenario:{scenario['name']}:{preset_name}:{phase}:{rarity_mode}",
+                    scene_phase=phase,  # type: ignore
+                    environment=list(pv["env"]),
+                    tone=["debug"],
+                    constraints=Constraints(
+                        confinement=float(pv["confinement"]),
+                        connectivity=float(pv["connectivity"]),
+                        visibility=float(pv["visibility"]),
+                    ),
+                    party_band="unknown",
+                    spotlight=["debug"],
+                )
+                selection = SelectionContext(
+                    enabled_packs=["core_complications"],
+                    include_tags=split_csv(scenario.get("include_tags", "")),
+                    exclude_tags=split_csv(scenario.get("exclude_tags", "")),
+                    factions_present=[],
+                    rarity_mode=rarity_mode,  # type: ignore
+                )
+                seed = int(scenario["base_seed"]) + run_idx
+                result = run_batch(
+                    scene=scene,
+                    selection=selection,
+                    entries=entries,
+                    seed=seed,
+                    n=int(scenario["batch_size"]),
+                    starting_engine_state=engine_state_class.default(),
+                    tick_between=bool(scenario.get("tick_between", True)),
+                    ticks_between=int(scenario.get("ticks_between", 1)),
+                    verbose=bool(scenario.get("verbose", False)),
+                )
+                report["runs"].append({
+                    "preset": preset_name,
+                    "phase": phase,
+                    "rarity_mode": rarity_mode,
+                    "seed": seed,
+                    "result": result,
+                })
+    
+    return report
+
+
 def main() -> None:
     st.set_page_config(page_title="SPAR Engine Harness v0.1", layout="wide")
+    init_persistent_paths()
     hs = get_hs()
 
     st.title("SPAR Engine Harness v0.1")
@@ -370,7 +535,118 @@ def main() -> None:
     with tabs[1]:
         st.header("Scenario Runner (Multi-run)")
         st.caption("Run predefined multi-run suites and download a debug report for tuning.")
-
+        
+        # JSON Scenario Import/Export Section
+        st.subheader("JSON Scenario Import/Export")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.caption("**Import Scenario**")
+            
+            # File uploader
+            uploaded_file = st.file_uploader("Upload scenario JSON", type=['json'])
+            
+            # Library dropdown
+            builtin_scenarios = get_builtin_scenarios()
+            scenario_names = ["-- Select from library --"] + [s["name"] for s in builtin_scenarios]
+            selected_scenario_name = st.selectbox("Or select from library", scenario_names)
+            
+            # Load scenario
+            loaded_scenario = None
+            if uploaded_file is not None:
+                try:
+                    content = uploaded_file.read().decode('utf-8')
+                    loaded_scenario = load_scenario_json(content)
+                    st.success(f"Loaded: {loaded_scenario['name']}")
+                except Exception as e:
+                    st.error(f"Failed to load scenario: {e}")
+            elif selected_scenario_name != "-- Select from library --":
+                matching = [s for s in builtin_scenarios if s["name"] == selected_scenario_name]
+                if matching:
+                    loaded_scenario = matching[0]
+                    st.success(f"Loaded: {loaded_scenario['name']}")
+            
+            # Display loaded scenario details
+            if loaded_scenario:
+                with st.expander("Scenario Details", expanded=True):
+                    st.write(f"**Name**: {loaded_scenario['name']}")
+                    st.write(f"**Description**: {loaded_scenario.get('description', 'N/A')}")
+                    st.write(f"**Presets**: {', '.join(loaded_scenario['presets'])}")
+                    st.write(f"**Phases**: {', '.join(loaded_scenario['phases'])}")
+                    st.write(f"**Rarity Modes**: {', '.join(loaded_scenario['rarity_modes'])}")
+                    st.write(f"**Batch Size**: {loaded_scenario['batch_size']}")
+                    st.write(f"**Base Seed**: {loaded_scenario['base_seed']}")
+                    st.write(f"**Tick Between**: {loaded_scenario.get('tick_between', True)}")
+                    st.write(f"**Ticks Between**: {loaded_scenario.get('ticks_between', 1)}")
+        
+        with col2:
+            st.caption("**Export Results**")
+            
+            # Update default only when a new scenario is loaded
+            if loaded_scenario and "last_loaded_scenario" not in st.session_state:
+                st.session_state.last_loaded_scenario = None
+            
+            if loaded_scenario and st.session_state.last_loaded_scenario != loaded_scenario.get("name"):
+                # New scenario loaded - generate fresh filename
+                # Use output_basename if provided, otherwise sanitize scenario name
+                from datetime import datetime
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                if "output_basename" in loaded_scenario and loaded_scenario["output_basename"]:
+                    basename = loaded_scenario["output_basename"]
+                else:
+                    basename = loaded_scenario['name'].lower().replace(' ', '_').replace('/', '_').replace('\\', '_')
+                new_path = f"results/{basename}_{timestamp}.json"
+                update_persistent_path("scenario_output_path", new_path)
+                st.session_state.last_loaded_scenario = loaded_scenario.get("name")
+            
+            st.caption(f"📁 Working directory: {Path.cwd()}")
+            output_path = st.text_input(
+                "Save results to path",
+                value=st.session_state.scenario_output_path,
+                help="Full file path where results JSON will be saved (persisted between sessions). Relative paths are from working directory shown above.",
+                key="output_path_input"
+            )
+            
+            # Update persistent config when user modifies path
+            if output_path and output_path != st.session_state.scenario_output_path:
+                update_persistent_path("scenario_output_path", output_path)
+            
+            run_and_save = st.button(
+                "Run and Save Scenario",
+                type="primary",
+                disabled=(loaded_scenario is None),
+                use_container_width=True
+            )
+            
+            if run_and_save and loaded_scenario:
+                try:
+                    with st.spinner(f"Running scenario: {loaded_scenario['name']}..."):
+                        report = run_scenario_from_json(
+                            loaded_scenario,
+                            entries,
+                            hs.engine_state.__class__
+                        )
+                        hs.last_suite_report = report
+                    
+                    # Save to specified path
+                    if output_path:
+                        success, message = save_report_to_path(report, output_path)
+                        if success:
+                            st.success(message)
+                        else:
+                            st.error(message)
+                    else:
+                        st.error("Please specify an output path")
+                        
+                except Exception as ex:
+                    st.error(f"Scenario execution failed: {str(ex)}")
+        
+        st.divider()
+        
+        # Existing hardcoded suite section
+        st.subheader("Hardcoded Suites (Legacy)")
+        
         suite = st.selectbox(
             "Suite",
             [
@@ -403,11 +679,60 @@ def main() -> None:
         ticks_between_suite = st.number_input("Ticks between events", min_value=0, max_value=10, value=1, step=1)
 
         verbose_report = st.checkbox("Include full event lists in report", value=False)
-
+        
         run_suite = st.button("Run suite", type="primary")
+        
+        # Save current settings as template
+        st.caption("**Save Current Settings as Template**")
+        
+        # Generate default path from current suite name
+        default_basename = suite.lower().replace(' ', '_').replace('×', 'x').replace('(', '').replace(')', '')
+        
+        st.caption(f"📁 Working directory: {Path.cwd()}")
+        template_path = st.text_input(
+            "Save template to path",
+            value=st.session_state.template_save_path,
+            help="Full file path where scenario JSON will be saved. Relative paths are from working directory shown above.",
+            key="template_path_input"
+        )
+        
+        # Update persistent config
+        if template_path and template_path != st.session_state.template_save_path:
+            update_persistent_path("template_save_path", template_path)
+        
+        save_template = st.button("Save as Template", use_container_width=True)
+        
+        if save_template:
+            # Export current settings as scenario JSON
+            current_scenario = {
+                "schema_version": "1.0",
+                "name": suite,
+                "description": f"Exported from hardcoded suite: {suite}",
+                "output_basename": default_basename,
+                "presets": presets,
+                "phases": phases,
+                "rarity_modes": rarity_modes,
+                "batch_size": int(batchN),
+                "base_seed": int(base_seed),
+                "include_tags": str(include_tags_suite),
+                "exclude_tags": str(exclude_tags_suite),
+                "tick_between": bool(tick_between_suite),
+                "ticks_between": int(ticks_between_suite),
+                "verbose": bool(verbose_report),
+            }
+            
+            # Reuse save_report_to_path function (no code duplication)
+            if template_path:
+                success, message = save_report_to_path(current_scenario, template_path)
+                if success:
+                    st.success(message)
+                else:
+                    st.error(message)
+            else:
+                st.error("Please specify a template path")
         if run_suite:
             try:
-                report: Dict[str, Any] = {
+                suite_report: Dict[str, Any] = {
                     "suite": suite,
                     "batch_n": int(batchN),
                     "base_seed": int(base_seed),
@@ -460,7 +785,7 @@ def main() -> None:
                                 ticks_between=int(ticks_between_suite),
                                 verbose=bool(verbose_report),
                             )
-                            report["runs"].append(
+                            suite_report["runs"].append(
                                 {
                                     "preset": preset_name,
                                     "phase": ph,
@@ -470,7 +795,7 @@ def main() -> None:
                                 }
                             )
 
-                hs.last_suite_report = report
+                hs.last_suite_report = suite_report
                 st.success("Suite completed.")
             except Exception as ex:
                 st.error(str(ex))
@@ -498,20 +823,40 @@ def main() -> None:
                     }
                 )
             st.dataframe(rows, use_container_width=True, hide_index=True)
-
-            md = report_to_markdown(report)
-            st.download_button(
-                "Download report (Markdown)",
-                data=md.encode("utf-8"),
-                file_name="scenario_suite_report.md",
-                mime="text/markdown",
+            
+            st.caption("**Save Report**")
+            
+            # Generate default path from suite name
+            if report:
+                from datetime import datetime
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                suite_basename = report.get("suite", "suite_report").lower().replace(' ', '_').replace('×', 'x').replace('(', '').replace(')', '')
+                new_path = f"results/{suite_basename}_{timestamp}.json"
+                update_persistent_path("report_save_path", new_path)
+            
+            st.caption(f"📁 Working directory: {Path.cwd()}")
+            report_path = st.text_input(
+                "Save report to path",
+                value=st.session_state.report_save_path,
+                help="Full file path where report JSON will be saved. Relative paths are from working directory shown above.",
+                key="report_path_input"
             )
-            st.download_button(
-                "Download report (JSON)",
-                data=json.dumps(report, indent=2).encode("utf-8"),
-                file_name="scenario_suite_report.json",
-                mime="application/json",
-            )
+            
+            # Update persistent config
+            if report_path and report_path != st.session_state.report_save_path:
+                update_persistent_path("report_save_path", report_path)
+            
+            save_report = st.button("Save Report", use_container_width=True)
+            
+            if save_report:
+                if report_path:
+                    success, message = save_report_to_path(report, report_path)
+                    if success:
+                        st.success(message)
+                    else:
+                        st.error(message)
+                else:
+                    st.error("Please specify a report path")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "name": "Presets \u00d7 (Approach/Engage/Aftermath) \u00d7 Normal",
+  "description": "Exported from hardcoded suite: Presets \u00d7 (Approach/Engage/Aftermath) \u00d7 Normal",
+  "output_basename": "presets_x_approach/engage/aftermath_x_normal",
+  "presets": [
+    "dungeon",
+    "city",
+    "wilderness",
+    "ruins"
+  ],
+  "phases": [
+    "approach",
+    "engage",
+    "aftermath"
+  ],
+  "rarity_modes": [
+    "normal"
+  ],
+  "batch_size": 253,
+  "base_seed": 1342082,
+  "include_tags": "hazard,reinforcements,time_pressure,social_friction,visibility,mystic,attrition,terrain,positioning,opportunity,information",
+  "exclude_tags": "",
+  "tick_between": true,
+  "ticks_between": 5,
+  "verbose": true
+}

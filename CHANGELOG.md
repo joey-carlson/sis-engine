@@ -1,5 +1,24 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- **Cutoff tuning v2: Morphology-sensitive cap compression** - Enhanced Spiky mode with graduated cap reductions based on morphology score. High-morphology environments (tight spaces, poor visibility, low connectivity) now compress severity caps more aggressively, increasing cutoff frequency to target ranges: 5-10% for dungeon/ruins, 2-5% for wilderness. Implementation uses two-threshold system (morph >= 0.9: -1 cap, morph >= 1.4: -2 cap) to treat structural fragility as a cutoff multiplier while preserving Normal/Calm behavior.
+- **Adaptive weighting validation** - Validated adaptive weighting system effectiveness across all presets/modes. Enhanced penalty curve (v0.1 -> v0.2) with tiered recency penalties achieves target variety: dungeon/ruins max 14.5% (exceeds 15% stretch goal), wilderness 27.5% (within structural content limit). Comprehensive test suite added with severity band analysis tooling to diagnose content gaps vs implementation issues.
+- **Aftermath phase content expansion** - Added 10 minimal aftermath entries to address phase coverage gaps. Wilderness aftermath expanded from 3 to 6 events with non-attrition diversity (information, visibility, terrain tags). Sea aftermath added 2 dedicated entries. City, ruins, dungeon received 1-2 aftermath entries each. All entries use low severity bands (1-6) appropriate for aftermath consequences. Enables Presets × (Approach/Engage/Aftermath) × Normal suite completion at batch size 200.
+- **JSON scenario import/export system with unified save/export UX** - Added JSON-based scenario definition, import, and execution with automatic result export. Users can upload custom scenario JSON files or select from built-in library (scenarios/ directory). Scenarios define presets, phases, rarity modes, batch size, seed, and other parameters. Unified all three save/export operations (Save Report Markdown, Save Report JSON, Save as Template) to use consistent interface: working directory display for path clarity, path specification with cross-session persistence (survives app restarts via `.streamlit_harness_config.json`), and descriptive default filenames with timestamps. "Run and Save Scenario" executes and saves results to user-specified path. "Save as Template" exports current hardcoded suite UI settings as JSON scenario. All operations use shared save_report_to_path() backend (no code duplication). Persistent config file excluded from git to keep personal preferences local. Schema includes `schema_version` field (v1.0) for future-proofing and optional `output_basename` for clean multi-file exports. Includes 2 built-in phase validation scenarios (Normal and Spiky modes) plus comprehensive template file with inline documentation and examples. Enables reproducible validation workflows, automated testing, and ad-hoc scenario creation from UI state. See docs/REQUIREMENTS_json_scenario_import_export.md for complete schema and usage.
+
+### Fixed
+- **Critical: Cooldown accumulation bug** - Modified `run_batch()` in `streamlit_harness/app.py` to always tick by at least 1 between events, preventing indefinite cooldown accumulation that caused content pool exhaustion. Without this fix, batches would fail with "No content entries available" error after 5-10 events.
+- Added comprehensive root cause analysis in `docs/ROOT_CAUSE_ANALYSIS_content_availability.md`
+
+### Changed
+- **Repository file versioning cleanup** - Removed version numbers from filenames, moved version info to file headers. Consolidated duplicate versioned files: `IMPLEMENTATION_REPORT_cutoff_tuning_v2.md` merged into `IMPLEMENTATION_REPORT_cutoff_tuning.md` with version history header, `Streamlit_Harness_v0.1_Requirements_Architecture.md` renamed to `Streamlit_Harness_Requirements_Architecture.md`, `data/core_complications_v0_1.json` renamed to `data/core_complications.json` with versioning tracked in `data/README.md`. All code references updated. Future versioning will use header comments instead of filename suffixes.
+
+### Added  
+- Integration tests in `tests/test_cooldown_fix.py` to verify cooldown system functions correctly with minimum ticking
+- `data/README.md` - Content pack version history and design principles documentation
+
 ## 0.1.x – Streamlit Harness v0.1 Prototype Added
 
 - Refactored Streamlit harness session state into a single HarnessState dataclass to prevent rerun scoping regressions.
@@ -19,4 +38,3 @@
 - Packaging hygiene: removed `.git` and `.DS_Store` from the distributed zip artifact.
 
 All notable changes to this project are documented here.
-
