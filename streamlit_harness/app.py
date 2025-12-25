@@ -95,6 +95,11 @@ def update_persistent_path(key: str, value: str) -> None:
     save_config(config)
 
 
+def sanitize_basename(basename: str) -> str:
+    """Sanitize basename to remove path separators and other problematic characters."""
+    return basename.lower().replace(' ', '_').replace('/', '_').replace('\\', '_')
+
+
 def load_entries(pack_path: str):
     p = Path(pack_path)
     if not p.exists():
@@ -591,16 +596,21 @@ def main() -> None:
                 scenario_name = loaded_scenario.get("name", "scenario")
                 
                 # Check if this is a different scenario from last time
-                if "last_loaded_scenario" not in st.session_state or st.session_state.last_loaded_scenario != scenario_name:
+                if "last_loaded_scenario" not in st.session_state:
+                    st.session_state.last_loaded_scenario = None
+                
+                # Only regenerate filename if scenario has changed
+                if st.session_state.last_loaded_scenario != scenario_name:
                     # New scenario selected - generate fresh filename with timestamp
                     from datetime import datetime
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                     
                     # Use output_basename if provided, otherwise sanitize scenario name
+                    # ALWAYS sanitize to remove path separators
                     if "output_basename" in loaded_scenario and loaded_scenario["output_basename"]:
-                        basename = loaded_scenario["output_basename"]
+                        basename = sanitize_basename(loaded_scenario["output_basename"])
                     else:
-                        basename = scenario_name.lower().replace(' ', '_').replace('/', '_').replace('\\', '_')
+                        basename = sanitize_basename(scenario_name)
                     
                     # Truncate basename if total filename would be too long (>255 chars)
                     # Keep timestamp intact, truncate basename if needed
@@ -614,9 +624,15 @@ def main() -> None:
                     
                     new_path = f"{path_prefix}{basename}_{timestamp}{extension}"
                     
-                    # Update persistent config and session tracking
-                    update_persistent_path("scenario_output_path", new_path)
+                    # Update session state BEFORE widget is created (avoids warning)
+                    st.session_state.output_path_input = new_path
+                    st.session_state.scenario_output_path = new_path
                     st.session_state.last_loaded_scenario = scenario_name
+                    
+                    # Persist to config file
+                    config = load_config()
+                    config["scenario_output_path"] = new_path
+                    save_config(config)
             
             st.caption(f"📁 Working directory: {Path.cwd()}")
             output_path = st.text_input(
