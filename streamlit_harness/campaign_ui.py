@@ -1921,14 +1921,17 @@ def render_finalize_session() -> None:
             cancel = st.form_submit_button("Cancel", use_container_width=True)
         
         if commit:
-            # Collect all bullet values from form inputs
-            what_happened = []
+            # CRITICAL: Collect bullets from FULL list, not just visible ones
+            # Update visible bullets from form inputs
             for idx in range(visible_count):
                 bullet_key = f"finalize_bullet_{idx}"
                 if bullet_key in st.session_state:
                     bullet_text = st.session_state[bullet_key]
-                    if bullet_text.strip():
-                        what_happened.append(bullet_text.strip())
+                    if idx < len(bullets):
+                        bullets[idx] = bullet_text
+            
+            # Build what_happened from full bullet list (visible + hidden)
+            what_happened = [b.strip() for b in bullets if b.strip()]
             
             if not what_happened:
                 st.error("Please enter at least one bullet point")
