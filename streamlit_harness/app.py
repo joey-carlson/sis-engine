@@ -703,6 +703,62 @@ def main() -> None:
     # ---------------- Sidebar ----------------
     with st.sidebar:
         st.header("Inputs")
+        
+        # Campaign Context Selector
+        st.subheader("Campaign Context")
+        
+        from streamlit_harness.campaign_ui import Campaign
+        campaigns = Campaign.list_all()
+        
+        if campaigns:
+            campaign_options = ["-- No Campaign --"] + [c.name for c in campaigns]
+            current_campaign_id = st.session_state.get("current_campaign_id")
+            
+            # Find current selection index
+            current_index = 0
+            if current_campaign_id:
+                current_campaign = Campaign.load(current_campaign_id)
+                if current_campaign and current_campaign.name in campaign_options:
+                    current_index = campaign_options.index(current_campaign.name)
+            
+            selected_campaign_name = st.selectbox(
+                "Active Campaign",
+                campaign_options,
+                index=current_index,
+                help="Select a campaign to apply its context (tags, factions) to event generation"
+            )
+            
+            # Update campaign context when selection changes
+            if selected_campaign_name == "-- No Campaign --":
+                if current_campaign_id:
+                    st.session_state.current_campaign_id = None
+                    st.session_state.context_enabled = False
+                    st.rerun()
+            else:
+                # Find and activate selected campaign
+                matching = [c for c in campaigns if c.name == selected_campaign_name]
+                if matching:
+                    selected_campaign = matching[0]
+                    if selected_campaign.campaign_id != current_campaign_id:
+                        st.session_state.current_campaign_id = selected_campaign.campaign_id
+                        st.session_state.context_enabled = True
+                        
+                        # Set campaign context
+                        if selected_campaign.campaign_state:
+                            from streamlit_harness.campaign_context import ContextBundle, set_campaign_context
+                            context_bundle = ContextBundle.from_campaign(
+                                campaign_id=selected_campaign.campaign_id,
+                                campaign_name=selected_campaign.name,
+                                campaign_state=selected_campaign.campaign_state,
+                                sources=selected_campaign.sources,
+                            )
+                            set_campaign_context(context_bundle)
+                        
+                        st.rerun()
+        else:
+            st.caption("No campaigns yet. Create one in Campaign Manager mode.")
+        
+        st.divider()
 
         preset = st.selectbox("Scene preset", ["dungeon", "city", "wilderness", "ruins"], index=0)
         pv = scene_preset_values(preset)
