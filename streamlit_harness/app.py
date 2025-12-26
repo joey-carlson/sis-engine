@@ -863,6 +863,41 @@ def main() -> None:
                 st.divider()
             
             if hs.events:
+                # Add "Send to Campaign" section before events
+                if st.session_state.get("current_campaign_id"):
+                    from streamlit_harness.campaign_ui import Campaign, PrepItem
+                    campaign = Campaign.load(st.session_state.current_campaign_id)
+                    if campaign:
+                        st.info(f"📤 Sending to: **{campaign.name}** | Events will be added to Prep Queue (not canon)")
+                        
+                        if st.button("📤 Send All to Prep Queue", use_container_width=True):
+                            from datetime import datetime as dt
+                            # Create prep items from all generated events
+                            for e in hs.events[:25]:
+                                prep_item = PrepItem(
+                                    item_id=f"prep_{dt.now().strftime('%Y%m%d_%H%M%S%f')}",
+                                    created_at=dt.now().isoformat(),
+                                    title=e.get("title", "Untitled Event"),
+                                    summary=e.get("content", "")[:200],
+                                    tags=e.get("tags", []),
+                                    source={
+                                        "scenario_name": "Event Generator",
+                                        "preset": preset,
+                                        "phase": scene_phase,
+                                        "rarity_mode": rarity_mode,
+                                        "seed": seed,
+                                    },
+                                    status="queued",
+                                )
+                                campaign.prep_queue.append(prep_item)
+                            
+                            campaign.save()
+                            st.success(f"✓ Sent {len(hs.events[:25])} events to Prep Queue!")
+                            st.rerun()
+                        
+                        st.divider()
+                
+                # Display events
                 for e in hs.events[:25]:
                     with st.container(border=True):
                         event_card(e)

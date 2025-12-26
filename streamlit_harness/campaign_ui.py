@@ -40,6 +40,53 @@ def normalize_campaign_name_to_dir(name: str) -> str:
 
 
 @dataclass
+class PrepItem:
+    """Prep queue item - potential encounter/event (non-canon)."""
+    
+    item_id: str
+    created_at: str
+    title: str
+    summary: str
+    tags: List[str] = field(default_factory=list)
+    source: Dict[str, Any] = field(default_factory=dict)  # Run metadata
+    status: str = "queued"  # "queued", "pinned", "archived"
+    related_factions: List[str] = field(default_factory=list)
+    related_scars: List[str] = field(default_factory=list)
+    notes: Optional[str] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        return {
+            "item_id": self.item_id,
+            "created_at": self.created_at,
+            "title": self.title,
+            "summary": self.summary,
+            "tags": self.tags,
+            "source": self.source,
+            "status": self.status,
+            "related_factions": self.related_factions,
+            "related_scars": self.related_scars,
+            "notes": self.notes,
+        }
+    
+    @staticmethod
+    def from_dict(data: Dict[str, Any]) -> "PrepItem":
+        """Deserialize from dictionary."""
+        return PrepItem(
+            item_id=data["item_id"],
+            created_at=data["created_at"],
+            title=data["title"],
+            summary=data["summary"],
+            tags=data.get("tags", []),
+            source=data.get("source", {}),
+            status=data.get("status", "queued"),
+            related_factions=data.get("related_factions", []),
+            related_scars=data.get("related_scars", []),
+            notes=data.get("notes"),
+        )
+
+
+@dataclass
 class Source:
     """Content source reference (built-in or external)."""
     
@@ -86,6 +133,7 @@ class Campaign:
     campaign_state: Optional[CampaignState] = None
     ledger: List[Dict[str, Any]] = field(default_factory=list)
     sources: List[Source] = field(default_factory=list)
+    prep_queue: List[PrepItem] = field(default_factory=list)
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -98,6 +146,7 @@ class Campaign:
             "campaign_state": self.campaign_state.to_dict() if self.campaign_state else None,
             "ledger": self.ledger,
             "sources": [s.to_dict() for s in self.sources],
+            "prep_queue": [p.to_dict() for p in self.prep_queue],
         }
     
     @staticmethod
@@ -110,6 +159,9 @@ class Campaign:
         sources_data = data.get("sources", [])
         sources = [Source.from_dict(s) for s in sources_data]
         
+        prep_queue_data = data.get("prep_queue", [])
+        prep_queue = [PrepItem.from_dict(p) for p in prep_queue_data]
+        
         return Campaign(
             campaign_id=data["campaign_id"],
             name=data["name"],
@@ -119,6 +171,7 @@ class Campaign:
             campaign_state=campaign_state,
             ledger=data.get("ledger", []),
             sources=sources,
+            prep_queue=prep_queue,
         )
     
     def get_path(self) -> Path:
@@ -231,6 +284,83 @@ def _save_override_remove(campaign_id: str, entity_name: str) -> None:
     overrides.demoted_to_artifact.discard(entity_name)
     overrides.demoted_to_concept.discard(entity_name)
     overrides.save()
+
+
+def _render_prep_item(campaign: Campaign, item: PrepItem, show_unarchive: bool = False) -> None:
+    """Render a single prep item with inline controls."""
+    with st.container(border=True):
+        # Status indicator
+        status_emoji = {"pinned": "📌", "queued": "📋", "archived": "📦"}.get(item.status, "📋")
+        
+        col1, col2 = st.columns([10, 2])
+        
+        with col1:
+            st.markdown(f"{status_emoji} **{item.title}**")
+            st.caption(item.summary)
+            
+            # Tags (compact)
+            if item.tags:
+                tag_str = ", ".join(item.tags[:5])
+                if len(item.tags) > 5:
+                    tag_str += f" (+{len(item.tags) - 5} more)"
+                st.caption(f"🏷️ {tag_str}")
+            
+            # Source metadata (small)
+            if item.source:
+                source_parts = []
+                if item.source.get("scenario_name"):
+                    source_parts.append(f"Scenario: {item.source['scenario_name']}")
+                if item.source.get("preset"):
+                    source_parts.append(f"{item.source['preset']}")
+                if item.source.get("phase"):
+                    source_parts.append(f"{item.source['phase']}")
+                if item.source.get("seed"):
+                    source_parts.append(f"Seed: {item.source['seed']}")
+                if source_parts:
+                    st.caption(f"🎲 {' | '.join(source_parts)}")
+        
+        with col2:
+            # Inline controls
+            if item.status == "pinned":
+                if st.button("📌", key=f"unpin_{item.item_id}", help="Unpin"):
+                    # Find and update item
+                    for i, p in enumerate(campaign.prep_queue):
+                        if p.item_id == item.item_id:
+                            campaign.prep_queue[i].status = "queued"
+                            break
+                    campaign.save()
+                    st.rerun()
+            else:
+                if st.button("📌", key=f"pin_{item.item_id}", help="Pin"):
+                    # Find and update item
+                    for i, p in enumerate(campaign.prep_queue):
+                        if p.item_id == item.item_id:
+                            campaign.prep_queue[i].status = "pinned"
+                            break
+                    campaign.save()
+                    st.rerun()
+            
+            if show_unarchive:
+                if st.button("↩️", key=f"unarchive_{item.item_id}", help="Unarchive"):
+                    for i, p in enumerate(campaign.prep_queue):
+                        if p.item_id == item.item_id:
+                            campaign.prep_queue[i].status = "queued"
+                            break
+                    campaign.save()
+                    st.rerun()
+            else:
+                if st.button("📦", key=f"archive_{item.item_id}", help="Archive"):
+                    for i, p in enumerate(campaign.prep_queue):
+                        if p.item_id == item.item_id:
+                            campaign.prep_queue[i].status = "archived"
+                            break
+                    campaign.save()
+                    st.rerun()
+            
+            if st.button("🗑️", key=f"delete_{item.item_id}", help="Delete"):
+                campaign.prep_queue = [p for p in campaign.prep_queue if p.item_id != item.item_id]
+                campaign.save()
+                st.rerun()
 
 
 def render_campaign_selector() -> None:
@@ -893,6 +1023,42 @@ def render_campaign_dashboard() -> None:
             if last_entry.get("deltas"):
                 deltas = last_entry["deltas"]
                 st.caption(f"Pressure: {deltas.get('pressure_change', 0):+d} | Heat: {deltas.get('heat_change', 0):+d}")
+    
+    st.divider()
+    
+    # Prep Queue (Non-Canon)
+    queued_items = [p for p in campaign.prep_queue if p.status == "queued"]
+    pinned_items = [p for p in campaign.prep_queue if p.status == "pinned"]
+    archived_items = [p for p in campaign.prep_queue if p.status == "archived"]
+    active_count = len(queued_items) + len(pinned_items)
+    
+    with st.expander(f"🎴 Prep Queue ({active_count}) — Not Yet Canon", expanded=False):
+        st.caption("Potential encounters/events that haven't happened yet")
+        
+        if not campaign.prep_queue:
+            st.info("No prep items yet. Generate events and send them here!")
+        else:
+            # Show pinned first
+            if pinned_items:
+                st.markdown("**📌 Pinned**")
+                for item in pinned_items:
+                    _render_prep_item(campaign, item)
+                st.divider()
+            
+            # Then queued
+            if queued_items:
+                if pinned_items:
+                    st.markdown("**📋 Queued**")
+                for item in queued_items:
+                    _render_prep_item(campaign, item)
+            
+            # Archived (collapsed)
+            if archived_items:
+                with st.expander(f"📦 Archived ({len(archived_items)})", expanded=False):
+                    for item in archived_items:
+                        _render_prep_item(campaign, item, show_unarchive=True)
+    
+    st.divider()
     
     # Ledger with Import button (Flow C)
     if campaign.ledger:
