@@ -136,15 +136,20 @@ Add past sessions to current campaign:
 1. Open campaign dashboard
 2. Click **"Import"** in Session Ledger section
 3. **Paste Campaign History** (narrative text)
-4. Parser detects:
+4. Click **"Parse"** to analyze the text
+5. Parser detects:
    - Session dates (looks for date patterns)
    - Canon events (bullet points, significant events)
    - Faction references (@ mentions, organization names)
-5. **Preview Results** before merging:
+6. **Preview Results** before merging:
    - Shows detected sessions with dates
    - Canon bullets extracted
    - Factions identified
-6. **Merge to Campaign**:
+7. **Optional: Download Parsed JSON**
+   - Click "📥 Download Parsed JSON" to export raw parser output
+   - Useful for debugging, analysis, or external processing
+   - File format: `parsed_history_merge_YYYYMMDD_HHMMSS.json`
+8. **Merge to Campaign**:
    - Sessions added to ledger
    - Canon appended to summary
    - New factions added to tracker
@@ -157,10 +162,15 @@ Create campaign from existing narrative:
 1. From landing page, click **"Import Campaign History"**
 2. Enter campaign name
 3. Paste campaign history text
-4. Parser extracts structure (sessions, canon, factions)
-5. Preview parsed data
-6. Click **"Create from History"**
-7. Campaign created with:
+4. Click **"Parse History"** to analyze the text
+5. Parser extracts structure (sessions, canon, factions)
+6. Preview parsed data
+7. **Optional: Download Parsed JSON**
+   - Click "📥 Download Parsed JSON" to export raw parser output
+   - Useful for debugging, analysis, or external processing
+   - File format: `parsed_history_YYYYMMDD_HHMMSS.json`
+8. Click **"Create from History"**
+9. Campaign created with:
    - Session ledger populated
    - Canon summary extracted
    - Faction tracker initialized
