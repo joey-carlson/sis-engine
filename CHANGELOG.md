@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+
+### Added
+- **Campaign Context Bridge** - Connected Campaign Manager to Event Generator with Context Bundle system. When "Run Session" clicked from campaign, Event Generator pre-fills with campaign-derived tags (based on pressure/heat/scars/factions). Context Applied strip shows campaign name, bands, factions, sources with View (expand notes) and Disable (1-click toggle) buttons. Tags merged intelligently: context suggestions + defaults, deduplicated. Context persists across sessions, GM can override any time. Answers "Why does this event belong in my campaign?" Zero engine modifications. See `streamlit_harness/campaign_context.py`.
 
 ### Added
 - **Campaign UX Prototype v0.1** - New Campaign Manager mode in Streamlit harness with multi-campaign management workflow. Features: (1) Campaign selector with cards showing pressure/heat bands and activity metrics, (2) Campaign dashboard with editable canon summary, structured scars list, factions board with attention/disposition, campaign ledger, and content sources management, (3) Session finalization wizard for recording "what happened" with 3 bullets, scar creation, and faction updates, (4) Persistent state in campaigns/*.json files. Content sources: Add/toggle external sources (metadata only, no parsing), built-in source always shown, active sources displayed in header and recorded in ledger. Achieves ≤4 click target for all core actions: open campaign (2 clicks), create campaign (3 clicks), finalize session (2 clicks + typing), add source (2 clicks). Mode toggle at app top preserves existing debug harness. Session workspace currently stub (points to scenario runner). Campaign history import mocked for v0.1. Zero modifications to spar_engine/* or spar_campaign/* files. See `docs/UX_NOTES_campaign_v0.1.md` for complete UX analysis, known pain points, and v0.2 recommendations.
