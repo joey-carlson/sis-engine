@@ -1064,7 +1064,8 @@ def render_campaign_dashboard() -> None:
     if campaign.ledger:
         with st.expander("📋 Last Session Changes", expanded=True):
             last_entry = campaign.ledger[-1]
-            st.caption(f"Session {last_entry.get('session_number', '?')}: {last_entry.get('session_date', '')}")
+            session_date_str = last_entry.get('session_date', '')[:10] if last_entry.get('session_date') else ''
+            st.caption(f"Session {last_entry.get('session_number', '?')}: {session_date_str}")
             
             if last_entry.get("what_happened"):
                 what_happened = last_entry["what_happened"]
@@ -1080,6 +1081,24 @@ def render_campaign_dashboard() -> None:
                     with st.expander(f"Show {len(what_happened) - 5} more bullets", expanded=False):
                         for bullet in what_happened[5:]:
                             st.markdown(f"• {bullet}")
+            
+            # Session notes if present
+            if last_entry.get("session_notes"):
+                with st.expander("Session Notes", expanded=False):
+                    st.caption(last_entry["session_notes"])
+            
+            # Metadata if present
+            if last_entry.get("metadata"):
+                metadata = last_entry["metadata"]
+                meta_parts = []
+                if "severity_avg" in metadata:
+                    meta_parts.append(f"Severity: {metadata['severity_avg']:.1f}")
+                if "cutoff_rate" in metadata:
+                    meta_parts.append(f"Cutoff: {metadata['cutoff_rate']*100:.0f}%")
+                if "top_tags" in metadata and metadata["top_tags"]:
+                    meta_parts.append(f"Tags: {', '.join(metadata['top_tags'][:3])}")
+                if meta_parts:
+                    st.caption(f"📊 {' | '.join(meta_parts)}")
             
             if last_entry.get("deltas"):
                 deltas = last_entry["deltas"]
@@ -1291,6 +1310,14 @@ def render_campaign_dashboard() -> None:
                                     lines.append(f"- {bullet}")
                                 lines.append("")
                             
+                            # Session notes if present
+                            session_notes = entry.get('session_notes')
+                            if session_notes:
+                                lines.append("**Session Notes:**")
+                                lines.append("")
+                                lines.append(session_notes)
+                                lines.append("")
+                            
                             deltas = entry.get('deltas', {})
                             if deltas:
                                 lines.append("**State Changes:**")
@@ -1299,6 +1326,20 @@ def render_campaign_dashboard() -> None:
                                 if deltas.get('heat_change'):
                                     lines.append(f"- Heat: {deltas['heat_change']:+d}")
                                 lines.append("")
+                            
+                            # Metadata summary if present
+                            metadata = entry.get('metadata')
+                            if metadata:
+                                meta_parts = []
+                                if 'severity_avg' in metadata:
+                                    meta_parts.append(f"Sev: {metadata['severity_avg']:.1f}")
+                                if 'cutoff_rate' in metadata:
+                                    meta_parts.append(f"Cutoff: {metadata['cutoff_rate']*100:.0f}%")
+                                if 'top_tags' in metadata and metadata['top_tags']:
+                                    meta_parts.append(f"Tags: {', '.join(metadata['top_tags'])}")
+                                if meta_parts:
+                                    lines.append(f"*Metadata: {' | '.join(meta_parts)}*")
+                                    lines.append("")
                             
                             sources = entry.get('active_sources', [])
                             if sources:
@@ -1362,6 +1403,14 @@ def render_campaign_dashboard() -> None:
                                 lines.append(f"- {bullet}")
                             lines.append("")
                         
+                        # Session notes if present
+                        session_notes = entry.get('session_notes')
+                        if session_notes:
+                            lines.append("## Session Notes")
+                            lines.append("")
+                            lines.append(session_notes)
+                            lines.append("")
+                        
                         deltas = entry.get('deltas', {})
                         if deltas:
                             lines.append("## State Changes")
@@ -1374,6 +1423,21 @@ def render_campaign_dashboard() -> None:
                                 lines.append("- Rumor spread")
                             if deltas.get('faction_attention_change'):
                                 lines.append("- Faction attention increased")
+                            lines.append("")
+                        
+                        # Metadata if present
+                        metadata = entry.get('metadata')
+                        if metadata:
+                            lines.append("## Session Metadata")
+                            lines.append("")
+                            if 'severity_avg' in metadata:
+                                lines.append(f"- Average Severity: {metadata['severity_avg']:.2f}")
+                            if 'cutoff_rate' in metadata:
+                                lines.append(f"- Cutoff Rate: {metadata['cutoff_rate']*100:.1f}%")
+                            if 'top_tags' in metadata and metadata['top_tags']:
+                                lines.append(f"- Top Tags: {', '.join(metadata['top_tags'])}")
+                            if 'scenario_name' in metadata:
+                                lines.append(f"- Scenario: {metadata['scenario_name']}")
                             lines.append("")
                         
                         sources = entry.get('active_sources', [])
@@ -1698,7 +1762,9 @@ def render_campaign_dashboard() -> None:
         
         with st.expander(f"Existing Ledger Entries", expanded=False):
             for entry in reversed(campaign.ledger):  # Newest first
-                st.markdown(f"**Session {entry.get('session_number', '?')}** — {entry.get('session_date', '')}")
+                session_date_str = entry.get('session_date', '')[:10] if entry.get('session_date') else ''
+                st.markdown(f"**Session {entry.get('session_number', '?')}** — {session_date_str}")
+                
                 if entry.get("what_happened"):
                     what_happened = entry["what_happened"]
                     
@@ -1711,6 +1777,22 @@ def render_campaign_dashboard() -> None:
                         with st.expander(f"+ {len(what_happened) - 3} more", expanded=False):
                             for bullet in what_happened[3:]:
                                 st.caption(f"• {bullet}")
+                
+                # Session notes if present
+                if entry.get("session_notes"):
+                    st.caption(f"_Notes: {entry['session_notes'][:100]}{'...' if len(entry['session_notes']) > 100 else ''}_")
+                
+                # Metadata summary if present
+                if entry.get("metadata"):
+                    metadata = entry["metadata"]
+                    meta_parts = []
+                    if "severity_avg" in metadata:
+                        meta_parts.append(f"Sev: {metadata['severity_avg']:.1f}")
+                    if "top_tags" in metadata and metadata["top_tags"]:
+                        meta_parts.append(f"Tags: {', '.join(metadata['top_tags'][:2])}")
+                    if meta_parts:
+                        st.caption(f"📊 {' | '.join(meta_parts)}")
+                
                 st.divider()
 
 
@@ -1865,20 +1947,29 @@ def render_finalize_session() -> None:
                 st.session_state.show_all_bullets = False
                 st.rerun()
         
-        # Add/remove bullet buttons (outside form to avoid conflicts)
+        # Add/remove bullet buttons
         col_add, col_remove = st.columns(2)
         with col_add:
             add_bullet = st.form_submit_button("➕ Add Bullet")
         with col_remove:
             remove_bullet = st.form_submit_button("➖ Remove Last", disabled=(len(bullets) <= 1))
         
-        # Handle add/remove (must be outside form's normal flow)
+        # Handle add/remove
         if add_bullet:
             st.session_state.finalize_bullets.append("")
             st.rerun()
         if remove_bullet and len(bullets) > 1:
             st.session_state.finalize_bullets.pop()
             st.rerun()
+        
+        # Optional session notes
+        st.subheader("Session Notes (Optional)")
+        session_notes = st.text_area(
+            "Notes",
+            placeholder="Optional freeform notes: context, GM thoughts, player reactions, etc.",
+            height=100,
+            help="Optional notes about this session"
+        )
         
         st.subheader("What Changed?")
         
@@ -1914,6 +2005,10 @@ def render_finalize_session() -> None:
         with col2:
             heat_change = st.number_input("Heat change", min_value=-10, max_value=10, value=default_heat, step=1)
         
+        # C: Canon Summary update option
+        st.subheader("Canon Summary")
+        add_to_canon = st.checkbox("Add to Canon Summary?", value=True, help="Append a bullet to Canon Summary from this session")
+        
         col1, col2 = st.columns(2)
         with col1:
             commit = st.form_submit_button("💾 Commit Session", type="primary", use_container_width=True)
@@ -1941,10 +2036,26 @@ def render_finalize_session() -> None:
             active_source_ids = [s.source_id for s in campaign.sources if s.enabled]
             active_source_names = [s.name for s in campaign.sources if s.enabled]
             
+            # Build metadata from session packet if available
+            metadata = {}
+            if session_packet:
+                metadata = {
+                    "severity_avg": session_packet.severity_avg,
+                    "cutoff_rate": session_packet.cutoff_rate,
+                    "top_tags": [tag for tag, _ in session_packet.top_tags[:5]],
+                    "scenario_name": session_packet.scenario_name,
+                }
+            
+            # Add prep item IDs if from prep queue
+            if "prep_items_to_archive" in st.session_state:
+                metadata["prep_item_ids"] = st.session_state.prep_items_to_archive
+            
             session_entry = {
                 "session_number": len(campaign.ledger) + 1,
                 "session_date": datetime.now().isoformat(),
                 "what_happened": what_happened,
+                "session_notes": session_notes if session_notes.strip() else None,
+                "metadata": metadata if metadata else None,
                 "deltas": {
                     "pressure_change": pressure_change,
                     "heat_change": heat_change,
@@ -2001,9 +2112,19 @@ def render_finalize_session() -> None:
                     _legacy_scars=cs._legacy_scars,
                 )
             
-            # Add to canon summary (first bullet becomes canon)
-            if what_happened:
-                campaign.canon_summary.append(what_happened[0])
+            # C: Canon Summary update with deterministic synthesis
+            if add_to_canon and what_happened:
+                # Deterministic synthesis rules
+                if len(what_happened) == 1:
+                    canon_bullet = what_happened[0]
+                elif len(what_happened) <= 4:
+                    # Join first two with semicolon
+                    canon_bullet = f"{what_happened[0]}; {what_happened[1]}"
+                else:
+                    # First bullet + indicator
+                    canon_bullet = f"{what_happened[0]} (and more)"
+                
+                campaign.canon_summary.append(canon_bullet)
             
             # Add to ledger
             campaign.ledger.append(session_entry)
