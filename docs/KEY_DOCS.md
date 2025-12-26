@@ -28,10 +28,27 @@ This project is governed by a small set of documents. If you are new to the repo
 6. **Project Context & Status**  
    Narrative context, key decisions, and current status for collaborators.
 
+## Data Directories
+
+7. **campaigns/** - Campaign persistent state (organized by campaign name)
+   Each campaign has its own subdirectory containing:
+   - `campaign_<id>.json` - Main campaign file (state, ledger, canon)
+   - `campaign_<id>_import_overrides.json` - Parser classification overrides
+   
+   Structure: `campaigns/<Normalized_Campaign_Name>/campaign_*.json`
+   
+   Directory names are programmatically generated via `normalize_campaign_name_to_dir()`:
+   - Removes special characters
+   - Replaces spaces/hyphens with underscores
+   - Example: "Spelljammer" → `campaigns/Spelljammer/`
+   - Example: "City of Fog" → `campaigns/City_of_Fog/`
+   
+   **Note:** campaigns/ is version controlled for cross-deployment testing (local + Streamlit Cloud).
+
 ## Repo-level tracking
 
-7. **CHANGELOG.md**  
+8. **CHANGELOG.md**  
    Chronological changes (append newest at top).
 
-8. **PARKING_LOT.md**  
+9. **PARKING_LOT.md**  
    Deferred ideas and future work items.

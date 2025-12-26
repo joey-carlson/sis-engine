@@ -1,0 +1,37 @@
+{
+  "campaign_id": "campaign_20251225_222532",
+  "name": "Space Opera Test",
+  "created": "2025-12-25T22:25:32.007874",
+  "last_played": "2025-12-25T22:25:32.007874",
+  "canon_summary": [
+    "THE VEILLINE RUN (SPACE OPERA) \u2014 GM NOTEBOOK\n(Old GM",
+    "We pick up after a long break.)\n\nFormat note to self: this is not an outline",
+    "It\u2019s a pile of handles to grab while we play",
+    "====================================================================\nWHAT\u2019S GOING ON WITH THE GAME (REAL LIFE / TABLE)\n========================================="
+  ],
+  "campaign_state": {
+    "version": "0.2",
+    "campaign_pressure": 0,
+    "heat": 0,
+    "scars": [],
+    "factions": {},
+    "total_scenes_run": 0,
+    "total_cutoffs_seen": 0,
+    "highest_severity_seen": 0
+  },
+  "ledger": [
+    {
+      "session_number": null,
+      "session_date": "Unknown",
+      "what_happened": [
+        ""
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    }
+  ],
+  "sources": []
+}

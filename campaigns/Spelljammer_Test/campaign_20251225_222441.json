@@ -1,0 +1,204 @@
+{
+  "campaign_id": "campaign_20251225_222441",
+  "name": "Spelljammer Test",
+  "created": "2025-12-25T22:24:41.804149",
+  "last_played": "2025-12-25T22:24:41.804149",
+  "canon_summary": [
+    "**Time vs. choice:** seeing the future is not the same as controlling it.",
+    "**Identity & memory:** what happens when \u201cyou\u201d is a record that can be replayed, edited, or stolen.",
+    "There\u2019s an old, cosmic system tied to **Star Seeds**, **Vault Mechanisms**, and **Incarnates**. \u201cOpening the way\u201d (like the Infinite Staircase door) can trigger world-scale consequences.",
+    "#### Astral Elves (recurring on-screen threat)",
+    "The Solstice Pact is an Astral Elf offshoot, but the PCs have tangled with Astral Elf military pressure more than once. Astral Elves have the reach, discipline, and resources to make problems \u201cfollow\u201d the party across ports and planes.",
+    "**Temporal Guardians:** awakened modron-linked secret society, operating out of **Fortress Epoch** (out of phase). \u201cWatch, record, intervene rarely.\u201d They fear manufactured glyph births and hollow Incarnates.",
+    "A temporal device that allows observation across time and distance, and can reveal branching futures. It\u2019s a force-multiplier and a narrative toxin: anyone using it too much starts wanting certainty more than they want truth.",
+    "*Status right now:** stolen by Astral Elves (Solstice Pact operation). Biziver captured at the same time."
+  ],
+  "campaign_state": {
+    "version": "0.2",
+    "campaign_pressure": 0,
+    "heat": 0,
+    "scars": [],
+    "factions": {
+      "astral_elves": {
+        "faction_id": "astral_elves",
+        "attention": 0,
+        "disposition": 0,
+        "notes": "Astral Elves"
+      },
+      "solstice_pact": {
+        "faction_id": "solstice_pact",
+        "attention": 0,
+        "disposition": 0,
+        "notes": "Solstice Pact"
+      },
+      "temporal_guardians": {
+        "faction_id": "temporal_guardians",
+        "attention": 0,
+        "disposition": 0,
+        "notes": "Temporal Guardians"
+      }
+    },
+    "total_scenes_run": 13,
+    "total_cutoffs_seen": 0,
+    "highest_severity_seen": 0
+  },
+  "ledger": [
+    {
+      "session_number": 0,
+      "session_date": "2025-01-05",
+      "what_happened": [
+        "- PCs meet on the Citadel.\n- Zefot is singled out by the Amethyst Incarnate and receives a branching life-path boon (visions of divergent futures).\n\n**GM note:** this is the \u201cfirst hook\u201d that makes ev"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 1,
+      "session_date": "2025-01-19",
+      "what_happened": [
+        "- The party investigates a fast-moving blight.\n- Research points to a portal into Fistandia\u2019s extradimensional mansion.\n- The portal closes behind them, trapping them inside.\n\n---"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 2,
+      "session_date": "2025-02-02",
+      "what_happened": [
+        "- The party learns Fistandia\u2019s legacy includes halting unnatural ice-cap advance ~200 years ago.\n- They join the annual pilgrimage into the northern wastes, led by Yselm Bloodfang (secretly Auril-alig"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 3,
+      "session_date": "2025-02-16",
+      "what_happened": [
+        "- In a null-magic / time-warp cave, the party finds Fistandia sustaining herself with a time-dilation containment device.\n- Fistandia warns: fixing the blight\u2019s origin may require time travel.\n- Yselm"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": null,
+      "session_date": "2025-02-23",
+      "what_happened": [
+        "- The party wakes in Sigil and learns they may be reliving stored memories of their Spelljammer selves.\n- They choose to re-enter the memory record and continue.\n\n**GM note:** this is my permission st"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 4,
+      "session_date": "2025-03-02",
+      "what_happened": [
+        "- The party takes salvage work on the Rock of Bral.\n- They investigate a rogue comet fragment with crystalline root growth reacting to solar energy.\n- Inside: giant-sized ruins consistent with Eberron"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": null,
+      "session_date": "2025-03-09",
+      "what_happened": [
+        "*(Exact placement not pinned in the written summaries, but established continuity at the table.)*\n- The party tangles with Astral Elf military assets and takes an Astral Elf military ship.\n- That ship"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 5,
+      "session_date": "2025-03-16",
+      "what_happened": [
+        "- Biziver appears (former PC turned NPC), confirms Bryannas\u2019s father\u2019s link to the Temporal Guardians.\n- The party is recruited into a recovery mission: locate the missing ship **Lambent Zenith**, las"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 6,
+      "session_date": "2025-03-30",
+      "what_happened": [
+        "- The control rod behaves like a dowsing tool, leading to an uncharted crystal sphere.\n- Inside: a wreckage maelstrom circling the corpse of **Ilevathos, the Whispering Reliquary**.\n- The party is pul"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 7,
+      "session_date": "2025-04-13",
+      "what_happened": [
+        "- Biziver reports normal routes to the Guardians are closed; the Infinite Staircase may be the only way.\n- He\u2019s found references to a \u201cPath to Infinity\u201d doorway somewhere in the Citadel.\n- Magnus betr"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 8,
+      "session_date": "2025-04-27",
+      "what_happened": [
+        "- During rebuilding, Velas Rin approaches Eisira (future contact hook).\n- The party meets Sylemeth (Amethyst Incarnate) and Khalir (Moonstone Incarnate).\n- At the Archives of Reflection:\n  - Orlen (me"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 9,
+      "session_date": "2025-05-11",
+      "what_happened": [
+        "- A basement collapse reveals access into Maker tunnels beneath Eisira\u2019s HQ.\n- The party navigates intent-driven, glyph-activated catacombs.\n- Zash\u2019ir activates the mechanism using a 1,000 gp fire opa"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    },
+    {
+      "session_number": 10,
+      "session_date": "2025-05-25",
+      "what_happened": [
+        "Side-story in a Dark Sun\u2013toned desert wasteland (Athas feel), resonant with the Eberron \u2192 wasteland revelation.\n\nKnown structure:\n- Separate four-character one-shot team (not the main Spelljammer PCs)"
+      ],
+      "deltas": {
+        "pressure_change": 0,
+        "heat_change": 0
+      },
+      "active_sources": []
+    }
+  ],
+  "sources": []
+}

@@ -1,0 +1,23 @@
+{
+  "campaign_id": "campaign_20251225_222718",
+  "name": "SPAR Test",
+  "created": "2025-12-25T22:27:18.637827",
+  "last_played": "2025-12-25T22:27:18.637827",
+  "canon_summary": [
+    "Expect bullets, reminders, and \u201cask at the table\u201d questions",
+    "---\n\n## Elevator pitch\nA pulp-noir expedition game set in a coastal city where the fog is alive, the radios whisper names that don\u2019t exist, and every favor come",
+    "The PCs aren\u2019t \u201cchosen,\u201d they\u2019re *useful*, which is worse"
+  ],
+  "campaign_state": {
+    "version": "0.2",
+    "campaign_pressure": 0,
+    "heat": 0,
+    "scars": [],
+    "factions": {},
+    "total_scenes_run": 0,
+    "total_cutoffs_seen": 0,
+    "highest_severity_seen": 0
+  },
+  "ledger": [],
+  "sources": []
+}
