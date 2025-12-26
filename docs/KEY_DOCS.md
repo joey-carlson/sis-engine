@@ -26,6 +26,9 @@ This project is governed by a small set of documents. If you are new to the repo
 6. **Data Contract: Story-Facing vs System-Facing** (`/docs/DATA_CONTRACT_story_vs_system_v0.1.md`)
    Explicit, versioned contract defining which campaign/session fields serve narrative purposes (GM/player readable) versus system purposes (metrics, reproducibility). Foundation for export design and prevents conflation of story layer with simulation layer.
 
+7. **Export Specification: Story vs System Views** (`/docs/EXPORT_SPEC_story_vs_system_v0.1.md`)
+   Template specification for campaign and session exports following data contract separation. Defines Campaign Story Export (narrative-focused, resembles GM notes) and Session Story Export (GM-readable session record). Includes transformation rules for system flags → narrative prose, explicit exclusion lists, and acceptance criteria for implementation.
+
 ## Context
 
 6. **Project Context & Status**  
