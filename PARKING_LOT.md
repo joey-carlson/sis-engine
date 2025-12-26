@@ -15,25 +15,63 @@ A running list of deferred ideas and improvements.
 - **Scenario editor**: In-app JSON editing and creation interface for building scenarios without external editor
 - **Scenario comparison**: Side-by-side result comparison UI for analyzing multiple scenario runs
 
-## Campaign Mechanics Layer (Explicitly Deferred)
+## Campaign Mechanics Layer - Future Enhancements (v0.2+)
 
-**Status**: Parked pending content richness stabilization
+**Status**: v0.1 COMPLETE and LOCKED (see `spar_campaign/` module)
 
-Campaign rhythm validation confirmed core engine creates sufficient multi-scene rhythms through severity variance and state memory. Clock plateau identified as future campaign-mechanics concern, NOT engine defect.
+Campaign Mechanics v0.1 successfully implements:
+- Campaign pressure and heat tracking
+- Scene outcome observation
+- Non-invasive scene setup influence
+- Explicit decay mechanics
 
-Deferred mechanics that belong to optional campaign layer:
-- **Long-term clocks**: Campaign-scale pressure indicators (beyond scene-level tension/heat)
-- **Clock decay rules**: Phase-specific clock reduction (e.g., aftermath decay)
-- **Faction pressure**: Multi-faction tension tracking and consequences
-- **Scars/Heat/Reputation**: Persistent campaign-level consequences
-- **Arc-scale consequences**: Long-form narrative state tracking
-- **Meta-pacing rules**: Campaign rhythm modifiers
+Potential future enhancements (deferred until v0.1 validated in play):
+- **Faction standing trackers**: Multi-faction tension and diplomacy state
+- **Auto-scar triggers**: Automatic scar generation from significant events
+- **Resource depletion mechanics**: Campaign-scale supply tracking
+- **Richer influence rules**: More sophisticated scene setup hints
+- **UI integration**: Streamlit harness campaign state display
+- **Scenario schema support**: Campaign state in JSON scenarios
+- **Campaign-level cutoffs**: Optional hard gates based on campaign state
 
-**Design Intent**: These belong to an explicit campaign mechanics system layered on top of the stable core engine, not integrated into engine logic. Preserves engine simplicity, interpretability, and flexibility for different campaign styles.
+**Design Intent**: All future work must preserve optional nature, pure functional design, and engine separation.
+
+## Source List Import (External Content Feeds) - Deferred
+
+**Context:**
+As SPAR content grows, manually maintaining large content packs becomes inefficient. We've already reviewed community-scale datasets (e.g., large spreadsheet-based loot tables), which demonstrate both the value and pitfalls of external content sources.
+
+**Idea:**
+Introduce a future capability to treat a large external file (spreadsheet, CSV, JSON, etc.) as a source list that can be imported, transformed, or referenced as a content feed for event/scenario generation.
+
+**High-level goals:**
+- Allow pointing at a large external dataset as an input source
+- Map source rows/entries into SPAR-compatible content entries
+- Preserve engine/content separation (source is not engine logic)
+- Enable large-scale content reuse without hand-curation
+
+**Non-goals (for now):**
+- No importer UX design yet
+- No live syncing or hot-reload assumptions
+- No schema locking beyond SPAR's internal content format
+- No community submission pipeline yet
+
+**Design considerations (future):**
+- Clear separation between canonical content packs and imported sources
+- Strong tag normalization and hygiene
+- Validation layer to prevent low-quality or inconsistent imports
+- Ability to selectively enable/disable source subsets
+
+**Prerequisites before implementation:**
+- Campaign Mechanics v0.1 validated in play
+- At least one full thematic content pack completed
+- Clear decisions on content ownership and curation workflow
+
+---
 
 ## SPAR ↔ D&D Adapter Formalization (Explicitly Deferred)
 
-**Status**: Parked pending content richness and campaign mechanics
+**Status**: Parked pending content richness and campaign mechanics validation
 
 Integration and publication-facing work:
 - **Mechanical mappings**: How SPAR outputs map to D&D complications
