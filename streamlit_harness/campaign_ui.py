@@ -1166,8 +1166,8 @@ def render_campaign_dashboard() -> None:
                             if st.session_state.get(f"prep_select_{item.item_id}", False)
                         ]
                         
-                        # Build packet from selected prep items
-                        what_happened_bullets = [f"{item.title}" for item in selected_items[:3]]
+                        # Build happened_items list - ONE per selected item (not just top 3)
+                        happened_items = [item.title for item in selected_items]
                         
                         # Aggregate tags
                         all_tags = []
@@ -1188,7 +1188,7 @@ def render_campaign_dashboard() -> None:
                                 "source": item.source,
                             })
                         
-                        # Create packet
+                        # Create packet with full happened_items list
                         packet = SessionPacket(
                             scenario_name=f"Prep Queue: {', '.join([i.title[:20] for i in selected_items[:2]])}...",
                             preset="prep_queue",
@@ -1204,9 +1204,10 @@ def render_campaign_dashboard() -> None:
                             suggested_heat_delta=0,
                             suggested_faction_updates={},
                             candidate_scars=[],
+                            happened_items=happened_items,  # Full N-item list
                             notes=[
                                 f"Session draft created from {len(selected_items)} prep items",
-                                "Review and edit 'What Happened' bullets before committing"
+                                "Review and edit 'What Happened' entries before committing"
                             ],
                         )
                         
@@ -1310,6 +1311,36 @@ def render_campaign_dashboard() -> None:
                                     lines.append(f"- {bullet}")
                                 lines.append("")
                             
+                            # Manual entries with rich data (GM-useful detail)
+                            manual_entries = entry.get('manual_entries')
+                            if manual_entries:
+                                lines.append("**Manual Entries & GM Notes:**")
+                                lines.append("")
+                                for manual_entry in manual_entries:
+                                    lines.append(f"**{manual_entry['title']}**")
+                                    lines.append("")
+                                    lines.append(f"{manual_entry['description']}")
+                                    lines.append("")
+                                    
+                                    # Rich metadata in compact form
+                                    rich_parts = []
+                                    if manual_entry.get('tags'):
+                                        rich_parts.append(f"Tags: {', '.join(manual_entry['tags'])}")
+                                    if manual_entry.get('severity'):
+                                        rich_parts.append(f"Severity: {manual_entry['severity']}/10")
+                                    if manual_entry.get('related_factions'):
+                                        rich_parts.append(f"Factions: {', '.join(manual_entry['related_factions'])}")
+                                    if manual_entry.get('related_scars'):
+                                        rich_parts.append(f"Scars: {', '.join(manual_entry['related_scars'])}")
+                                    
+                                    if rich_parts:
+                                        lines.append(f"*{' | '.join(rich_parts)}*")
+                                        lines.append("")
+                                    
+                                    if manual_entry.get('notes'):
+                                        lines.append(f"_GM Notes: {manual_entry['notes']}_")
+                                        lines.append("")
+                            
                             # Session notes if present
                             session_notes = entry.get('session_notes')
                             if session_notes:
@@ -1325,6 +1356,10 @@ def render_campaign_dashboard() -> None:
                                     lines.append(f"- Pressure: {deltas['pressure_change']:+d}")
                                 if deltas.get('heat_change'):
                                     lines.append(f"- Heat: {deltas['heat_change']:+d}")
+                                if deltas.get('rumor_spread'):
+                                    lines.append("- Rumor spread")
+                                if deltas.get('faction_attention_change'):
+                                    lines.append("- Faction attention increased")
                                 lines.append("")
                             
                             # Metadata summary if present
@@ -1337,13 +1372,15 @@ def render_campaign_dashboard() -> None:
                                     meta_parts.append(f"Cutoff: {metadata['cutoff_rate']*100:.0f}%")
                                 if 'top_tags' in metadata and metadata['top_tags']:
                                     meta_parts.append(f"Tags: {', '.join(metadata['top_tags'])}")
+                                if 'scenario_name' in metadata:
+                                    meta_parts.append(f"Scenario: {metadata['scenario_name']}")
                                 if meta_parts:
                                     lines.append(f"*Metadata: {' | '.join(meta_parts)}*")
                                     lines.append("")
                             
                             sources = entry.get('active_sources', [])
                             if sources:
-                                lines.append(f"*Sources: {', '.join(sources)}*")
+                                lines.append(f"*Content Sources: {', '.join(sources)}*")
                                 lines.append("")
                     
                     markdown_content = "\n".join(lines)
@@ -1389,7 +1426,7 @@ def render_campaign_dashboard() -> None:
                         # Get last session
                         entry = campaign.ledger[-1]
                         
-                        # Generate markdown content
+                        # Generate GM-useful markdown content
                         lines = []
                         session_num = entry.get('session_number', '?')
                         session_date = entry.get('session_date', '')[:10]
@@ -1405,6 +1442,47 @@ def render_campaign_dashboard() -> None:
                                 lines.append(f"- {bullet}")
                             lines.append("")
                         
+                        # Manual entries with rich data (GM-useful detail)
+                        manual_entries = entry.get('manual_entries')
+                        if manual_entries:
+                            lines.append("## Manual Entries & GM Notes")
+                            lines.append("")
+                            for manual_entry in manual_entries:
+                                lines.append(f"### {manual_entry['title']}")
+                                lines.append("")
+                                lines.append(f"**Description**: {manual_entry['description']}")
+                                lines.append("")
+                                
+                                if manual_entry.get('tags'):
+                                    lines.append(f"**Tags**: {', '.join(manual_entry['tags'])}")
+                                    lines.append("")
+                                
+                                if manual_entry.get('severity'):
+                                    lines.append(f"**Severity**: {manual_entry['severity']}/10")
+                                    lines.append("")
+                                
+                                if manual_entry.get('related_factions'):
+                                    lines.append(f"**Related Factions**: {', '.join(manual_entry['related_factions'])}")
+                                    lines.append("")
+                                
+                                if manual_entry.get('related_scars'):
+                                    lines.append(f"**Related Scars**: {', '.join(manual_entry['related_scars'])}")
+                                    lines.append("")
+                                
+                                if manual_entry.get('notes'):
+                                    lines.append(f"**GM Notes**: {manual_entry['notes']}")
+                                    lines.append("")
+                                
+                                # State impact from this entry
+                                delta_parts = []
+                                if manual_entry.get('pressure_delta'):
+                                    delta_parts.append(f"Pressure: {manual_entry['pressure_delta']:+d}")
+                                if manual_entry.get('heat_delta'):
+                                    delta_parts.append(f"Heat: {manual_entry['heat_delta']:+d}")
+                                if delta_parts:
+                                    lines.append(f"*Entry Impact: {' | '.join(delta_parts)}*")
+                                    lines.append("")
+                        
                         # Session notes if present
                         session_notes = entry.get('session_notes')
                         if session_notes:
@@ -1414,13 +1492,15 @@ def render_campaign_dashboard() -> None:
                             lines.append("")
                         
                         deltas = entry.get('deltas', {})
-                        if deltas:
-                            lines.append("## State Changes")
+                        if deltas and campaign.campaign_state:
+                            lines.append("## State Changes & Mechanics")
                             lines.append("")
                             if deltas.get('pressure_change'):
-                                lines.append(f"- Campaign Pressure: {deltas['pressure_change']:+d}")
+                                new_pressure = campaign.campaign_state.campaign_pressure
+                                lines.append(f"- Campaign Pressure: {deltas['pressure_change']:+d} → {new_pressure}")
                             if deltas.get('heat_change'):
-                                lines.append(f"- Heat: {deltas['heat_change']:+d}")
+                                new_heat = campaign.campaign_state.heat
+                                lines.append(f"- Heat: {deltas['heat_change']:+d} → {new_heat}")
                             if deltas.get('rumor_spread'):
                                 lines.append("- Rumor spread")
                             if deltas.get('faction_attention_change'):
@@ -1432,14 +1512,15 @@ def render_campaign_dashboard() -> None:
                         if metadata:
                             lines.append("## Session Metadata")
                             lines.append("")
+                            if 'scenario_name' in metadata:
+                                lines.append(f"**Scenario**: {metadata['scenario_name']}")
+                                lines.append("")
                             if 'severity_avg' in metadata:
                                 lines.append(f"- Average Severity: {metadata['severity_avg']:.2f}")
                             if 'cutoff_rate' in metadata:
                                 lines.append(f"- Cutoff Rate: {metadata['cutoff_rate']*100:.1f}%")
                             if 'top_tags' in metadata and metadata['top_tags']:
                                 lines.append(f"- Top Tags: {', '.join(metadata['top_tags'])}")
-                            if 'scenario_name' in metadata:
-                                lines.append(f"- Scenario: {metadata['scenario_name']}")
                             lines.append("")
                         
                         sources = entry.get('active_sources', [])
@@ -2068,68 +2149,68 @@ def render_finalize_session() -> None:
     with st.form("finalize_session_form"):
         st.subheader("What Happened?")
         
-        # Initialize bullet list in session state if needed
-        if "finalize_bullets" not in st.session_state:
-            bullets_list = []
+        # Initialize entry list in session state if needed
+        if "finalize_entries" not in st.session_state:
+            entries_list = []
             
-            # Pre-fill from top events if packet exists
-            if session_packet and session_packet.top_events:
-                bullets_list = [event.get("title", "") for event in session_packet.top_events]
+            # Pre-fill from happened_items if packet exists (dynamic N-item list)
+            if session_packet and session_packet.happened_items:
+                entries_list = list(session_packet.happened_items)
             
-            # Add manual entries to bullets
+            # Add manual entries to list
             if "manual_entries" in st.session_state and st.session_state.manual_entries:
                 for entry in st.session_state.manual_entries:
-                    bullets_list.append(entry["title"])
+                    entries_list.append(entry["title"])
             
             # Default to 3 empty if nothing
-            if not bullets_list:
-                bullets_list = ["", "", ""]
+            if not entries_list:
+                entries_list = ["", "", ""]
             
-            st.session_state.finalize_bullets = bullets_list
+            st.session_state.finalize_entries = entries_list
         
-        bullets = st.session_state.finalize_bullets
+        entries = st.session_state.finalize_entries
         
         # Cap visible at 5 by default with toggle
-        if "show_all_bullets" not in st.session_state:
-            st.session_state.show_all_bullets = len(bullets) <= 5
+        if "show_all_entries" not in st.session_state:
+            st.session_state.show_all_entries = len(entries) <= 5
         
-        visible_count = len(bullets) if st.session_state.show_all_bullets else min(5, len(bullets))
+        visible_count = len(entries) if st.session_state.show_all_entries else min(5, len(entries))
         
-        # Render visible bullet inputs
-        bullet_values = []
+        # Render visible entry inputs (dynamic N-item list)
+        entry_values = []
         for idx in range(visible_count):
-            value = bullets[idx] if idx < len(bullets) else ""
-            bullet_input = st.text_input(
-                f"Bullet {idx+1}",
+            value = entries[idx] if idx < len(entries) else ""
+            entry_input = st.text_input(
+                f"Entry {idx+1}",
                 value=value,
                 placeholder="Event or outcome...",
-                key=f"finalize_bullet_{idx}"
+                key=f"finalize_entry_{idx}"
             )
-            bullet_values.append(bullet_input)
+            entry_values.append(entry_input)
         
-        # Show toggle if there are hidden bullets
-        if len(bullets) > 5 and not st.session_state.show_all_bullets:
-            if st.form_submit_button(f"Show all {len(bullets)} bullets"):
-                st.session_state.show_all_bullets = True
+        # Show toggle if there are hidden entries
+        if len(entries) > 5 and not st.session_state.show_all_entries:
+            if st.form_submit_button(f"Show all {len(entries)} entries"):
+                st.session_state.show_all_entries = True
                 st.rerun()
-        elif len(bullets) > 5 and st.session_state.show_all_bullets:
+        elif len(entries) > 5 and st.session_state.show_all_entries:
             if st.form_submit_button("Show first 5 only"):
-                st.session_state.show_all_bullets = False
+                st.session_state.show_all_entries = False
                 st.rerun()
         
-        # Add/remove bullet buttons
+        # Add/remove entry buttons
         col_add, col_remove = st.columns(2)
         with col_add:
-            add_bullet = st.form_submit_button("➕ Add Bullet")
+            add_entry = st.form_submit_button("➕ Add Entry")
         with col_remove:
-            remove_bullet = st.form_submit_button("➖ Remove Last", disabled=(len(bullets) <= 1))
+            remove_entry = st.form_submit_button("➖ Remove Last", disabled=(len(entries) <= 1))
         
         # Handle add/remove
-        if add_bullet:
-            st.session_state.finalize_bullets.append("")
+        if add_entry:
+            st.session_state.finalize_entries.append("")
             st.rerun()
-        if remove_bullet and len(bullets) > 1:
-            st.session_state.finalize_bullets.pop()
+        if remove_entry and len(entries) > 1:
+            st.session_state.finalize_entries.pop()
             st.rerun()
         
         # Optional session notes
@@ -2194,20 +2275,20 @@ def render_finalize_session() -> None:
             cancel = st.form_submit_button("Cancel", use_container_width=True)
         
         if commit:
-            # CRITICAL: Collect bullets from FULL list, not just visible ones
-            # Update visible bullets from form inputs
+            # CRITICAL: Collect entries from FULL list, not just visible ones
+            # Update visible entries from form inputs
             for idx in range(visible_count):
-                bullet_key = f"finalize_bullet_{idx}"
-                if bullet_key in st.session_state:
-                    bullet_text = st.session_state[bullet_key]
-                    if idx < len(bullets):
-                        bullets[idx] = bullet_text
+                entry_key = f"finalize_entry_{idx}"
+                if entry_key in st.session_state:
+                    entry_text = st.session_state[entry_key]
+                    if idx < len(entries):
+                        entries[idx] = entry_text
             
-            # Build what_happened from full bullet list (visible + hidden)
-            what_happened = [b.strip() for b in bullets if b.strip()]
+            # Build what_happened from full entry list (visible + hidden)
+            what_happened = [e.strip() for e in entries if e.strip()]
             
             if not what_happened:
-                st.error("Please enter at least one bullet point")
+                st.error("Please enter at least one entry")
                 st.stop()
             
             # Record active sources in session metadata
@@ -2228,11 +2309,17 @@ def render_finalize_session() -> None:
             if "prep_items_to_archive" in st.session_state:
                 metadata["prep_item_ids"] = st.session_state.prep_items_to_archive
             
+            # Store manual entries with full rich data
+            manual_entries_data = None
+            if "manual_entries" in st.session_state and st.session_state.manual_entries:
+                manual_entries_data = st.session_state.manual_entries
+            
             session_entry = {
                 "session_number": len(campaign.ledger) + 1,
                 "session_date": datetime.now().isoformat(),
-                "what_happened": what_happened,
+                "what_happened": what_happened,  # Full N-item list preserved
                 "session_notes": session_notes if session_notes.strip() else None,
+                "manual_entries": manual_entries_data,  # Rich manual entry data
                 "metadata": metadata if metadata else None,
                 "deltas": {
                     "pressure_change": pressure_change,
@@ -2327,10 +2414,10 @@ def render_finalize_session() -> None:
             # Clear session state after commit
             if "pending_session_packet" in st.session_state:
                 del st.session_state.pending_session_packet
-            if "finalize_bullets" in st.session_state:
-                del st.session_state.finalize_bullets
-            if "show_all_bullets" in st.session_state:
-                del st.session_state.show_all_bullets
+            if "finalize_entries" in st.session_state:
+                del st.session_state.finalize_entries
+            if "show_all_entries" in st.session_state:
+                del st.session_state.show_all_entries
             if "manual_entries" in st.session_state:
                 del st.session_state.manual_entries
             
@@ -2340,10 +2427,10 @@ def render_finalize_session() -> None:
         
         if cancel:
             # Clear session state on cancel
-            if "finalize_bullets" in st.session_state:
-                del st.session_state.finalize_bullets
-            if "show_all_bullets" in st.session_state:
-                del st.session_state.show_all_bullets
+            if "finalize_entries" in st.session_state:
+                del st.session_state.finalize_entries
+            if "show_all_entries" in st.session_state:
+                del st.session_state.show_all_entries
             if "manual_entries" in st.session_state:
                 del st.session_state.manual_entries
             st.session_state.campaign_page = "dashboard"

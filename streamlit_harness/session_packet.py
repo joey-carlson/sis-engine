@@ -35,14 +35,15 @@ class SessionPacket:
     top_tags: List[tuple[str, int]]  # (tag, count)
     top_events: List[Dict[str, Any]]  # Event dicts
     
-    # Suggested campaign deltas
+    # Suggested campaign deltas (required fields)
     suggested_pressure_delta: int
     suggested_heat_delta: int
     suggested_faction_updates: Dict[str, int]  # {faction_id: attention_delta}
     candidate_scars: List[Dict[str, str]]  # {scar_id, category, severity, notes}
     
-    # Explanatory notes
-    notes: List[str] = field(default_factory=list)
+    # Fields with defaults (must come last)
+    happened_items: List[str] = field(default_factory=list)  # Session draft - dynamic list
+    notes: List[str] = field(default_factory=list)  # Explanatory notes
     
     @staticmethod
     def from_run_result(
@@ -137,6 +138,9 @@ class SessionPacket:
         if candidate_scars:
             notes.append(f"Scar candidates: {len(candidate_scars)} suggested based on intensity")
         
+        # Build happened_items list from top events
+        happened_items = [event.get("title", "") for event in top_events]
+        
         return SessionPacket(
             scenario_name=scenario_name,
             preset=preset,
@@ -148,6 +152,7 @@ class SessionPacket:
             cutoff_rate=cutoff_rate,
             top_tags=top_tags,
             top_events=top_events,
+            happened_items=happened_items,
             suggested_pressure_delta=pressure_delta,
             suggested_heat_delta=heat_delta,
             suggested_faction_updates=faction_updates,
