@@ -659,15 +659,23 @@ def main() -> None:
     from streamlit_harness.campaign_context import init_campaign_context_state, get_campaign_context
     init_campaign_context_state()
     
-    # Mode selector at top (with key for programmatic control)
+    # Mode selector at top
+    # Use index-based control for programmatic switching
+    if "mode_index" not in st.session_state:
+        st.session_state.mode_index = 1  # Default to Event Generator
+    
+    mode_options = ["🎲 Campaign Manager", "⚡ Event Generator"]
     mode = st.radio(
         "Mode",
-        ["🎲 Campaign Manager", "⚡ Event Generator"],
+        mode_options,
+        index=st.session_state.mode_index,
         horizontal=True,
         label_visibility="collapsed",
-        help="Campaign Manager: Multi-campaign management with living state. Event Generator: Single-event testing and scenario validation.",
-        key="app_mode"
+        help="Campaign Manager: Multi-campaign management with living state. Event Generator: Single-event testing and scenario validation."
     )
+    
+    # Update index when user changes mode
+    st.session_state.mode_index = mode_options.index(mode)
     
     # Render campaign UI if in campaign mode
     if mode == "🎲 Campaign Manager":
@@ -1079,7 +1087,7 @@ def main() -> None:
                                 del st.session_state.send_success_count
                                 del st.session_state.send_success_campaign
                                 # Switch to Campaign Manager mode and dashboard
-                                st.session_state.app_mode = "🎲 Campaign Manager"
+                                st.session_state.mode_index = 0  # Index 0 = Campaign Manager
                                 st.session_state.campaign_page = "dashboard"
                                 st.rerun()
                             
