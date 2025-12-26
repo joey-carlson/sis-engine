@@ -1829,12 +1829,170 @@ def render_session_workspace() -> None:
     
     st.info("🔧 Campaign context applied! Switch to Event Generator mode to run scenarios with campaign tags/factions pre-filled.")
     
-    # Quick access to finalize
-    if st.button("✅ Finalize Session", type="primary", use_container_width=True):
-        st.session_state.campaign_page = "finalize"
-        st.rerun()
+    # Primary actions
+    col_finalize, col_manual = st.columns(2)
+    with col_finalize:
+        if st.button("✅ Finalize Session", type="primary", use_container_width=True):
+            st.session_state.campaign_page = "finalize"
+            st.rerun()
+    with col_manual:
+        if st.button("➕ Add Manual Entry", use_container_width=True):
+            st.session_state.show_manual_entry_form = True
     
     st.divider()
+    
+    # Initialize manual entries in session state
+    if "manual_entries" not in st.session_state:
+        st.session_state.manual_entries = []
+    
+    # Manual Entry Form (inline)
+    if st.session_state.get("show_manual_entry_form", False):
+        with st.container(border=True):
+            st.subheader("📝 Manual Entry")
+            st.caption("Record improvised events without using the generator")
+            
+            with st.form("manual_entry_form"):
+                # Required fields
+                entry_title = st.text_input("Title / Label*", placeholder="e.g., Unexpected Ambush")
+                entry_description = st.text_area(
+                    "Description / Summary*",
+                    placeholder="What happened...",
+                    height=100
+                )
+                
+                # Optional fields (collapsed)
+                with st.expander("Optional Details", expanded=False):
+                    # Tags
+                    entry_tags = st.text_input(
+                        "Tags (comma-separated)",
+                        placeholder="e.g., combat, social, mystery"
+                    )
+                    
+                    # Related factions
+                    if campaign.campaign_state and campaign.campaign_state.factions:
+                        faction_options = list(campaign.campaign_state.factions.keys())
+                        entry_factions = st.multiselect(
+                            "Related Factions",
+                            faction_options
+                        )
+                    else:
+                        entry_factions = []
+                    
+                    # Related scars
+                    if campaign.campaign_state and campaign.campaign_state.scars:
+                        scar_options = [s.scar_id for s in campaign.campaign_state.scars]
+                        entry_scars = st.multiselect(
+                            "Related Scars",
+                            scar_options
+                        )
+                    else:
+                        entry_scars = []
+                    
+                    # Severity
+                    entry_severity = st.number_input(
+                        "Severity (1-10, optional)",
+                        min_value=0,
+                        max_value=10,
+                        value=0,
+                        help="0 = not applicable"
+                    )
+                    
+                    # Additional notes
+                    entry_notes = st.text_area(
+                        "Additional Notes",
+                        placeholder="Context, player reactions, GM thoughts...",
+                        height=80
+                    )
+                
+                # Optional state impact (advanced, collapsed)
+                with st.expander("State Impact (Advanced)", expanded=False):
+                    entry_pressure_delta = st.number_input(
+                        "Pressure Delta",
+                        min_value=-5,
+                        max_value=5,
+                        value=0
+                    )
+                    entry_heat_delta = st.number_input(
+                        "Heat Delta",
+                        min_value=-5,
+                        max_value=5,
+                        value=0
+                    )
+                
+                # Form buttons
+                col_save, col_cancel = st.columns(2)
+                with col_save:
+                    save = st.form_submit_button("💾 Save Entry", type="primary", use_container_width=True)
+                with col_cancel:
+                    cancel = st.form_submit_button("Cancel", use_container_width=True)
+                
+                if save:
+                    if not entry_title or not entry_description:
+                        st.error("Title and Description are required")
+                        st.stop()
+                    
+                    # Create manual entry
+                    manual_entry = {
+                        "entry_id": f"manual_{datetime.now().strftime('%Y%m%d_%H%M%S%f')}",
+                        "title": entry_title,
+                        "description": entry_description,
+                        "tags": [t.strip() for t in entry_tags.split(",") if t.strip()] if entry_tags else [],
+                        "related_factions": entry_factions,
+                        "related_scars": entry_scars,
+                        "severity": entry_severity if entry_severity > 0 else None,
+                        "notes": entry_notes if entry_notes.strip() else None,
+                        "pressure_delta": entry_pressure_delta if entry_pressure_delta != 0 else None,
+                        "heat_delta": entry_heat_delta if entry_heat_delta != 0 else None,
+                        "created_at": datetime.now().isoformat(),
+                    }
+                    
+                    # Add to session manual entries
+                    st.session_state.manual_entries.append(manual_entry)
+                    st.session_state.show_manual_entry_form = False
+                    st.success(f"✓ Manual entry saved: {entry_title}")
+                    st.rerun()
+                
+                if cancel:
+                    st.session_state.show_manual_entry_form = False
+                    st.rerun()
+    
+    # Show saved manual entries
+    if st.session_state.manual_entries:
+        st.subheader(f"📋 Manual Entries ({len(st.session_state.manual_entries)})")
+        st.caption("These will be included when you finalize the session")
+        
+        for idx, entry in enumerate(st.session_state.manual_entries):
+            with st.container(border=True):
+                col1, col2 = st.columns([10, 2])
+                
+                with col1:
+                    st.markdown(f"**{entry['title']}**")
+                    st.caption(entry['description'][:150] + "..." if len(entry['description']) > 150 else entry['description'])
+                    
+                    # Show tags if present
+                    if entry.get('tags'):
+                        st.caption(f"🏷️ {', '.join(entry['tags'])}")
+                    
+                    # Show state deltas if present
+                    delta_parts = []
+                    if entry.get('pressure_delta'):
+                        delta_parts.append(f"Pressure: {entry['pressure_delta']:+d}")
+                    if entry.get('heat_delta'):
+                        delta_parts.append(f"Heat: {entry['heat_delta']:+d}")
+                    if delta_parts:
+                        st.caption(f"📊 {' | '.join(delta_parts)}")
+                
+                with col2:
+                    if st.button("🗑️", key=f"delete_manual_{idx}", help="Delete entry"):
+                        st.session_state.manual_entries.pop(idx)
+                        st.rerun()
+        
+        # Add another entry button
+        if st.button("➕ Add Another Entry"):
+            st.session_state.show_manual_entry_form = True
+            st.rerun()
+        
+        st.divider()
     
     # Campaign context for reference
     with st.expander("📊 Campaign Context", expanded=False):
@@ -1909,13 +2067,22 @@ def render_finalize_session() -> None:
         
         # Initialize bullet list in session state if needed
         if "finalize_bullets" not in st.session_state:
+            bullets_list = []
+            
             # Pre-fill from top events if packet exists
             if session_packet and session_packet.top_events:
-                st.session_state.finalize_bullets = [
-                    event.get("title", "") for event in session_packet.top_events
-                ]
-            else:
-                st.session_state.finalize_bullets = ["", "", ""]
+                bullets_list = [event.get("title", "") for event in session_packet.top_events]
+            
+            # Add manual entries to bullets
+            if "manual_entries" in st.session_state and st.session_state.manual_entries:
+                for entry in st.session_state.manual_entries:
+                    bullets_list.append(entry["title"])
+            
+            # Default to 3 empty if nothing
+            if not bullets_list:
+                bullets_list = ["", "", ""]
+            
+            st.session_state.finalize_bullets = bullets_list
         
         bullets = st.session_state.finalize_bullets
         
@@ -1995,9 +2162,17 @@ def render_finalize_session() -> None:
         
         st.subheader("State Changes")
         
-        # Pre-fill from packet if available
+        # Pre-fill from packet if available, or aggregate from manual entries
         default_pressure = session_packet.suggested_pressure_delta if session_packet else 0
         default_heat = session_packet.suggested_heat_delta if session_packet else 0
+        
+        # Add manual entry deltas
+        if "manual_entries" in st.session_state and st.session_state.manual_entries:
+            for entry in st.session_state.manual_entries:
+                if entry.get('pressure_delta'):
+                    default_pressure += entry['pressure_delta']
+                if entry.get('heat_delta'):
+                    default_heat += entry['heat_delta']
         
         col1, col2 = st.columns(2)
         with col1:
@@ -2153,6 +2328,8 @@ def render_finalize_session() -> None:
                 del st.session_state.finalize_bullets
             if "show_all_bullets" in st.session_state:
                 del st.session_state.show_all_bullets
+            if "manual_entries" in st.session_state:
+                del st.session_state.manual_entries
             
             st.success("Session finalized!")
             st.session_state.campaign_page = "dashboard"
@@ -2164,6 +2341,8 @@ def render_finalize_session() -> None:
                 del st.session_state.finalize_bullets
             if "show_all_bullets" in st.session_state:
                 del st.session_state.show_all_bullets
+            if "manual_entries" in st.session_state:
+                del st.session_state.manual_entries
             st.session_state.campaign_page = "dashboard"
             st.rerun()
 
