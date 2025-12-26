@@ -225,7 +225,7 @@ class TestConfigPersistence:
             
             config = load_config()
             assert "scenario_output_path" in config
-            assert config["scenario_output_path"] == "results/scenario_output.json"
+            assert config["scenario_output_path"] == "scenarios/results/scenario_output.json"
     
     def test_load_config_with_invalid_json(self):
         """Verify defaults are returned when config file is invalid."""
