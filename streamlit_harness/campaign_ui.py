@@ -1067,9 +1067,19 @@ def render_campaign_dashboard() -> None:
             st.caption(f"Session {last_entry.get('session_number', '?')}: {last_entry.get('session_date', '')}")
             
             if last_entry.get("what_happened"):
+                what_happened = last_entry["what_happened"]
                 st.markdown("**What Happened:**")
-                for bullet in last_entry["what_happened"]:
+                
+                # Show first 5 bullets, collapse rest if >5
+                bullets_to_show = what_happened[:5]
+                for bullet in bullets_to_show:
                     st.markdown(f"• {bullet}")
+                
+                # Show remaining bullets in collapsed section if >5
+                if len(what_happened) > 5:
+                    with st.expander(f"Show {len(what_happened) - 5} more bullets", expanded=False):
+                        for bullet in what_happened[5:]:
+                            st.markdown(f"• {bullet}")
             
             if last_entry.get("deltas"):
                 deltas = last_entry["deltas"]
@@ -1690,8 +1700,17 @@ def render_campaign_dashboard() -> None:
             for entry in reversed(campaign.ledger):  # Newest first
                 st.markdown(f"**Session {entry.get('session_number', '?')}** — {entry.get('session_date', '')}")
                 if entry.get("what_happened"):
-                    for bullet in entry["what_happened"][:3]:  # First 3 bullets
+                    what_happened = entry["what_happened"]
+                    
+                    # Show first 3 bullets inline
+                    for bullet in what_happened[:3]:
                         st.caption(f"• {bullet}")
+                    
+                    # Show remaining bullets in nested expander if >3
+                    if len(what_happened) > 3:
+                        with st.expander(f"+ {len(what_happened) - 3} more", expanded=False):
+                            for bullet in what_happened[3:]:
+                                st.caption(f"• {bullet}")
                 st.divider()
 
 
@@ -1806,15 +1825,60 @@ def render_finalize_session() -> None:
     with st.form("finalize_session_form"):
         st.subheader("What Happened?")
         
-        # Pre-fill from top events if packet exists
-        default_bullets = ["", "", ""]
-        if session_packet and session_packet.top_events:
-            for idx, event in enumerate(session_packet.top_events[:3]):
-                default_bullets[idx] = event.get("title", "")
+        # Initialize bullet list in session state if needed
+        if "finalize_bullets" not in st.session_state:
+            # Pre-fill from top events if packet exists
+            if session_packet and session_packet.top_events:
+                st.session_state.finalize_bullets = [
+                    event.get("title", "") for event in session_packet.top_events
+                ]
+            else:
+                st.session_state.finalize_bullets = ["", "", ""]
         
-        bullet1 = st.text_input("Bullet 1", value=default_bullets[0], placeholder="Key event or outcome...")
-        bullet2 = st.text_input("Bullet 2", value=default_bullets[1], placeholder="Another development...")
-        bullet3 = st.text_input("Bullet 3", value=default_bullets[2], placeholder="Third notable thing...")
+        bullets = st.session_state.finalize_bullets
+        
+        # Cap visible at 5 by default with toggle
+        if "show_all_bullets" not in st.session_state:
+            st.session_state.show_all_bullets = len(bullets) <= 5
+        
+        visible_count = len(bullets) if st.session_state.show_all_bullets else min(5, len(bullets))
+        
+        # Render visible bullet inputs
+        bullet_values = []
+        for idx in range(visible_count):
+            value = bullets[idx] if idx < len(bullets) else ""
+            bullet_input = st.text_input(
+                f"Bullet {idx+1}",
+                value=value,
+                placeholder="Event or outcome...",
+                key=f"finalize_bullet_{idx}"
+            )
+            bullet_values.append(bullet_input)
+        
+        # Show toggle if there are hidden bullets
+        if len(bullets) > 5 and not st.session_state.show_all_bullets:
+            if st.form_submit_button(f"Show all {len(bullets)} bullets"):
+                st.session_state.show_all_bullets = True
+                st.rerun()
+        elif len(bullets) > 5 and st.session_state.show_all_bullets:
+            if st.form_submit_button("Show first 5 only"):
+                st.session_state.show_all_bullets = False
+                st.rerun()
+        
+        # Add/remove bullet buttons (outside form to avoid conflicts)
+        col_add, col_remove = st.columns(2)
+        with col_add:
+            add_bullet = st.form_submit_button("➕ Add Bullet")
+        with col_remove:
+            remove_bullet = st.form_submit_button("➖ Remove Last", disabled=(len(bullets) <= 1))
+        
+        # Handle add/remove (must be outside form's normal flow)
+        if add_bullet:
+            st.session_state.finalize_bullets.append("")
+            st.rerun()
+        if remove_bullet and len(bullets) > 1:
+            st.session_state.finalize_bullets.pop()
+            st.rerun()
         
         st.subheader("What Changed?")
         
@@ -1857,8 +1921,14 @@ def render_finalize_session() -> None:
             cancel = st.form_submit_button("Cancel", use_container_width=True)
         
         if commit:
-            # Build ledger entry
-            what_happened = [b for b in [bullet1, bullet2, bullet3] if b.strip()]
+            # Collect all bullet values from form inputs
+            what_happened = []
+            for idx in range(visible_count):
+                bullet_key = f"finalize_bullet_{idx}"
+                if bullet_key in st.session_state:
+                    bullet_text = st.session_state[bullet_key]
+                    if bullet_text.strip():
+                        what_happened.append(bullet_text.strip())
             
             if not what_happened:
                 st.error("Please enter at least one bullet point")
@@ -1952,15 +2022,24 @@ def render_finalize_session() -> None:
             # Save
             campaign.save()
             
-            # Clear session packet after commit
+            # Clear session state after commit
             if "pending_session_packet" in st.session_state:
                 del st.session_state.pending_session_packet
+            if "finalize_bullets" in st.session_state:
+                del st.session_state.finalize_bullets
+            if "show_all_bullets" in st.session_state:
+                del st.session_state.show_all_bullets
             
             st.success("Session finalized!")
             st.session_state.campaign_page = "dashboard"
             st.rerun()
         
         if cancel:
+            # Clear session state on cancel
+            if "finalize_bullets" in st.session_state:
+                del st.session_state.finalize_bullets
+            if "show_all_bullets" in st.session_state:
+                del st.session_state.show_all_bullets
             st.session_state.campaign_page = "dashboard"
             st.rerun()
 
