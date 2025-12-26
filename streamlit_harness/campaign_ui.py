@@ -277,8 +277,26 @@ def render_campaign_selector() -> None:
             
             with st.expander("Factions Detected", expanded=True):
                 if parsed["factions"]:
-                    for faction in parsed["factions"]:
-                        st.write(f"• {faction}")
+                    for idx, faction in enumerate(parsed["factions"]):
+                        col1, col2 = st.columns([10, 2])
+                        with col1:
+                            st.write(f"• {faction}")
+                        with col2:
+                            # Demote to Place button (inline, no subdialog)
+                            if st.button("→Place", key=f"demote_faction_{idx}", help="Demote to Place"):
+                                # Update parsed data in session state
+                                if "parsed_history" in st.session_state:
+                                    # Move from factions to places
+                                    factions = list(parsed["factions"])
+                                    factions.remove(faction)
+                                    
+                                    places = list(parsed["entities"]["places"])
+                                    places.append(faction)
+                                    
+                                    # Update parsed dict
+                                    st.session_state.parsed_history["factions"] = sorted(factions)
+                                    st.session_state.parsed_history["entities"]["places"] = sorted(places)
+                                    st.rerun()
                 else:
                     st.caption("No factions detected")
             
