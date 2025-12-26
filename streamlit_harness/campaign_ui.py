@@ -596,12 +596,33 @@ def render_finalize_session() -> None:
     st.title("✅ Finalize Session")
     st.caption(f"Campaign: {campaign.name}")
     
+    # Check for session packet (Flow B: Generator → Campaign)
+    session_packet = st.session_state.get("pending_session_packet")
+    
+    if session_packet:
+        st.info(f"📊 Session data loaded from: {session_packet.scenario_name}")
+        with st.expander("Session Statistics", expanded=False):
+            st.write(f"**Severity Avg**: {session_packet.severity_avg:.2f}")
+            st.write(f"**Cutoff Rate**: {session_packet.cutoff_rate*100:.1f}%")
+            st.write(f"**Top Tags**: {', '.join([tag for tag, _ in session_packet.top_tags[:5]])}")
+            
+            if session_packet.notes:
+                st.markdown("**Suggestions:**")
+                for note in session_packet.notes:
+                    st.caption(f"• {note}")
+    
     with st.form("finalize_session_form"):
         st.subheader("What Happened?")
         
-        bullet1 = st.text_input("Bullet 1", placeholder="Key event or outcome...")
-        bullet2 = st.text_input("Bullet 2", placeholder="Another development...")
-        bullet3 = st.text_input("Bullet 3", placeholder="Third notable thing...")
+        # Pre-fill from top events if packet exists
+        default_bullets = ["", "", ""]
+        if session_packet and session_packet.top_events:
+            for idx, event in enumerate(session_packet.top_events[:3]):
+                default_bullets[idx] = event.get("title", "")
+        
+        bullet1 = st.text_input("Bullet 1", value=default_bullets[0], placeholder="Key event or outcome...")
+        bullet2 = st.text_input("Bullet 2", value=default_bullets[1], placeholder="Another development...")
+        bullet3 = st.text_input("Bullet 3", value=default_bullets[2], placeholder="Third notable thing...")
         
         st.subheader("What Changed?")
         
@@ -625,13 +646,17 @@ def render_finalize_session() -> None:
                 else:
                     st.caption("No factions defined yet")
         
-        st.subheader("State Changes (Manual)")
+        st.subheader("State Changes")
+        
+        # Pre-fill from packet if available
+        default_pressure = session_packet.suggested_pressure_delta if session_packet else 0
+        default_heat = session_packet.suggested_heat_delta if session_packet else 0
         
         col1, col2 = st.columns(2)
         with col1:
-            pressure_change = st.number_input("Pressure change", min_value=-10, max_value=10, value=0, step=1)
+            pressure_change = st.number_input("Pressure change", min_value=-10, max_value=10, value=default_pressure, step=1)
         with col2:
-            heat_change = st.number_input("Heat change", min_value=-10, max_value=10, value=0, step=1)
+            heat_change = st.number_input("Heat change", min_value=-10, max_value=10, value=default_heat, step=1)
         
         col1, col2 = st.columns(2)
         with col1:
@@ -721,6 +746,10 @@ def render_finalize_session() -> None:
             
             # Save
             campaign.save()
+            
+            # Clear session packet after commit
+            if "pending_session_packet" in st.session_state:
+                del st.session_state.pending_session_packet
             
             st.success("Session finalized!")
             st.session_state.campaign_page = "dashboard"

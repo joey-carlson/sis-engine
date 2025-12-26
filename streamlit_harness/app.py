@@ -838,6 +838,30 @@ def main() -> None:
 
                 hs.last_batch = batch_events
 
+            # Finalize Session button (Flow B: Generator → Campaign)
+            if hs.events and st.session_state.get("active_campaign_context"):
+                if st.button("✅ Finalize Session", type="primary", use_container_width=True):
+                    # Create session packet from last batch
+                    if hs.last_batch:
+                        from streamlit_harness.session_packet import SessionPacket
+                        packet = SessionPacket.from_run_result(
+                            scenario_name=f"{preset} / {scene_phase} / {rarity_mode}",
+                            preset=preset,
+                            phase=scene_phase,
+                            rarity_mode=rarity_mode,
+                            seed=seed,
+                            batch_size=hs.batch_n,
+                            events=hs.last_batch,
+                            summary=summarize_events(hs.last_batch),
+                        )
+                        st.session_state.pending_session_packet = packet
+                        
+                        # Navigate to campaign finalize
+                        st.session_state.campaign_page = "finalize"
+                        # Switch to campaign mode
+                        st.rerun()
+                st.divider()
+            
             if hs.events:
                 for e in hs.events[:25]:
                     with st.container(border=True):
