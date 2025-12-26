@@ -160,7 +160,7 @@ def render_campaign_selector() -> None:
             st.session_state.show_new_campaign_form = True
     with col2:
         if st.button("📥 Import Campaign History", use_container_width=True):
-            st.info("Campaign history import - Coming in v0.2")
+            st.session_state.show_history_import = True
     
     # New campaign form
     if st.session_state.get("show_new_campaign_form", False):
@@ -233,6 +233,113 @@ def render_campaign_selector() -> None:
             if cancel:
                 st.session_state.show_new_campaign_form = False
                 st.rerun()
+    
+    # History Import Form (Flow D: New Campaign)
+    if st.session_state.get("show_history_import", False):
+        st.subheader("📥 Import Campaign History")
+        st.caption("Create new campaign from existing history")
+        
+        history_text = st.text_area("Paste campaign history", height=200, placeholder="Paste session notes, date markers, faction names...")
+        
+        if st.button("Parse History"):
+            if history_text:
+                from streamlit_harness.history_parser import parse_campaign_history
+                parsed = parse_campaign_history(history_text)
+                st.session_state.parsed_history = parsed
+        
+        # Show parse preview if available
+        if st.session_state.get("parsed_history"):
+            parsed = st.session_state.parsed_history
+            
+            st.markdown("**Parse Preview**")
+            for note in parsed["notes"]:
+                st.caption(note)
+            
+            with st.expander("Sessions Detected", expanded=True):
+                for session in parsed["sessions"]:
+                    st.markdown(f"**Session {session['session_number']}** - {session['date']}")
+                    st.caption(session['content'][:100] + "..." if len(session['content']) > 100 else session['content'])
+            
+            with st.expander("Canon Summary", expanded=True):
+                for bullet in parsed["canon_summary"]:
+                    st.write(f"• {bullet}")
+            
+            with st.expander("Factions Detected", expanded=True):
+                if parsed["factions"]:
+                    for faction in parsed["factions"]:
+                        st.write(f"• {faction}")
+                else:
+                    st.caption("No factions detected")
+            
+            # Create campaign from parsed history
+            campaign_name_import = st.text_input("Campaign Name", value="Imported Campaign")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Create Campaign from History", type="primary"):
+                    # Create campaign with parsed data
+                    campaign_id = f"campaign_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    timestamp = datetime.now().isoformat()
+                    
+                    # Initialize state with detected factions
+                    campaign_state = CampaignState.default()
+                    initial_factions = {}
+                    for f_name in parsed["factions"]:
+                        fid = f_name.lower().replace(" ", "_")
+                        initial_factions[fid] = FactionState(
+                            faction_id=fid,
+                            attention=0,
+                            disposition=0,
+                            notes=f_name,
+                        )
+                    
+                    if initial_factions:
+                        campaign_state = CampaignState(
+                            version="0.2",
+                            campaign_pressure=0,
+                            heat=0,
+                            scars=[],
+                            factions=initial_factions,
+                            total_scenes_run=len(parsed["sessions"]),
+                            total_cutoffs_seen=0,
+                            highest_severity_seen=0,
+                            _legacy_scars=set(),
+                        )
+                    
+                    # Create ledger from parsed sessions
+                    ledger = []
+                    for session in parsed["sessions"]:
+                        ledger.append({
+                            "session_number": session["session_number"],
+                            "session_date": session["date"],
+                            "what_happened": [session["content"][:200]],  # Truncate
+                            "deltas": {"pressure_change": 0, "heat_change": 0},
+                            "active_sources": [],
+                        })
+                    
+                    campaign = Campaign(
+                        campaign_id=campaign_id,
+                        name=campaign_name_import,
+                        created=timestamp,
+                        last_played=timestamp,
+                        canon_summary=parsed["canon_summary"],
+                        campaign_state=campaign_state,
+                        ledger=ledger,
+                    )
+                    
+                    campaign.save()
+                    st.session_state.current_campaign_id = campaign_id
+                    st.session_state.show_history_import = False
+                    st.session_state.parsed_history = None
+                    st.session_state.campaign_page = "dashboard"
+                    st.success(f"Campaign '{campaign_name_import}' created from history!")
+                    st.rerun()
+            
+            with col2:
+                if st.button("Cancel"):
+                    st.session_state.show_history_import = False
+                    st.session_state.parsed_history = None
+                    st.rerun()
     
     st.divider()
     
@@ -515,9 +622,82 @@ def render_campaign_dashboard() -> None:
                 deltas = last_entry["deltas"]
                 st.caption(f"Pressure: {deltas.get('pressure_change', 0):+d} | Heat: {deltas.get('heat_change', 0):+d}")
     
-    # Ledger
+    # Ledger with Import button (Flow C)
     if campaign.ledger:
-        with st.expander(f"📚 Campaign Ledger ({len(campaign.ledger)} sessions)", expanded=False):
+        ledger_col1, ledger_col2 = st.columns([10, 2])
+        with ledger_col1:
+            st.subheader(f"📚 Campaign Ledger ({len(campaign.ledger)} sessions)")
+        with ledger_col2:
+            if st.button("📥 Import", key="import_history_dashboard"):
+                st.session_state.show_dashboard_history_import = True
+        
+        # History import for existing campaign (Flow C)
+        if st.session_state.get("show_dashboard_history_import", False):
+            with st.container(border=True):
+                st.markdown("**Import History into Existing Campaign**")
+                
+                history_text = st.text_area("Paste history", height=150, key="dashboard_history_import")
+                
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    if st.button("Parse"):
+                        if history_text:
+                            from streamlit_harness.history_parser import parse_campaign_history
+                            st.session_state.dashboard_parsed = parse_campaign_history(history_text)
+                with col2:
+                    if st.button("Clear"):
+                        st.session_state.show_dashboard_history_import = False
+                        st.session_state.dashboard_parsed = None
+                        st.rerun()
+                
+                # Show preview if parsed
+                if st.session_state.get("dashboard_parsed"):
+                    parsed = st.session_state.dashboard_parsed
+                    
+                    st.caption("**Preview:**")
+                    st.caption(f"{len(parsed['sessions'])} sessions, {len(parsed['canon_summary'])} canon bullets")
+                    
+                    with col3:
+                        if st.button("Merge", type="primary"):
+                            # Merge into existing campaign
+                            for session in parsed["sessions"]:
+                                campaign.ledger.append({
+                                    "session_number": len(campaign.ledger) + 1,
+                                    "session_date": session["date"],
+                                    "what_happened": [session["content"][:200]],
+                                    "deltas": {"pressure_change": 0, "heat_change": 0},
+                                })
+                            
+                            # Append canon bullets
+                            campaign.canon_summary.extend(parsed["canon_summary"])
+                            
+                            # Add factions if not present
+                            if campaign.campaign_state:
+                                new_factions = dict(campaign.campaign_state.factions)
+                                for f_name in parsed["factions"]:
+                                    fid = f_name.lower().replace(" ", "_")
+                                    if fid not in new_factions:
+                                        new_factions[fid] = FactionState(fid, 0, 0, f_name)
+                                
+                                campaign.campaign_state = CampaignState(
+                                    version="0.2",
+                                    campaign_pressure=campaign.campaign_state.campaign_pressure,
+                                    heat=campaign.campaign_state.heat,
+                                    scars=campaign.campaign_state.scars,
+                                    factions=new_factions,
+                                    total_scenes_run=campaign.campaign_state.total_scenes_run + len(parsed["sessions"]),
+                                    total_cutoffs_seen=campaign.campaign_state.total_cutoffs_seen,
+                                    highest_severity_seen=campaign.campaign_state.highest_severity_seen,
+                                    _legacy_scars=campaign.campaign_state._legacy_scars,
+                                )
+                            
+                            campaign.save()
+                            st.session_state.show_dashboard_history_import = False
+                            st.session_state.dashboard_parsed = None
+                            st.success("History merged into campaign!")
+                            st.rerun()
+        
+        with st.expander(f"Existing Ledger Entries", expanded=False):
             for entry in reversed(campaign.ledger):  # Newest first
                 st.markdown(f"**Session {entry.get('session_number', '?')}** — {entry.get('session_date', '')}")
                 if entry.get("what_happened"):
