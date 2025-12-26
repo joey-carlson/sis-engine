@@ -262,10 +262,16 @@ def extract_canon_from_section(canon_section: str) -> List[str]:
                 return subsection_content[key]
         return None
     
-    # Premise/Pitch: 1-2 bullets
-    premise_content = find_subsection(['premise', 'pitch', 'one-sentence'])
+    # Vibe/Premise/Pitch: 1-2 bullets
+    premise_content = find_subsection(['vibe', 'premise', 'pitch', 'one-sentence'])
     if premise_content:
         lines = [l.strip() for l in premise_content.split('\n') if l.strip() and len(l.strip()) > 30]
+        bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:2]])
+    
+    # Core Themes: 1-2 bullets (if present in Campaign Overview format)
+    themes_content = find_subsection(['core themes', 'theme'])
+    if themes_content:
+        lines = [l.strip() for l in themes_content.split('\n') if l.strip() and len(l.strip()) > 30]
         bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:2]])
     
     # Genre/Tone: 0-1 bullets (if present)
@@ -275,8 +281,8 @@ def extract_canon_from_section(canon_section: str) -> List[str]:
         if lines:
             bullets.append(re.sub(r'^[\-\*•]\s*', '', lines[0]))
     
-    # Big Engine/Myth-arc: 1 bullet
-    engine_content = find_subsection(['engine', 'myth-arc', 'myth arc'])
+    # Big Engine/Myth-arc/Long-haul problem: 1 bullet
+    engine_content = find_subsection(['engine', 'myth-arc', 'myth arc', 'long-haul problem', 'long-haul'])
     if engine_content:
         lines = [l.strip() for l in engine_content.split('\n') if l.strip() and len(l.strip()) > 30]
         if lines:
@@ -286,6 +292,19 @@ def extract_canon_from_section(canon_section: str) -> List[str]:
     pc_content = find_subsection(['player character', 'the party', 'party'])
     if pc_content:
         bullets.append("Party roster established (see full history for PC details)")
+    
+    # Major antagonists: 1-2 bullets
+    antagonist_content = find_subsection(['antagonist', 'villain', 'threat'])
+    if antagonist_content:
+        lines = [l.strip() for l in antagonist_content.split('\n') if l.strip() and len(l.strip()) > 30]
+        bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:2]])
+    
+    # Allied forces: 1 bullet
+    ally_content = find_subsection(['allied forces', 'allies', 'major allied'])
+    if ally_content:
+        lines = [l.strip() for l in ally_content.split('\n') if l.strip() and len(l.strip()) > 30]
+        if lines:
+            bullets.append(re.sub(r'^[\-\*•]\s*', '', lines[0]))
     
     # Key NPCs/Powers/Guardians/Temporal entities: 2-3 bullets
     npc_content = find_subsection(['npc', 'powers in play', 'guardians', 'temporal', 'solstice', 'makers'])
@@ -375,6 +394,48 @@ def parse_ledger_sessions(ledger_section: str) -> List[Dict[str, Any]]:
             "title": title,  # Clean title only
             "bullets": bullets,  # Structured bullet list
             "content": raw_content,  # Raw text for reference
+        })
+    
+    # Pattern 2: Addendum entries
+    addendum_pattern = r'###\s+(\d{4}-\d{2}-\d{2})\s+[—–]\s+Addendum(?:\s+\([^)]+\))?\s+[—–]\s+([^\n]+)'
+    
+    for match in re.finditer(addendum_pattern, ledger_section):
+        date_str = match.group(1)
+        title = match.group(2).strip()
+        
+        # Normalize date with dateparser
+        normalized_date = normalize_date(date_str)
+        if not normalized_date:
+            normalized_date = date_str
+        
+        # Get content after header
+        content_start = match.end()
+        content_end = ledger_section.find('\n###', content_start)
+        if content_end == -1:
+            content_end = len(ledger_section)
+        
+        raw_content = ledger_section[content_start:content_end].strip()
+        
+        # Extract bullets
+        bullets = []
+        lines = raw_content.split('\n')
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            
+            if re.match(r'^[\-\*•]\s+', line):
+                bullet_text = re.sub(r'^[\-\*•]\s+', '', line)
+                bullets.append(bullet_text)
+            elif bullets:
+                bullets[-1] += " " + line
+        
+        sessions.append({
+            "session_number": None,  # Addendums don't have session numbers
+            "date": normalized_date,
+            "title": title,
+            "bullets": bullets,
+            "content": raw_content,
         })
     
     # Sort by date for consistency
@@ -717,27 +778,53 @@ def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict
     # Split into sections
     sections = split_by_sections(text)
     
-    # Parse Canon Summary (only from Canon Summary section)
+    # Parse Canon Summary (flexible section matching)
+    # Try standard names first, then synonyms
     canon_section_key = None
-    for key in sections.keys():
-        if 'canon summary' in key:
-            canon_section_key = key
+    canon_synonyms = ['canon summary', 'campaign overview', 'campaign bible']
+    for synonym in canon_synonyms:
+        for key in sections.keys():
+            if synonym in key:
+                canon_section_key = key
+                break
+        if canon_section_key:
             break
     
     canon_summary = []
+    canon_source = None
     if canon_section_key:
         canon_summary = extract_canon_from_section(sections[canon_section_key])
+        # Record which section was used
+        if 'canon summary' in canon_section_key:
+            canon_source = "Canon Summary"
+        elif 'campaign overview' in canon_section_key:
+            canon_source = "Campaign Overview"
+        elif 'campaign bible' in canon_section_key:
+            canon_source = "Campaign Bible"
     
-    # Parse Sessions (only from Campaign Ledger section)
+    # Parse Sessions (flexible section matching)
+    # Try standard names first, then synonyms
     ledger_section_key = None
-    for key in sections.keys():
-        if 'campaign ledger' in key or 'sessionized history' in key:
-            ledger_section_key = key
+    ledger_synonyms = ['campaign ledger', 'sessionized history', 'session log', 'session journal']
+    for synonym in ledger_synonyms:
+        for key in sections.keys():
+            if synonym in key:
+                ledger_section_key = key
+                break
+        if ledger_section_key:
             break
     
     sessions = []
+    ledger_source = None
     if ledger_section_key:
         sessions = parse_ledger_sessions(sections[ledger_section_key])
+        # Record which section was used
+        if 'campaign ledger' in ledger_section_key:
+            ledger_source = "Campaign Ledger"
+        elif 'session log' in ledger_section_key:
+            ledger_source = "Session Log"
+        elif 'session journal' in ledger_section_key:
+            ledger_source = "Session Journal"
     
     # Parse Future Sessions
     future_section_key = None
@@ -797,13 +884,19 @@ def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict
     # Build notes
     notes = [notes_prefix]  # Add source indicator first
     
+    # Add section source indicators
+    if canon_source:
+        notes.append(f"📖 Canon from: {canon_source}")
+    if ledger_source:
+        notes.append(f"📅 Sessions from: {ledger_source}")
+    
     if not sessions:
-        notes.append("⚠️ No sessions detected in Campaign Ledger section")
+        notes.append("⚠️ No sessions detected")
     else:
-        notes.append(f"✓ Detected {len(sessions)} sessions from ledger")
+        notes.append(f"✓ Detected {len(sessions)} sessions")
     
     if not canon_summary:
-        notes.append("⚠️ No canon summary extracted from Canon Summary section")
+        notes.append("⚠️ No canon summary extracted")
     else:
         notes.append(f"✓ Extracted {len(canon_summary)} canon bullets")
     
