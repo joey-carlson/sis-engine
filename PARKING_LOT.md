@@ -15,57 +15,60 @@ A running list of deferred ideas and improvements.
 - **Scenario editor**: In-app JSON editing and creation interface for building scenarios without external editor
 - **Scenario comparison**: Side-by-side result comparison UI for analyzing multiple scenario runs
 
-## Campaign Mechanics Layer - Future Enhancements (v0.2+)
+## Campaign Mechanics Layer - Future Enhancements (v0.3+)
 
-**Status**: v0.1 COMPLETE and LOCKED (see `spar_campaign/` module)
+**Status**: v0.2 COMPLETE (see `spar_campaign/` module and Campaign Manager UI)
 
-Campaign Mechanics v0.1 successfully implements:
-- Campaign pressure and heat tracking
-- Scene outcome observation
-- Non-invasive scene setup influence
-- Explicit decay mechanics
+Campaign Mechanics v0.1 + v0.2 successfully implement:
+- ✅ Campaign pressure and heat tracking
+- ✅ Scene outcome observation
+- ✅ Non-invasive scene setup influence
+- ✅ Explicit decay mechanics
+- ✅ Structured scars (category, severity, source, notes)
+- ✅ Faction tracking (attention + disposition)
+- ✅ Long-arc bands (descriptive state tiers)
+- ✅ Multi-campaign UI with dashboard
+- ✅ Session finalization wizard
+- ✅ Content sources metadata tracking
 
-Potential future enhancements (deferred until v0.1 validated in play):
-- **Faction standing trackers**: Multi-faction tension and diplomacy state
+Potential future enhancements (v0.3+):
 - **Auto-scar triggers**: Automatic scar generation from significant events
-- **Resource depletion mechanics**: Campaign-scale supply tracking
+- **Disposition auto-adjustment**: Context-aware faction disposition changes
+- **Resource depletion mechanics**: Campaign-scale supply tracking with game effects
 - **Richer influence rules**: More sophisticated scene setup hints
-- **UI integration**: Streamlit harness campaign state display
-- **Scenario schema support**: Campaign state in JSON scenarios
+- **Scenario schema integration**: CampaignState in JSON scenario format
 - **Campaign-level cutoffs**: Optional hard gates based on campaign state
+- **Scar remediation**: Mechanics for resolving/healing scars
+- **Faction AI/actions**: Active faction responses (not just tracking)
 
 **Design Intent**: All future work must preserve optional nature, pure functional design, and engine separation.
 
-## Source List Import (External Content Feeds) - Deferred
+## Source List Import & Parsing (External Content Feeds) - Partially Complete
 
-**Context:**
-As SPAR content grows, manually maintaining large content packs becomes inefficient. We've already reviewed community-scale datasets (e.g., large spreadsheet-based loot tables), which demonstrate both the value and pitfalls of external content sources.
+**Status**: Metadata tracking COMPLETE, parsing/import still deferred
 
-**Idea:**
-Introduce a future capability to treat a large external file (spreadsheet, CSV, JSON, etc.) as a source list that can be imported, transformed, or referenced as a content feed for event/scenario generation.
+**What's implemented (Campaign UX v0.1)**:
+- ✅ Source metadata model (name, path, enabled, type)
+- ✅ UI for adding/toggling sources
+- ✅ Active sources displayed in campaign header
+- ✅ Active sources recorded in ledger metadata
+- ✅ Per-campaign source management
 
-**High-level goals:**
-- Allow pointing at a large external dataset as an input source
-- Map source rows/entries into SPAR-compatible content entries
-- Preserve engine/content separation (source is not engine logic)
-- Enable large-scale content reuse without hand-curation
+**What remains deferred (future work)**:
+- **Content parsing**: Read external files (CSV, spreadsheet, JSON)
+- **Content mapping**: Transform external format → SPAR content schema
+- **Tag normalization**: Validate and clean external tags
+- **Validation layer**: Prevent low-quality imports
+- **Live import UI**: Parse and preview before accepting
+- **Community pipeline**: Submission and curation workflow
 
-**Non-goals (for now):**
-- No importer UX design yet
-- No live syncing or hot-reload assumptions
-- No schema locking beyond SPAR's internal content format
-- No community submission pipeline yet
+**Design considerations for parsing (future):**
+- Clear separation between canonical packs and imported sources
+- Strong tag hygiene and validation
+- Selective enable/disable (already implemented at metadata level)
+- Preview and approve workflow (not auto-import)
 
-**Design considerations (future):**
-- Clear separation between canonical content packs and imported sources
-- Strong tag normalization and hygiene
-- Validation layer to prevent low-quality or inconsistent imports
-- Ability to selectively enable/disable source subsets
-
-**Prerequisites before implementation:**
-- Campaign Mechanics v0.1 validated in play
-- At least one full thematic content pack completed
-- Clear decisions on content ownership and curation workflow
+**Next step**: Implement parser for one format (e.g., CSV) as proof of concept
 
 ---
 
