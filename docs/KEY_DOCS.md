@@ -23,6 +23,9 @@ This project is governed by a small set of documents. If you are new to the repo
 5. **Campaign Integration Architecture** (`/docs/ARCH_campaign_integration.md`)
    Technical architecture for campaign state management, data flows, and integration patterns.
 
+6. **Data Contract: Story-Facing vs System-Facing** (`/docs/DATA_CONTRACT_story_vs_system_v0.1.md`)
+   Explicit, versioned contract defining which campaign/session fields serve narrative purposes (GM/player readable) versus system purposes (metrics, reproducibility). Foundation for export design and prevents conflation of story layer with simulation layer.
+
 ## Context
 
 6. **Project Context & Status**  
