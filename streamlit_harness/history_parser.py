@@ -262,39 +262,52 @@ def extract_canon_from_section(canon_section: str) -> List[str]:
                 return subsection_content[key]
         return None
     
-    # Premise: 1-2 bullets (combine vibe + myth-arc)
-    premise_content = find_subsection(['premise'])
+    # Premise/Pitch: 1-2 bullets
+    premise_content = find_subsection(['premise', 'pitch', 'one-sentence'])
     if premise_content:
         lines = [l.strip() for l in premise_content.split('\n') if l.strip() and len(l.strip()) > 30]
         bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:2]])
     
-    # Player Characters: 1 bullet (collapsed)
-    pc_content = find_subsection(['player character'])
+    # Genre/Tone: 0-1 bullets (if present)
+    genre_content = find_subsection(['genre', 'tone'])
+    if genre_content:
+        lines = [l.strip() for l in genre_content.split('\n') if l.strip() and len(l.strip()) > 30]
+        if lines:
+            bullets.append(re.sub(r'^[\-\*•]\s*', '', lines[0]))
+    
+    # Big Engine/Myth-arc: 1 bullet
+    engine_content = find_subsection(['engine', 'myth-arc', 'myth arc'])
+    if engine_content:
+        lines = [l.strip() for l in engine_content.split('\n') if l.strip() and len(l.strip()) > 30]
+        if lines:
+            bullets.append(re.sub(r'^[\-\*•]\s*', '', lines[0]))
+    
+    # Player Characters / Party: 1 bullet (collapsed)
+    pc_content = find_subsection(['player character', 'the party', 'party'])
     if pc_content:
-        # Just note that there's a party, don't enumerate
         bullets.append("Party roster established (see full history for PC details)")
     
-    # Key NPCs/Powers: 2-3 bullets
-    npc_content = find_subsection(['npc', 'powers in play'])
+    # Key NPCs/Powers/Guardians/Temporal entities: 2-3 bullets
+    npc_content = find_subsection(['npc', 'powers in play', 'guardians', 'temporal', 'solstice', 'makers'])
     if npc_content:
         lines = [l.strip() for l in npc_content.split('\n') if l.strip() and len(l.strip()) > 30]
         bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:3]])
     
     # Major Artifacts: 2-3 bullets
-    artifact_content = find_subsection(['artifact', 'mysteries'])
+    artifact_content = find_subsection(['artifact', 'mysteries', 'chronolens', 'component'])
     if artifact_content:
         lines = [l.strip() for l in artifact_content.split('\n') if l.strip() and len(l.strip()) > 30]
         bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:3]])
     
-    # Cosmology: 0-1 bullets (if present and significant)
-    cosmology_content = find_subsection(['cosmology', 'backbone'])
+    # Cosmology/Backdrop: 0-1 bullets (if present)
+    cosmology_content = find_subsection(['cosmology', 'backbone', 'frame twist', 'campaign frame'])
     if cosmology_content:
         lines = [l.strip() for l in cosmology_content.split('\n') if l.strip() and len(l.strip()) > 30]
         if lines:
             bullets.append(re.sub(r'^[\-\*•]\s*', '', lines[0]))
     
-    # Current Situation: 1-2 bullets
-    situation_content = find_subsection(['current situation'])
+    # Current Situation/State: 1-2 bullets
+    situation_content = find_subsection(['current situation', 'current state', 'state of play'])
     if situation_content:
         lines = [l.strip() for l in situation_content.split('\n') if l.strip() and len(l.strip()) > 30]
         bullets.extend([re.sub(r'^[\-\*•]\s*', '', l) for l in lines[:2]])
@@ -375,26 +388,42 @@ def extract_artifacts_from_section(artifacts_section: str) -> List[str]:
     
     Looks for patterns like:
     - The Chronolens: description
-    - Bryannas's Ring: description
-    - Infernal Device of...: description
+    - Bryannas's Ring: description (double possessive)
+    - Control lever / rod (compound with slash)
+    - Infernal Device of Lum the Mad: description
     """
     if not artifacts_section:
         return []
     
     artifacts = []
     
-    # Pattern 1: "The X:" or "X's Y:"
-    pattern1 = r'(?:The\s+)?([A-Z][a-z]+(?:\'s\s+[A-Z][a-z]+)?(?:\s+[A-Z][a-z]+)*):'
+    # Pattern 1: Possessives including double-s forms: "Bryannas's Ring"
+    pattern1 = r'([A-Z][a-z]+\'s(?:s)?\s+(?:Ring|Device|Crown|Staff|Sword|Orb|[A-Z][a-z]+))'
     for match in re.finditer(pattern1, artifacts_section):
-        artifact_name = match.group(1).strip()
-        # Remove leading "The " if present
-        artifact_name = re.sub(r'^The\s+', '', artifact_name)
-        artifacts.append(artifact_name)
+        artifacts.append(match.group(1).strip())
     
-    # Pattern 2: "Device of X" or "X of Y"
-    pattern2 = r'((?:Device|Ring|Crown|Staff|Sword|Orb)\s+of\s+[A-Z][a-z]+(?:\s+[a-z]+)?(?:\s+[A-Z][a-z]+)?)'
+    # Pattern 2: "The X:" format
+    pattern2 = r'The\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*):'
     for match in re.finditer(pattern2, artifacts_section):
         artifacts.append(match.group(1).strip())
+    
+    # Pattern 3: "Infernal Device of X" - complex "of" phrases
+    pattern3 = r'((?:Infernal\s+)?Device\s+of\s+[A-Z][a-z]+(?:\s+[a-z]+)?(?:\s+[A-Z][a-z]+)?)'
+    for match in re.finditer(pattern3, artifacts_section, re.IGNORECASE):
+        artifacts.append(match.group(1).strip())
+    
+    # Pattern 4: Compound forms with slashes: "Control lever / rod"
+    pattern4 = r'(Control\s+(?:lever|rod)(?:\s*/\s*(?:lever|rod))?)'
+    for match in re.finditer(pattern4, artifacts_section, re.IGNORECASE):
+        # Normalize: "Control lever / rod" → "Control lever"
+        normalized = match.group(1).replace(' / ', ' ').strip()
+        artifacts.append(normalized)
+    
+    # Pattern 5: Specific artifact names mentioned in text
+    specific_artifacts = ['Chronal Prism', 'Chronolens']
+    for artifact in specific_artifacts:
+        if artifact in artifacts_section:
+            artifacts.append(artifact)
     
     return list(set(artifacts))  # Deduplicate
 
@@ -425,7 +454,7 @@ def classify_entities(text: str, canon_section: Optional[str] = None) -> Dict[st
     frequent = {name: count for name, count in entity_counts.items() if count >= 2}
     
     # Filter out section headers and meta terms
-    section_headers = ['Future Sessions', 'Open Threads', 'Campaign Ledger', 'Canon Summary']
+    section_headers = ['Future Sessions', 'Open Threads', 'Campaign Ledger', 'Canon Summary', 'Parser Index', 'Key Entities']
     arc_markers = ['Spiral', 'Projected', 'Expected']
     
     filtered = {}
@@ -438,20 +467,33 @@ def classify_entities(text: str, canon_section: Optional[str] = None) -> Dict[st
             continue
         filtered[name] = count
     
+    # Add explicit Astral Elves detection if context suggests faction
+    if 'Astral Elves' not in filtered and 'Astral Elf' in text:
+        # Check if mentioned in faction context
+        if any(term in text for term in ['Astral Elf forces', 'Astral Elf splinter', 'Astral Elven']):
+            filtered['Astral Elves'] = 1  # Add with minimum frequency
+    
     # Classification patterns
     faction_keywords = [
         'pact', 'guild', 'order', 'watch', 'cult', 'consortium',
-        'guardians', 'makers', 'council', 'alliance', 'league'
+        'guardians', 'makers', 'council', 'alliance', 'league', 'gang'
+    ]
+    
+    # Hard demoters: if entity contains these, force to places
+    place_demoters = [
+        'tunnels', 'citadel', 'staircase', 'archives', 'sphere',
+        'chamber', 'fortress', 'ship', 'city'
     ]
     
     place_keywords = [
         'citadel', 'city', 'fortress', 'bral', 'sphere', 'staircase',
-        'tower', 'palace', 'keep', 'sanctum', 'archives', 'spires'
+        'tower', 'palace', 'keep', 'sanctum', 'archives', 'spires',
+        'tunnels', 'chamber', 'ruins'
     ]
     
     artifact_keywords = [
         'lens', 'ring', 'device', 'crown', 'scepter', 'amulet',
-        'orb', 'staff', 'sword', 'crystal'
+        'orb', 'staff', 'sword', 'crystal', 'prism', 'lever', 'rod'
     ]
     
     concept_keywords = [
@@ -469,6 +511,11 @@ def classify_entities(text: str, canon_section: Optional[str] = None) -> Dict[st
         
         # Normalize: strip leading "The "
         normalized = re.sub(r'^The\s+', '', entity)
+        
+        # HARD DEMOTION: Force to places if contains place demoters
+        if any(demoter in entity_lower for demoter in place_demoters):
+            places.append(normalized)
+            continue
         
         # Check each category
         if any(kw in entity_lower for kw in faction_keywords):
@@ -567,6 +614,83 @@ def extract_open_threads(threads_section: str) -> List[str]:
     return threads
 
 
+def extract_from_parser_index(text: str) -> Optional[Dict[str, List[str]]]:
+    """Extract entities from Parser-Friendly Index section if present.
+    
+    Looks for sections containing "Parser-Friendly Index" or similar.
+    Parses structured lists under category headings like:
+    - Artifacts:
+    - Groups:
+    - Places:
+    
+    Returns dict with extracted categories, or None if no index found.
+    Flexible enough to handle various user formats.
+    """
+    sections = split_by_sections(text)
+    
+    # Look for index section (flexible matching)
+    index_key = None
+    for key in sections.keys():
+        if 'parser' in key and 'index' in key:
+            index_key = key
+            break
+        if 'key entities' in key:
+            index_key = key
+            break
+    
+    if not index_key:
+        return None
+    
+    index_section = sections[index_key]
+    result = {
+        "factions": [],
+        "places": [],
+        "artifacts": [],
+        "concepts": [],
+    }
+    
+    # Parse category blocks
+    # Look for patterns like "Artifacts:" or "Groups:" followed by bullet lists
+    category_pattern = r'(Artifacts?|Groups?|Factions?|Places?|Concepts?|Powers?):\s*\n((?:[\-\*•]\s*.+\n?)+)'
+    
+    for match in re.finditer(category_pattern, index_section, re.IGNORECASE | re.MULTILINE):
+        category = match.group(1).lower().rstrip('s')  # Normalize to singular
+        items_block = match.group(2)
+        
+        # Extract items from bullet list
+        items = []
+        for line in items_block.split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+            
+            # Remove bullet marker
+            cleaned = re.sub(r'^[\-\*•]\s*', '', line)
+            
+            # Handle parenthetical notes: "Chronolens (Chronosphere, legacy term)"
+            # Keep main name, strip notes
+            main_name = re.split(r'\s*\(', cleaned)[0].strip()
+            
+            if main_name:
+                items.append(main_name)
+        
+        # Map category to result keys
+        if category in ['group', 'faction']:
+            result["factions"].extend(items)
+        elif category == 'place':
+            result["places"].extend(items)
+        elif category == 'artifact':
+            result["artifacts"].extend(items)
+        elif category in ['concept', 'power']:
+            result["concepts"].extend(items)
+    
+    # Return None if no categories found
+    if not any(result.values()):
+        return None
+    
+    return result
+
+
 def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict[str, Any]:
     """Parse structured campaign history into components.
     
@@ -637,9 +761,18 @@ def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict
     if threads_section_key:
         open_threads = extract_open_threads(sections[threads_section_key])
     
-    # Classify entities (use full text for detection, pass canon section for artifacts)
-    canon_section_text = sections.get(canon_section_key, "") if canon_section_key else None
-    entities = classify_entities(text, canon_section=canon_section_text)
+    # Try to extract from Parser-Friendly Index first (high confidence)
+    index_entities = extract_from_parser_index(text)
+    
+    if index_entities:
+        # Index found - use it as primary source
+        entities = index_entities
+        notes_prefix = "📋 Using Parser-Friendly Index"
+    else:
+        # Fall back to heuristic classification
+        canon_section_text = sections.get(canon_section_key, "") if canon_section_key else None
+        entities = classify_entities(text, canon_section=canon_section_text)
+        notes_prefix = "🔍 Using heuristic classification"
     
     # Build initial result
     result = {
@@ -662,7 +795,7 @@ def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict
         result = overrides.apply_to_parsed(result)
     
     # Build notes
-    notes = []
+    notes = [notes_prefix]  # Add source indicator first
     
     if not sessions:
         notes.append("⚠️ No sessions detected in Campaign Ledger section")
