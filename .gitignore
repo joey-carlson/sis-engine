@@ -25,3 +25,6 @@ __MACOSX/
 
 # Streamlit harness config (personal preferences)
 .streamlit_harness_config.json
+
+# Campaign data (user-specific campaigns)
+campaigns/

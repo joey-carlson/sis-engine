@@ -654,7 +654,23 @@ def main() -> None:
     st.set_page_config(page_title="SPAR Engine Harness v0.1", layout="wide")
     init_persistent_paths()
     hs = get_hs()
-
+    
+    # Mode selector at top
+    mode = st.radio(
+        "Mode",
+        ["🎲 Campaign Manager", "🔧 Debug Harness"],
+        horizontal=True,
+        label_visibility="collapsed",
+        help="Campaign Manager: Multi-campaign management with living state. Debug Harness: Single-event testing and scenario validation."
+    )
+    
+    # Render campaign UI if in campaign mode
+    if mode == "🎲 Campaign Manager":
+        from streamlit_harness.campaign_ui import render_campaign_ui
+        render_campaign_ui()
+        return
+    
+    # Otherwise render debug harness (existing code)
     st.title("SPAR Engine Harness v0.1")
     st.caption("Debug-first harness for tuning the encounter complications engine. Not a product UI.")
 
