@@ -52,25 +52,47 @@ class ImportOverrides:
         )
     
     def get_path(self) -> Path:
-        """Get filesystem path for this override file."""
+        """Get filesystem path for this override file (searches subdirectories)."""
+        # Search all subdirectories for the override file
+        for subdir in CAMPAIGNS_DIR.iterdir():
+            if subdir.is_dir():
+                path = subdir / f"{self.campaign_id}_import_overrides.json"
+                if path.exists():
+                    return path
+        
+        # If not found, need to determine which subdirectory to use
+        # Load the campaign to get its name
+        for subdir in CAMPAIGNS_DIR.iterdir():
+            if subdir.is_dir():
+                campaign_path = subdir / f"{self.campaign_id}.json"
+                if campaign_path.exists():
+                    # Return path in this subdirectory
+                    return subdir / f"{self.campaign_id}_import_overrides.json"
+        
+        # Fallback: use campaigns root (shouldn't happen in normal operation)
         return CAMPAIGNS_DIR / f"{self.campaign_id}_import_overrides.json"
     
     def save(self) -> None:
-        """Save overrides to disk."""
-        self.get_path().write_text(json.dumps(self.to_dict(), indent=2))
+        """Save overrides to disk in subdirectory."""
+        path = self.get_path()
+        path.parent.mkdir(parents=True, exist_ok=True)  # Ensure subdirectory exists
+        path.write_text(json.dumps(self.to_dict(), indent=2))
     
     @staticmethod
     def load(campaign_id: str) -> "ImportOverrides":
-        """Load overrides from disk, or create new if doesn't exist."""
-        path = CAMPAIGNS_DIR / f"{campaign_id}_import_overrides.json"
-        if path.exists():
-            try:
-                data = json.loads(path.read_text())
-                return ImportOverrides.from_dict(data)
-            except Exception:
-                pass
+        """Load overrides from disk (searches subdirectories), or create new if doesn't exist."""
+        # Search all subdirectories for the override file
+        for subdir in CAMPAIGNS_DIR.iterdir():
+            if subdir.is_dir():
+                path = subdir / f"{campaign_id}_import_overrides.json"
+                if path.exists():
+                    try:
+                        data = json.loads(path.read_text())
+                        return ImportOverrides.from_dict(data)
+                    except Exception:
+                        pass
         
-        # Return empty overrides if load fails
+        # Return empty overrides if not found
         return ImportOverrides(campaign_id=campaign_id)
     
     def apply_to_parsed(self, parsed: Dict) -> Dict:

@@ -26,6 +26,19 @@ CAMPAIGNS_DIR = Path("campaigns")
 CAMPAIGNS_DIR.mkdir(exist_ok=True)
 
 
+def normalize_campaign_name_to_dir(name: str) -> str:
+    """Normalize campaign name to valid directory name.
+    
+    Removes special characters, replaces spaces/hyphens with underscores.
+    Used for creating campaign subdirectories.
+    """
+    import re
+    dir_name = re.sub(r'[^\w\s-]', '', name)  # Remove special chars
+    dir_name = re.sub(r'[-\s]+', '_', dir_name)  # Replace spaces/hyphens
+    dir_name = dir_name.strip('_')  # Remove leading/trailing underscores
+    return dir_name
+
+
 @dataclass
 class Source:
     """Content source reference (built-in or external)."""
@@ -109,35 +122,47 @@ class Campaign:
         )
     
     def get_path(self) -> Path:
-        """Get filesystem path for this campaign."""
-        return CAMPAIGNS_DIR / f"{self.campaign_id}.json"
-    
+        """Get filesystem path for this campaign in subdirectory."""
+        campaign_dir = CAMPAIGNS_DIR / normalize_campaign_name_to_dir(self.name)
+        return campaign_dir / f"{self.campaign_id}.json"
+
     def save(self) -> None:
-        """Save campaign to disk."""
-        self.get_path().write_text(json.dumps(self.to_dict(), indent=2))
+        """Save campaign to disk in subdirectory."""
+        path = self.get_path()
+        path.parent.mkdir(parents=True, exist_ok=True)  # Ensure subdirectory exists
+        path.write_text(json.dumps(self.to_dict(), indent=2))
     
     @staticmethod
     def load(campaign_id: str) -> Optional["Campaign"]:
-        """Load campaign from disk."""
-        path = CAMPAIGNS_DIR / f"{campaign_id}.json"
-        if not path.exists():
-            return None
-        try:
-            data = json.loads(path.read_text())
-            return Campaign.from_dict(data)
-        except Exception:
-            return None
-    
+        """Load campaign from disk (searches subdirectories)."""
+        # Search all subdirectories for the campaign file
+        for subdir in CAMPAIGNS_DIR.iterdir():
+            if subdir.is_dir():
+                path = subdir / f"{campaign_id}.json"
+                if path.exists():
+                    try:
+                        data = json.loads(path.read_text())
+                        return Campaign.from_dict(data)
+                    except Exception:
+                        continue
+        return None
+
     @staticmethod
     def list_all() -> List["Campaign"]:
-        """List all campaigns."""
+        """List all campaigns from subdirectories."""
         campaigns = []
-        for json_file in CAMPAIGNS_DIR.glob("*.json"):
-            try:
-                data = json.loads(json_file.read_text())
-                campaigns.append(Campaign.from_dict(data))
-            except Exception:
-                continue
+        # Scan all subdirectories for campaign JSON files
+        for subdir in CAMPAIGNS_DIR.iterdir():
+            if subdir.is_dir():
+                for json_file in subdir.glob("campaign_*.json"):
+                    # Skip import_overrides files
+                    if "_import_overrides" in json_file.name:
+                        continue
+                    try:
+                        data = json.loads(json_file.read_text())
+                        campaigns.append(Campaign.from_dict(data))
+                    except Exception:
+                        continue
         return sorted(campaigns, key=lambda c: c.last_played, reverse=True)
 
 
