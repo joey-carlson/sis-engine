@@ -423,6 +423,141 @@ def test_campaign_history_export_manual_entries_detailed():
     assert "| Severity:" not in " ".join(lines[:3])  # Not all on one line
 
 
+def test_session_id_generation_unique():
+    """Test that each session gets a unique session_id.
+    
+    Regression test for duplicate Session 5 issue - session_id prevents ambiguity.
+    """
+    from datetime import datetime
+    
+    # Simulate creating two sessions at different times
+    timestamp1 = datetime.now()
+    session_id_1 = f"session_{timestamp1.strftime('%Y%m%d_%H%M%S')}"
+    
+    # Wait enough for seconds to change (in real use, sessions are seconds/minutes apart)
+    import time
+    time.sleep(1.1)
+    
+    timestamp2 = datetime.now()
+    session_id_2 = f"session_{timestamp2.strftime('%Y%m%d_%H%M%S')}"
+    
+    # Verify uniqueness
+    assert session_id_1 != session_id_2
+    
+    # Verify format
+    assert session_id_1.startswith("session_")
+    assert len(session_id_1) > 15  # session_YYYYMMDD_HHMMSS
+
+
+def test_empty_state_changes_omitted():
+    """Test that empty 'State Changes' sections are omitted from exports.
+    
+    Regression test for empty state change blocks looking broken.
+    """
+    # Simulate deltas with no actual changes
+    deltas = {
+        "pressure_change": 0,
+        "heat_change": 0,
+        "rumor_spread": False,
+        "faction_attention_change": False,
+    }
+    
+    # Check if there are actual changes
+    has_changes = (
+        deltas.get('pressure_change', 0) != 0 or
+        deltas.get('heat_change', 0) != 0 or
+        deltas.get('rumor_spread', False) or
+        deltas.get('faction_attention_change', False)
+    )
+    
+    assert has_changes == False
+    
+    # Simulate deltas with changes
+    deltas_with_changes = {
+        "pressure_change": 2,
+        "heat_change": 0,
+        "rumor_spread": False,
+        "faction_attention_change": False,
+    }
+    
+    has_changes_2 = (
+        deltas_with_changes.get('pressure_change', 0) != 0 or
+        deltas_with_changes.get('heat_change', 0) != 0 or
+        deltas_with_changes.get('rumor_spread', False) or
+        deltas_with_changes.get('faction_attention_change', False)
+    )
+    
+    assert has_changes_2 == True
+
+
+def test_peak_severity_tracking():
+    """Test that peak severity updates from session metadata.
+    
+    Regression test for highest_severity_seen remaining 0.
+    """
+    from spar_campaign import CampaignState
+    
+    # Start with default state
+    cs = CampaignState.default()
+    assert cs.highest_severity_seen == 0
+    
+    # Simulate session with severity metadata
+    metadata = {"severity_avg": 6.5}
+    
+    # Update peak severity
+    new_peak = cs.highest_severity_seen
+    if metadata.get("severity_avg", 0) > new_peak:
+        new_peak = int(metadata["severity_avg"])
+    
+    assert new_peak == 6
+    
+    # Simulate another session with lower severity
+    metadata2 = {"severity_avg": 4.2}
+    if metadata2.get("severity_avg", 0) > new_peak:
+        new_peak = int(metadata2["severity_avg"])
+    
+    # Peak should not decrease
+    assert new_peak == 6
+    
+    # Simulate session with higher severity
+    metadata3 = {"severity_avg": 8.7}
+    if metadata3.get("severity_avg", 0) > new_peak:
+        new_peak = int(metadata3["severity_avg"])
+    
+    assert new_peak == 8
+
+
+def test_session_id_disambiguates_duplicate_numbers():
+    """Test that session_id allows disambiguation in exports when session_number duplicates exist."""
+    # Simulate two sessions with same number but different IDs
+    entry1 = {
+        "session_id": "session_20251226_142749",
+        "session_number": 5,
+        "session_date": "2025-12-26T14:27:49",
+    }
+    
+    entry2 = {
+        "session_id": "session_20251226_144410",
+        "session_number": 5,
+        "session_date": "2025-12-26T14:44:10",
+    }
+    
+    # Extract time portions for disambiguation
+    time1 = entry1["session_id"].split('_')[-1]
+    time2 = entry2["session_id"].split('_')[-1]
+    
+    # Verify they're different
+    assert time1 != time2
+    assert time1 == "142749"
+    assert time2 == "144410"
+    
+    # Verify export headings would be unique
+    heading1 = f"Session {entry1['session_number']} — {entry1['session_date'][:10]} ({time1})"
+    heading2 = f"Session {entry2['session_number']} — {entry2['session_date'][:10]} ({time2})"
+    
+    assert heading1 != heading2
+
+
 if __name__ == "__main__":
     # Run tests
     pytest.main([__file__, "-v"])

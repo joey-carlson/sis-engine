@@ -1312,7 +1312,15 @@ def render_campaign_dashboard() -> None:
                         for entry in campaign.ledger:
                             session_num = entry.get('session_number', '?')
                             session_date = entry.get('session_date', '')[:10]
-                            lines.append(f"### Session {session_num} — {session_date}")
+                            
+                            # Use session_id for disambiguation if present
+                            session_id = entry.get('session_id')
+                            if session_id:
+                                # Extract just the time portion for disambiguation
+                                time_portion = session_id.split('_')[-1] if '_' in session_id else session_id[-6:]
+                                lines.append(f"### Session {session_num} — {session_date} ({time_portion})")
+                            else:
+                                lines.append(f"### Session {session_num} — {session_date}")
                             lines.append("")
                             
                             what_happened = entry.get('what_happened', [])
@@ -1372,8 +1380,16 @@ def render_campaign_dashboard() -> None:
                                 lines.append(session_notes)
                                 lines.append("")
                             
+                            # Only show State Changes if there are actual changes
                             deltas = entry.get('deltas', {})
-                            if deltas:
+                            has_changes = (
+                                deltas.get('pressure_change', 0) != 0 or
+                                deltas.get('heat_change', 0) != 0 or
+                                deltas.get('rumor_spread', False) or
+                                deltas.get('faction_attention_change', False)
+                            )
+                            
+                            if has_changes:
                                 lines.append("**State Changes:**")
                                 if deltas.get('pressure_change'):
                                     lines.append(f"- Pressure: {deltas['pressure_change']:+d}")
@@ -2348,9 +2364,14 @@ def render_finalize_session() -> None:
             if "manual_entries" in st.session_state and st.session_state.manual_entries:
                 manual_entries_data = st.session_state.manual_entries
             
+            # Generate unique session_id (timestamp-based primary key)
+            session_timestamp = datetime.now()
+            session_id = f"session_{session_timestamp.strftime('%Y%m%d_%H%M%S')}"
+            
             session_entry = {
-                "session_number": len(campaign.ledger) + 1,
-                "session_date": datetime.now().isoformat(),
+                "session_id": session_id,  # Unique stable identifier
+                "session_number": len(campaign.ledger) + 1,  # Human-friendly label
+                "session_date": session_timestamp.isoformat(),
                 "what_happened": what_happened,  # Full N-item list preserved
                 "session_notes": session_notes if session_notes.strip() else None,
                 "manual_entries": manual_entries_data,  # Rich manual entry data
@@ -2398,6 +2419,13 @@ def render_finalize_session() -> None:
                             notes=old_faction.notes,
                         )
                 
+                # Update peak severity from session metadata if available
+                new_peak_severity = cs.highest_severity_seen
+                if metadata and "severity_avg" in metadata:
+                    # Update peak if session average exceeds current peak
+                    if metadata["severity_avg"] > new_peak_severity:
+                        new_peak_severity = int(metadata["severity_avg"])
+                
                 # Create new state
                 campaign.campaign_state = CampaignState(
                     version="0.2",
@@ -2407,7 +2435,7 @@ def render_finalize_session() -> None:
                     factions=new_factions,
                     total_scenes_run=cs.total_scenes_run + 1,
                     total_cutoffs_seen=cs.total_cutoffs_seen,
-                    highest_severity_seen=cs.highest_severity_seen,
+                    highest_severity_seen=new_peak_severity,
                     _legacy_scars=cs._legacy_scars,
                 )
             
