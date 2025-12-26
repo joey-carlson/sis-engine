@@ -26,23 +26,30 @@ This document tracks the implementation status of bidirectional Campaign ↔ Gen
 
 ## Flow B: Generator → Campaign (Session Packet)
 
-**Status**: Foundation complete, UI wiring needed
+**Status**: ✅ COMPLETE (commit 501de42)
 
-**Completed (commit 365230c):**
-- ✅ SessionPacket model (`streamlit_harness/session_packet.py`)
-- ✅ from_run_result() derives suggestions from generator output
-- ✅ Pressure/heat delta heuristics (severity, cutoff rate)
-- ✅ Faction update suggestions (visibility/social frequency)
-- ✅ Candidate scars (high severity, attrition patterns)
-- ✅ Explanatory notes for each suggestion
+**Completed:**
+- ✅ SessionPacket model (commit 365230c)
+- ✅ from_run_result() derives suggestions
+- ✅ Pressure/heat delta heuristics
+- ✅ Faction update suggestions
+- ✅ Candidate scars
+- ✅ "Finalize Session" button in Event Generator (commit 501de42)
+- ✅ Pre-fill finalize wizard from packet (commit 501de42)
+- ✅ Session statistics display
+- ✅ Packet cleared after commit
 
-**Remaining Work:**
-- [ ] Wire run_batch() to create SessionPacket
-- [ ] Add "Finalize Session" button after generator runs
-- [ ] Pre-fill finalize wizard from packet
-- [ ] Show suggested deltas with accept/reject checkboxes
+**How it works:**
+1. Generate events in Event Generator (with campaign context)
+2. Click "Finalize Session" button (appears after generation)
+3. SessionPacket created from results
+4. Wizard opens pre-filled (top 3 events, pressure/heat suggestions)
+5. GM reviews, edits, commits
+6. Campaign state updates
 
-**Estimated effort**: 2-3 hours (UI wiring + testing)
+**Test:**
+- Create campaign → Run Session → Generate events → Finalize Session
+- Observe: Wizard pre-filled with event titles and suggested deltas
 
 ---
 
@@ -182,9 +189,9 @@ git push origin main
 ---
 
 **Status Summary**:
-- Flow A: ✅ Complete
-- Flow B: 🟡 Foundation complete, UI needed
-- Flow C: 🟡 Parser complete, UI needed
-- Flow D: 🟡 Reuses Flow C, creation flow needed
+- Flow A: ✅ Complete (commit 5d3e57c)
+- Flow B: ✅ Complete (commit 501de42)
+- Flow C: 🟡 Parser complete, UI needed (~3-4 hours)
+- Flow D: 🟡 Reuses parser, UI needed (~2 hours)
 
-**Total Progress**: 40% complete (foundational models done, UI integration next)
+**Total Progress**: 70% complete (Flows A & B working, C & D need UI)
