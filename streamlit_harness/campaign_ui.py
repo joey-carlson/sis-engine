@@ -714,15 +714,26 @@ def render_campaign_selector() -> None:
                         )
                     
                     # Create ledger from parsed sessions
+                    # FIX 1: Skip invalid sessions (null session_number AND empty content)
                     ledger = []
                     for session in parsed["sessions"]:
-                        ledger.append({
-                            "session_number": session["session_number"],
-                            "session_date": session["date"],
-                            "what_happened": [session["content"][:200]],  # Truncate
-                            "deltas": {"pressure_change": 0, "heat_change": 0},
-                            "active_sources": [],
-                        })
+                        # Validate session has meaningful content
+                        content = session.get("content", "").strip()
+                        session_num = session.get("session_number")
+                        
+                        # Skip if both null session_number AND empty/whitespace-only content
+                        if session_num is None and not content:
+                            continue
+                        
+                        # Only add valid sessions with non-empty content
+                        if content:
+                            ledger.append({
+                                "session_number": session_num,
+                                "session_date": session["date"],
+                                "what_happened": [content[:200]],  # Truncate
+                                "deltas": {"pressure_change": 0, "heat_change": 0},
+                                "active_sources": [],
+                            })
                     
                     campaign = Campaign(
                         campaign_id=campaign_id,
@@ -1312,33 +1323,45 @@ def render_campaign_dashboard() -> None:
                                 lines.append("")
                             
                             # Manual entries with rich data (GM-useful detail)
+                            # FIX 3: Use same detailed format as session export
                             manual_entries = entry.get('manual_entries')
                             if manual_entries:
                                 lines.append("**Manual Entries & GM Notes:**")
                                 lines.append("")
                                 for manual_entry in manual_entries:
-                                    lines.append(f"**{manual_entry['title']}**")
+                                    lines.append(f"#### {manual_entry['title']}")
                                     lines.append("")
-                                    lines.append(f"{manual_entry['description']}")
+                                    lines.append(f"**Description**: {manual_entry['description']}")
                                     lines.append("")
                                     
-                                    # Rich metadata in compact form
-                                    rich_parts = []
                                     if manual_entry.get('tags'):
-                                        rich_parts.append(f"Tags: {', '.join(manual_entry['tags'])}")
-                                    if manual_entry.get('severity'):
-                                        rich_parts.append(f"Severity: {manual_entry['severity']}/10")
-                                    if manual_entry.get('related_factions'):
-                                        rich_parts.append(f"Factions: {', '.join(manual_entry['related_factions'])}")
-                                    if manual_entry.get('related_scars'):
-                                        rich_parts.append(f"Scars: {', '.join(manual_entry['related_scars'])}")
+                                        lines.append(f"**Tags**: {', '.join(manual_entry['tags'])}")
+                                        lines.append("")
                                     
-                                    if rich_parts:
-                                        lines.append(f"*{' | '.join(rich_parts)}*")
+                                    if manual_entry.get('severity'):
+                                        lines.append(f"**Severity**: {manual_entry['severity']}/10")
+                                        lines.append("")
+                                    
+                                    if manual_entry.get('related_factions'):
+                                        lines.append(f"**Related Factions**: {', '.join(manual_entry['related_factions'])}")
+                                        lines.append("")
+                                    
+                                    if manual_entry.get('related_scars'):
+                                        lines.append(f"**Related Scars**: {', '.join(manual_entry['related_scars'])}")
                                         lines.append("")
                                     
                                     if manual_entry.get('notes'):
-                                        lines.append(f"_GM Notes: {manual_entry['notes']}_")
+                                        lines.append(f"**GM Notes**: {manual_entry['notes']}")
+                                        lines.append("")
+                                    
+                                    # State impact from this entry
+                                    delta_parts = []
+                                    if manual_entry.get('pressure_delta'):
+                                        delta_parts.append(f"Pressure: {manual_entry['pressure_delta']:+d}")
+                                    if manual_entry.get('heat_delta'):
+                                        delta_parts.append(f"Heat: {manual_entry['heat_delta']:+d}")
+                                    if delta_parts:
+                                        lines.append(f"*Entry Impact: {' | '.join(delta_parts)}*")
                                         lines.append("")
                             
                             # Session notes if present
@@ -1807,13 +1830,24 @@ def render_campaign_dashboard() -> None:
                     with col3:
                         if st.button("Merge", type="primary"):
                             # Merge into existing campaign
+                            # FIX 1: Skip invalid sessions (null session_number AND empty content)
                             for session in parsed["sessions"]:
-                                campaign.ledger.append({
-                                    "session_number": len(campaign.ledger) + 1,
-                                    "session_date": session["date"],
-                                    "what_happened": [session["content"][:200]],
-                                    "deltas": {"pressure_change": 0, "heat_change": 0},
-                                })
+                                # Validate session has meaningful content
+                                content = session.get("content", "").strip()
+                                session_num = session.get("session_number")
+                                
+                                # Skip if both null session_number AND empty/whitespace-only content
+                                if session_num is None and not content:
+                                    continue
+                                
+                                # Only add valid sessions with non-empty content
+                                if content:
+                                    campaign.ledger.append({
+                                        "session_number": len(campaign.ledger) + 1,
+                                        "session_date": session["date"],
+                                        "what_happened": [content[:200]],
+                                        "deltas": {"pressure_change": 0, "heat_change": 0},
+                                    })
                             
                             # Append canon bullets
                             campaign.canon_summary.extend(parsed["canon_summary"])
@@ -2264,9 +2298,9 @@ def render_finalize_session() -> None:
         with col2:
             heat_change = st.number_input("Heat change", min_value=-10, max_value=10, value=default_heat, step=1)
         
-        # C: Canon Summary update option
+        # C: Canon Summary update option (FIX 2: Changed to opt-in, default OFF)
         st.subheader("Canon Summary")
-        add_to_canon = st.checkbox("Add to Canon Summary?", value=True, help="Append a bullet to Canon Summary from this session")
+        add_to_canon = st.checkbox("Add to Canon Summary?", value=False, help="Append a bullet to Canon Summary from this session")
         
         col1, col2 = st.columns(2)
         with col1:

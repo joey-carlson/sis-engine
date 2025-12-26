@@ -2,38 +2,21 @@
   "campaign_id": "campaign_20251225_222532",
   "name": "Space Opera Test",
   "created": "2025-12-25T22:25:32.007874",
-  "last_played": "2025-12-26T02:18:31.882049",
+  "last_played": "2025-12-26T14:27:49.415351",
   "canon_summary": [
-    "THE VEILLINE RUN (SPACE OPERA) \u2014 GM NOTEBOOK\n(Old GM",
-    "We pick up after a long break.)\n\nFormat note to self: this is not an outline",
-    "It\u2019s a pile of handles to grab while we play",
-    "High Ground Taken",
-    "Crossfire",
-    "Whispers in the Margin"
+    "Campaign 'Space Opera Test' begins..."
   ],
   "campaign_state": {
     "version": "0.2",
-    "campaign_pressure": 0,
-    "heat": 3,
+    "campaign_pressure": 1,
+    "heat": 2,
     "scars": [],
     "factions": {},
-    "total_scenes_run": 3,
+    "total_scenes_run": 4,
     "total_cutoffs_seen": 0,
     "highest_severity_seen": 0
   },
   "ledger": [
-    {
-      "session_number": null,
-      "session_date": "Unknown",
-      "what_happened": [
-        ""
-      ],
-      "deltas": {
-        "pressure_change": 0,
-        "heat_change": 0
-      },
-      "active_sources": []
-    },
     {
       "session_number": 2,
       "session_date": "2025-12-26T00:21:14.818432",
@@ -79,6 +62,40 @@
         "heat_change": 0,
         "rumor_spread": false,
         "faction_attention_change": false
+      },
+      "active_sources": [],
+      "active_source_ids": []
+    },
+    {
+      "session_number": 5,
+      "session_date": "2025-12-26T14:27:49.415318",
+      "what_happened": [
+        "Manual Test 02"
+      ],
+      "session_notes": null,
+      "manual_entries": [
+        {
+          "entry_id": "manual_20251226_142725016482",
+          "title": "Manual Test 02",
+          "description": "Manual Test 02",
+          "tags": [
+            "manual_test"
+          ],
+          "related_factions": [],
+          "related_scars": [],
+          "severity": 1,
+          "notes": "Manual Test 02",
+          "pressure_delta": 1,
+          "heat_delta": -1,
+          "created_at": "2025-12-26T14:27:25.016511"
+        }
+      ],
+      "metadata": null,
+      "deltas": {
+        "pressure_change": 1,
+        "heat_change": -1,
+        "rumor_spread": true,
+        "faction_attention_change": true
       },
       "active_sources": [],
       "active_source_ids": []
@@ -330,7 +347,7 @@
     },
     {
       "item_id": "prep_20251226_020750023965_8",
-      "created_at": "2025-12-26T02:07:50.023968",
+      "created_at": "2025-12-26T02:07:50.024015",
       "title": "Sudden Opening",
       "summary": "",
       "tags": [

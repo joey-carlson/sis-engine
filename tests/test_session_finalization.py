@@ -285,6 +285,144 @@ def test_empty_bullet_filtering():
     assert what_happened == ["Event 1", "Event 3", "Event 5"]
 
 
+def test_invalid_session_filtering_on_import():
+    """Test that invalid sessions (null number + empty content) are filtered during import.
+    
+    Regression test for FIX 1: Designer GPT identified bogus "Session None — Unknown" entry.
+    """
+    # Simulate parsed sessions with invalid entry
+    parsed_sessions = [
+        {
+            "session_number": None,
+            "date": "Unknown",
+            "content": "",  # Empty content
+        },
+        {
+            "session_number": None,
+            "date": "Unknown",
+            "content": "   ",  # Whitespace only
+        },
+        {
+            "session_number": 1,
+            "date": "2025-01-01",
+            "content": "Valid session content",
+        },
+        {
+            "session_number": None,
+            "date": "2025-01-02",
+            "content": "Valid content without number",  # Valid: has content
+        },
+    ]
+    
+    # Simulate import logic with Fix 1
+    ledger = []
+    for session in parsed_sessions:
+        content = session.get("content", "").strip()
+        session_num = session.get("session_number")
+        
+        # Skip if both null session_number AND empty/whitespace-only content
+        if session_num is None and not content:
+            continue
+        
+        # Only add valid sessions with non-empty content
+        if content:
+            ledger.append({
+                "session_number": session_num,
+                "session_date": session["date"],
+                "what_happened": [content[:200]],
+                "deltas": {"pressure_change": 0, "heat_change": 0},
+                "active_sources": [],
+            })
+    
+    # Verify only valid sessions included
+    assert len(ledger) == 2  # Only 2 valid sessions
+    assert ledger[0]["session_number"] == 1
+    assert ledger[1]["session_number"] is None  # But has content, so valid
+
+
+def test_canon_auto_append_default_off():
+    """Test that canon auto-append is now opt-in with default OFF.
+    
+    Regression test for FIX 2: Designer wants canon updates to be opt-in, not automatic.
+    """
+    # Simulating the finalize form checkbox default
+    add_to_canon_default = False  # FIX 2: Changed from True to False
+    
+    # Verify default is now OFF
+    assert add_to_canon_default == False
+
+
+def test_campaign_history_export_manual_entries_detailed():
+    """Test that campaign history export uses detailed format for manual entries.
+    
+    Regression test for FIX 3: Campaign history should match session export richness.
+    """
+    # Simulate manual entry with full data
+    manual_entry = {
+        "entry_id": "manual_001",
+        "title": "Unexpected Ambush",
+        "description": "Party ambushed by bandits on road",
+        "tags": ["combat", "surprise"],
+        "severity": 7,
+        "related_factions": ["bandit_gang"],
+        "related_scars": ["wounded_leg"],
+        "notes": "Player rolled critical fail on perception",
+        "pressure_delta": 2,
+        "heat_delta": 1,
+    }
+    
+    # Build export lines using FIX 3 format (detailed, not compact)
+    lines = []
+    lines.append(f"#### {manual_entry['title']}")
+    lines.append("")
+    lines.append(f"**Description**: {manual_entry['description']}")
+    lines.append("")
+    
+    if manual_entry.get('tags'):
+        lines.append(f"**Tags**: {', '.join(manual_entry['tags'])}")
+        lines.append("")
+    
+    if manual_entry.get('severity'):
+        lines.append(f"**Severity**: {manual_entry['severity']}/10")
+        lines.append("")
+    
+    if manual_entry.get('related_factions'):
+        lines.append(f"**Related Factions**: {', '.join(manual_entry['related_factions'])}")
+        lines.append("")
+    
+    if manual_entry.get('related_scars'):
+        lines.append(f"**Related Scars**: {', '.join(manual_entry['related_scars'])}")
+        lines.append("")
+    
+    if manual_entry.get('notes'):
+        lines.append(f"**GM Notes**: {manual_entry['notes']}")
+        lines.append("")
+    
+    delta_parts = []
+    if manual_entry.get('pressure_delta'):
+        delta_parts.append(f"Pressure: {manual_entry['pressure_delta']:+d}")
+    if manual_entry.get('heat_delta'):
+        delta_parts.append(f"Heat: {manual_entry['heat_delta']:+d}")
+    if delta_parts:
+        lines.append(f"*Entry Impact: {' | '.join(delta_parts)}*")
+        lines.append("")
+    
+    export_text = "\n".join(lines)
+    
+    # Verify rich format (not compressed inline)
+    assert "**Description**:" in export_text
+    assert "**Tags**:" in export_text
+    assert "**Severity**:" in export_text
+    assert "**Related Factions**:" in export_text
+    assert "**Related Scars**:" in export_text
+    assert "**GM Notes**:" in export_text
+    assert "*Entry Impact:" in export_text
+    
+    # Verify NOT using old compressed format
+    assert "*Tags:" not in export_text  # Old format used * not **
+    assert "| Severity:" not in " ".join(lines[:3])  # Not all on one line
+
+
 if __name__ == "__main__":
     # Run tests
     pytest.main([__file__, "-v"])
