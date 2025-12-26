@@ -567,13 +567,18 @@ def extract_open_threads(threads_section: str) -> List[str]:
     return threads
 
 
-def parse_campaign_history(text: str) -> Dict[str, Any]:
+def parse_campaign_history(text: str, campaign_id: Optional[str] = None) -> Dict[str, Any]:
     """Parse structured campaign history into components.
     
     This parser is section-aware and respects document structure:
     1. Splits by top-level headings (##)
     2. Extracts content from appropriate sections only
     3. Classifies entities (factions vs places vs artifacts)
+    4. Applies per-campaign import overrides if campaign_id provided
+    
+    Args:
+        text: Campaign history markdown text
+        campaign_id: Optional campaign ID for loading import overrides
     
     Returns:
         Dictionary with:
@@ -636,6 +641,26 @@ def parse_campaign_history(text: str) -> Dict[str, Any]:
     canon_section_text = sections.get(canon_section_key, "") if canon_section_key else None
     entities = classify_entities(text, canon_section=canon_section_text)
     
+    # Build initial result
+    result = {
+        "sessions": sessions,
+        "canon_summary": canon_summary,
+        "factions": entities["factions"],
+        "entities": {
+            "places": entities["places"],
+            "artifacts": entities["artifacts"],
+            "concepts": entities["concepts"],
+        },
+        "future_sessions": future_sessions,
+        "open_threads": open_threads,
+    }
+    
+    # Apply import overrides if campaign_id provided
+    if campaign_id:
+        from streamlit_harness.import_overrides import ImportOverrides
+        overrides = ImportOverrides.load(campaign_id)
+        result = overrides.apply_to_parsed(result)
+    
     # Build notes
     notes = []
     
@@ -649,11 +674,12 @@ def parse_campaign_history(text: str) -> Dict[str, Any]:
     else:
         notes.append(f"✓ Extracted {len(canon_summary)} canon bullets")
     
-    if entities["factions"]:
-        notes.append(f"✓ Classified {len(entities['factions'])} factions")
+    if result["factions"]:
+        notes.append(f"✓ Classified {len(result['factions'])} factions")
     
-    if entities["places"] or entities["artifacts"] or entities["concepts"]:
-        entity_count = len(entities["places"]) + len(entities["artifacts"]) + len(entities["concepts"])
+    entities_result = result["entities"]
+    if entities_result["places"] or entities_result["artifacts"] or entities_result["concepts"]:
+        entity_count = len(entities_result["places"]) + len(entities_result["artifacts"]) + len(entities_result["concepts"])
         notes.append(f"ℹ️ Detected {entity_count} non-faction entities")
     
     if future_sessions:
@@ -662,16 +688,8 @@ def parse_campaign_history(text: str) -> Dict[str, Any]:
     if open_threads:
         notes.append(f"ℹ️ Found {len(open_threads)} open threads (not added to canon)")
     
-    return {
-        "sessions": sessions,
-        "canon_summary": canon_summary,
-        "factions": entities["factions"],
-        "entities": {
-            "places": entities["places"],
-            "artifacts": entities["artifacts"],
-            "concepts": entities["concepts"],
-        },
-        "future_sessions": future_sessions,
-        "open_threads": open_threads,
-        "notes": notes,
-    }
+    if campaign_id:
+        notes.append("ℹ️ Import overrides applied (if any)")
+    
+    result["notes"] = notes
+    return result

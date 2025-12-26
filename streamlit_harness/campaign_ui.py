@@ -19,6 +19,7 @@ from typing import Any, Dict, List, Optional
 import streamlit as st
 
 from spar_campaign import CampaignState, Scar, FactionState
+from streamlit_harness.import_overrides import ImportOverrides
 
 
 CAMPAIGNS_DIR = Path("campaigns")
