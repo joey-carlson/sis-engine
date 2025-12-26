@@ -658,10 +658,10 @@ def main() -> None:
     # Mode selector at top
     mode = st.radio(
         "Mode",
-        ["🎲 Campaign Manager", "🔧 Debug Harness"],
+        ["🎲 Campaign Manager", "⚡ Event Generator"],
         horizontal=True,
         label_visibility="collapsed",
-        help="Campaign Manager: Multi-campaign management with living state. Debug Harness: Single-event testing and scenario validation."
+        help="Campaign Manager: Multi-campaign management with living state. Event Generator: Single-event testing and scenario validation."
     )
     
     # Render campaign UI if in campaign mode
@@ -670,9 +670,9 @@ def main() -> None:
         render_campaign_ui()
         return
     
-    # Otherwise render debug harness (existing code)
-    st.title("SPAR Engine Harness v0.1")
-    st.caption("Debug-first harness for tuning the encounter complications engine. Not a product UI.")
+    # Otherwise render event generator (existing code)
+    st.title("SPAR Event Generator v0.1")
+    st.caption("Single-event testing and multi-run scenario validation. Not a product UI.")
 
     # ---------------- Sidebar ----------------
     with st.sidebar:

@@ -122,7 +122,7 @@ This prototype adds a Campaign Manager mode to the Streamlit harness, demonstrat
 ## Known UX Pain Points
 
 ### 1. **Session-to-Scenario Handoff**
-- **Issue**: Have to switch to Debug Harness mode to run scenarios
+- **Issue**: Have to switch to Event Generator mode to run scenarios
 - **Impact**: Breaks immersion, adds clicks
 - **Fix**: Embed scenario runner in session workspace (v0.2)
 
@@ -151,8 +151,8 @@ This prototype adds a Campaign Manager mode to the Streamlit harness, demonstrat
 ## Design Decisions & Rationale
 
 ### Mode Toggle (Radio Buttons)
-**Decision**: Top-level radio toggle between Campaign Manager and Debug Harness  
-**Rationale**: Clean separation, no nested navigation, preserves existing debug functionality  
+**Decision**: Top-level radio toggle between Campaign Manager and Event Generator  
+**Rationale**: Clean separation, no nested navigation, preserves existing event generation functionality  
 **Alternative considered**: Sidebar nav → Rejected (adds click depth)
 
 ### Dashboard-First (No Separate Pages)
@@ -237,7 +237,7 @@ This prototype adds a Campaign Manager mode to the Streamlit harness, demonstrat
 ## Designer Questions (For Feedback)
 
 1. **Does the campaign selector feel like the right entry point?**
-   - Alternative: Start in debug mode, campaigns are sidebar option
+   - Alternative: Start in event generator, campaigns are sidebar option
 
 2. **Is the finalize wizard too light or too heavy?**
    - Too light: Need more capture?
@@ -264,6 +264,8 @@ This prototype adds a Campaign Manager mode to the Streamlit harness, demonstrat
 - `campaigns/*.json` - Campaign persistence (one file per campaign)
 - `spar_campaign/` - Campaign mechanics (zero modifications)
 
+**Label Update**: "Debug Harness" renamed to "Event Generator" for clarity
+
 ### State Management
 - Campaign selector: `st.session_state.campaign_page` (selector/dashboard/session/finalize)
 - Current campaign: `st.session_state.current_campaign_id`
@@ -274,7 +276,7 @@ This prototype adds a Campaign Manager mode to the Streamlit harness, demonstrat
 - ❌ spar_engine/* (engine untouched)
 - ❌ spar_campaign/* (mechanics untouched)
 - ❌ Scenario runner logic (preserved)
-- ❌ Existing debug harness (still accessible)
+- ❌ Existing event generator (still accessible)
 
 ---
 
