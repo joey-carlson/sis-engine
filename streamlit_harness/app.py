@@ -880,19 +880,45 @@ def main() -> None:
                 rng = TraceRNG(seed=int(seed))
 
                 batch_events: List[Dict[str, Any]] = []
-                for idx in range(n):
-                    if idx > 0 and tick_between and int(ticks_between_events) > 0:
-                        hs.engine_state = tick_state(hs.engine_state, ticks=int(ticks_between_events))
+                
+                try:
+                    for idx in range(n):
+                        if idx > 0 and tick_between and int(ticks_between_events) > 0:
+                            hs.engine_state = tick_state(hs.engine_state, ticks=int(ticks_between_events))
 
-                    rng.trace.clear()
-                    ev = generate_event(scene, hs.engine_state, selection, entries, rng)
-                    hs.engine_state = apply_state_delta(hs.engine_state, ev.state_delta)
+                        rng.trace.clear()
+                        ev = generate_event(scene, hs.engine_state, selection, entries, rng)
+                        hs.engine_state = apply_state_delta(hs.engine_state, ev.state_delta)
 
-                    d = event_to_dict(ev)
-                    batch_events.append(d)
-                    hs.events.insert(0, d)
-
-                hs.last_batch = batch_events
+                        d = event_to_dict(ev)
+                        batch_events.append(d)
+                        hs.events.insert(0, d)
+                    
+                    hs.last_batch = batch_events
+                
+                except ValueError as e:
+                    # Content exhaustion - show helpful message instead of crashing
+                    if "No content entries available" in str(e):
+                        st.error("⚠️ Content Exhausted")
+                        st.warning(
+                            f"Generated {len(batch_events)} of {n} events before running out of available content.\n\n"
+                            "**Possible causes:**\n"
+                            "- Tag filters too restrictive\n"
+                            "- Tag cooldowns from previous events\n"
+                            "- Not enough ticking between events\n\n"
+                            "**Try:**\n"
+                            "- Broaden include tags or remove exclude tags\n"
+                            "- Increase 'Ticks between events' to expire cooldowns\n"
+                            "- Reset session state to clear cooldowns\n"
+                            "- Generate fewer events at once"
+                        )
+                        # Save partial batch if any events were generated
+                        if batch_events:
+                            hs.last_batch = batch_events
+                            st.info(f"Partial batch saved: {len(batch_events)} events generated")
+                    else:
+                        # Re-raise other ValueErrors
+                        raise
 
             # Finalize Session button (Flow B: Generator → Campaign)
             if hs.events and st.session_state.get("active_campaign_context"):

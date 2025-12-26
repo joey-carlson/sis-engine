@@ -1026,7 +1026,7 @@ def render_campaign_dashboard() -> None:
     
     st.divider()
     
-    # Prep Queue (Non-Canon)
+    # Prep Queue (Non-Canon) with Selection
     queued_items = [p for p in campaign.prep_queue if p.status == "queued"]
     pinned_items = [p for p in campaign.prep_queue if p.status == "pinned"]
     archived_items = [p for p in campaign.prep_queue if p.status == "archived"]
@@ -1038,21 +1038,130 @@ def render_campaign_dashboard() -> None:
         if not campaign.prep_queue:
             st.info("No prep items yet. Generate events and send them here!")
         else:
-            # Show pinned first
+            # Selection controls for promotion to canon
+            active_items = pinned_items + queued_items
+            if active_items:
+                col1, col2, col3 = st.columns([3, 3, 6])
+                
+                # Compute selection count from checkbox keys
+                selected_prep_count = sum(
+                    1 for item in active_items
+                    if st.session_state.get(f"prep_select_{item.item_id}", False)
+                )
+                
+                with col1:
+                    if st.button("☑️ Select All", key="prep_select_all"):
+                        for item in active_items:
+                            st.session_state[f"prep_select_{item.item_id}"] = True
+                        st.rerun()
+                
+                with col2:
+                    if st.button("☐ Select None", key="prep_select_none"):
+                        for item in active_items:
+                            st.session_state[f"prep_select_{item.item_id}"] = False
+                        st.rerun()
+                
+                with col3:
+                    if st.button(
+                        f"📝 Create Session Draft from Selected ({selected_prep_count})",
+                        disabled=(selected_prep_count == 0),
+                        type="primary" if selected_prep_count > 0 else "secondary",
+                        use_container_width=True,
+                        key="create_session_from_prep"
+                    ):
+                        # Create session packet from selected prep items
+                        from streamlit_harness.session_packet import SessionPacket
+                        
+                        selected_items = [
+                            item for item in active_items
+                            if st.session_state.get(f"prep_select_{item.item_id}", False)
+                        ]
+                        
+                        # Build packet from selected prep items
+                        what_happened_bullets = [f"{item.title}" for item in selected_items[:3]]
+                        
+                        # Aggregate tags
+                        all_tags = []
+                        for item in selected_items:
+                            all_tags.extend(item.tags)
+                        from collections import Counter
+                        tag_counts = Counter(all_tags)
+                        top_tags = tag_counts.most_common(10)
+                        
+                        # Create events from prep items for top_events
+                        mock_events = []
+                        for item in selected_items:
+                            mock_events.append({
+                                "title": item.title,
+                                "content": item.summary,
+                                "tags": item.tags,
+                                "severity": 5,  # Default mid-range
+                                "source": item.source,
+                            })
+                        
+                        # Create packet
+                        packet = SessionPacket(
+                            scenario_name=f"Prep Queue: {', '.join([i.title[:20] for i in selected_items[:2]])}...",
+                            preset="prep_queue",
+                            phase="mixed",
+                            rarity_mode="curated",
+                            seed=0,
+                            batch_size=len(selected_items),
+                            severity_avg=5.0,
+                            cutoff_rate=0.0,
+                            top_tags=top_tags,
+                            top_events=mock_events,
+                            suggested_pressure_delta=0,
+                            suggested_heat_delta=0,
+                            suggested_faction_updates={},
+                            candidate_scars=[],
+                            notes=[
+                                f"Session draft created from {len(selected_items)} prep items",
+                                "Review and edit 'What Happened' bullets before committing"
+                            ],
+                        )
+                        
+                        # Store selected item IDs for cleanup after commit
+                        st.session_state.prep_items_to_archive = [item.item_id for item in selected_items]
+                        
+                        # Set packet and navigate to finalize
+                        st.session_state.pending_session_packet = packet
+                        st.session_state.campaign_page = "finalize"
+                        st.rerun()
+                
+                st.divider()
+            
+            # Show pinned first with checkboxes
             if pinned_items:
                 st.markdown("**📌 Pinned**")
                 for item in pinned_items:
-                    _render_prep_item(campaign, item)
+                    # Checkbox for selection
+                    col_check, col_item = st.columns([1, 19])
+                    with col_check:
+                        checkbox_key = f"prep_select_{item.item_id}"
+                        if checkbox_key not in st.session_state:
+                            st.session_state[checkbox_key] = False
+                        st.checkbox("", key=checkbox_key, label_visibility="collapsed")
+                    with col_item:
+                        _render_prep_item(campaign, item)
                 st.divider()
             
-            # Then queued
+            # Then queued with checkboxes
             if queued_items:
                 if pinned_items:
                     st.markdown("**📋 Queued**")
                 for item in queued_items:
-                    _render_prep_item(campaign, item)
+                    # Checkbox for selection
+                    col_check, col_item = st.columns([1, 19])
+                    with col_check:
+                        checkbox_key = f"prep_select_{item.item_id}"
+                        if checkbox_key not in st.session_state:
+                            st.session_state[checkbox_key] = False
+                        st.checkbox("", key=checkbox_key, label_visibility="collapsed")
+                    with col_item:
+                        _render_prep_item(campaign, item)
             
-            # Archived (collapsed)
+            # Archived (collapsed, no checkboxes)
             if archived_items:
                 with st.expander(f"📦 Archived ({len(archived_items)})", expanded=False):
                     for item in archived_items:
@@ -1578,6 +1687,19 @@ def render_finalize_session() -> None:
             # Add to ledger
             campaign.ledger.append(session_entry)
             campaign.last_played = datetime.now().isoformat()
+            
+            # Archive prep items that were used (if from prep queue)
+            if "prep_items_to_archive" in st.session_state:
+                items_to_archive = st.session_state.prep_items_to_archive
+                for item in campaign.prep_queue:
+                    if item.item_id in items_to_archive:
+                        item.status = "archived"
+                # Clear checkbox states for archived items
+                for item_id in items_to_archive:
+                    checkbox_key = f"prep_select_{item_id}"
+                    if checkbox_key in st.session_state:
+                        del st.session_state[checkbox_key]
+                del st.session_state.prep_items_to_archive
             
             # Save
             campaign.save()
