@@ -1,0 +1,149 @@
+[
+  {
+    "event_id": "aftermath_reputation_mark_01",
+    "title": "Reputation Marked",
+    "tags": ["social_friction", "information", "visibility"],
+    "allowed_environments": ["populated", "industrial", "derelict"],
+    "allowed_scene_phases": ["aftermath"],
+    "severity_band": [2, 5],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [1, 3],
+      "heat": [0, 2],
+      "opportunity": [0, 2],
+      "cost": [0, 1]
+    },
+    "fiction": {
+      "prompt": "How you handled it becomes part of your name here, the label sticks whether you like it or not.",
+      "sensory": ["knowing looks", "changed tone", "new distance"],
+      "immediate_choice": [
+        "Own the reputation",
+        "Work to reshape it"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_resource_ghost_01",
+    "title": "Resource Ghost",
+    "tags": ["consequence", "cost", "opportunity"],
+    "allowed_environments": ["confined", "open", "derelict", "industrial"],
+    "allowed_scene_phases": ["aftermath"],
+    "severity_band": [1, 4],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2,
+        "cost": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [1, 2],
+      "information": [0, 2],
+      "opportunity": [0, 1]
+    },
+    "fiction": {
+      "prompt": "Something you used up earlier now reveals its full cost, the loss compounds.",
+      "sensory": ["empty slot", "missing tool", "quiet absence"],
+      "immediate_choice": [
+        "Improvise around the gap",
+        "Secure replacement before it matters"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_terrain_memory_01",
+    "title": "Space Holds Memory",
+    "tags": ["terrain", "information", "visibility"],
+    "allowed_environments": ["confined", "populated", "derelict", "open"],
+    "allowed_scene_phases": ["aftermath"],
+    "severity_band": [1, 4],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "terrain": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [1, 3],
+      "opportunity": [0, 2],
+      "heat": [0, 1]
+    },
+    "fiction": {
+      "prompt": "The environment absorbed what happened, surfaces tell a quiet story to anyone who looks.",
+      "sensory": ["disturbed dust", "scratched walls", "lingering smell"],
+      "immediate_choice": [
+        "Erase what you can",
+        "Let it speak for itself"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_narrative_drift_01",
+    "title": "Story Rewritten",
+    "tags": ["information", "social_friction", "visibility"],
+    "allowed_environments": ["populated", "industrial"],
+    "allowed_scene_phases": ["aftermath"],
+    "severity_band": [2, 5],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "information": 2,
+        "social_friction": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [1, 3],
+      "heat": [0, 2],
+      "opportunity": [0, 2]
+    },
+    "fiction": {
+      "prompt": "The official version forms without you, details shift to fit a cleaner narrative.",
+      "sensory": ["repeated phrases", "confident retelling", "facts smoothed"],
+      "immediate_choice": [
+        "Challenge the false version",
+        "Use the misunderstanding"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_favor_expected_01",
+    "title": "Favor Expected",
+    "tags": ["social_friction", "obligation", "opportunity"],
+    "allowed_environments": ["populated", "industrial", "derelict"],
+    "allowed_scene_phases": ["aftermath"],
+    "severity_band": [2, 4],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "obligation": 2
+      }
+    },
+    "effect_vector_template": {
+      "opportunity": [0, 2],
+      "cost": [0, 2],
+      "information": [0, 1],
+      "heat": [0, 1]
+    },
+    "fiction": {
+      "prompt": "Someone who helped now waits for reciprocation, the unspoken debt sits between you.",
+      "sensory": ["patient silence", "meaningful pause", "reminder glance"],
+      "immediate_choice": [
+        "Acknowledge the debt",
+        "Delay without refusing"
+      ]
+    }
+  }
+]

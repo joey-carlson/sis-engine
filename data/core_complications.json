@@ -3588,5 +3588,1493 @@
         "Stay clear of the politics"
       ]
     }
+  },
+  {
+    "event_id": "aftermath_reputation_mark_01",
+    "title": "Reputation Marked",
+    "tags": [
+      "social_friction",
+      "information",
+      "visibility"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "heat": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "How you handled it becomes part of your name here, the label sticks whether you like it or not.",
+      "sensory": [
+        "knowing looks",
+        "changed tone",
+        "new distance"
+      ],
+      "immediate_choice": [
+        "Own the reputation",
+        "Work to reshape it"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_resource_ghost_01",
+    "title": "Resource Ghost",
+    "tags": [
+      "consequence",
+      "cost",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "confined",
+      "open",
+      "derelict",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2,
+        "cost": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "information": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Something you used up earlier now reveals its full cost, the loss compounds.",
+      "sensory": [
+        "empty slot",
+        "missing tool",
+        "quiet absence"
+      ],
+      "immediate_choice": [
+        "Improvise around the gap",
+        "Secure replacement before it matters"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_terrain_memory_01",
+    "title": "Space Holds Memory",
+    "tags": [
+      "terrain",
+      "information",
+      "visibility"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "derelict",
+      "open"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "terrain": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "The environment absorbed what happened, surfaces tell a quiet story to anyone who looks.",
+      "sensory": [
+        "disturbed dust",
+        "scratched walls",
+        "lingering smell"
+      ],
+      "immediate_choice": [
+        "Erase what you can",
+        "Let it speak for itself"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_narrative_drift_01",
+    "title": "Story Rewritten",
+    "tags": [
+      "information",
+      "social_friction",
+      "visibility"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "information": 2,
+        "social_friction": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "heat": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "The official version forms without you, details shift to fit a cleaner narrative.",
+      "sensory": [
+        "repeated phrases",
+        "confident retelling",
+        "facts smoothed"
+      ],
+      "immediate_choice": [
+        "Challenge the false version",
+        "Use the misunderstanding"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_favor_expected_01",
+    "title": "Favor Expected",
+    "tags": [
+      "social_friction",
+      "obligation",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      4
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "obligation": 2
+      }
+    },
+    "effect_vector_template": {
+      "opportunity": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "information": [
+        0,
+        1
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone who helped now waits for reciprocation, the unspoken debt sits between you.",
+      "sensory": [
+        "patient silence",
+        "meaningful pause",
+        "reminder glance"
+      ],
+      "immediate_choice": [
+        "Acknowledge the debt",
+        "Delay without refusing"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_jurisdiction_quiet_01",
+    "title": "Authority Boundary Shifts",
+    "tags": [
+      "social_friction",
+      "information",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Which official should handle this remains unclear, the gap creates soft space.",
+      "sensory": [
+        "bureaucratic silence",
+        "avoided paperwork",
+        "jurisdictional shrug"
+      ],
+      "immediate_choice": [
+        "Claim the space before it fills",
+        "Stay clear of the attention"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_paperwork_follows_01",
+    "title": "Administrative Wake",
+    "tags": [
+      "social_friction",
+      "cost",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      3
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "time_pressure": [
+        0,
+        2
+      ],
+      "information": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Forms need filing, questions need answering, the machinery demands acknowledgment.",
+      "sensory": [
+        "stamped notices",
+        "scheduled meetings",
+        "formal requests"
+      ],
+      "immediate_choice": [
+        "Comply and shape the record",
+        "Ignore until it escalates"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_social_cooling_01",
+    "title": "Sudden Distance",
+    "tags": [
+      "social_friction",
+      "information",
+      "visibility"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Allies become polite strangers, doors close quietly, no one explains why.",
+      "sensory": [
+        "averted eyes",
+        "formal address",
+        "shorter conversations"
+      ],
+      "immediate_choice": [
+        "Investigate the shift",
+        "Accept the new distance"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_isolation_grows_01",
+    "title": "Isolation Thickens",
+    "tags": [
+      "social_friction",
+      "information",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "open",
+      "derelict",
+      "populated"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "position_shift": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Support that was promised becomes vague, you realize you're operating alone now.",
+      "sensory": [
+        "unanswered messages",
+        "thin crowds",
+        "long silences"
+      ],
+      "immediate_choice": [
+        "Reach out directly",
+        "Operate self-sufficient"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_structure_weakens_01",
+    "title": "Foundation Questions",
+    "tags": [
+      "terrain",
+      "hazard",
+      "consequence"
+    ],
+    "allowed_environments": [
+      "confined",
+      "derelict",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "terrain": 2,
+        "hazard": 1
+      }
+    },
+    "effect_vector_template": {
+      "threat": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "information": [
+        1,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Load-bearing elements show stress now, the space won't hold forever.",
+      "sensory": [
+        "new cracks",
+        "settling sounds",
+        "shifted support"
+      ],
+      "immediate_choice": [
+        "Mark unsafe zones",
+        "Use the time while it stands"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_infrastructure_cascade_01",
+    "title": "System Cascade",
+    "tags": [
+      "hazard",
+      "terrain",
+      "consequence"
+    ],
+    "allowed_environments": [
+      "industrial",
+      "populated",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.7,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "hazard": 2,
+        "terrain": 1
+      }
+    },
+    "effect_vector_template": {
+      "threat": [
+        0,
+        2
+      ],
+      "cost": [
+        1,
+        3
+      ],
+      "time_pressure": [
+        0,
+        2
+      ],
+      "information": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "One failure triggers the next, connected systems reveal fragile dependencies.",
+      "sensory": [
+        "power flickers",
+        "water drip",
+        "warning lights"
+      ],
+      "immediate_choice": [
+        "Stabilize what you can",
+        "Evacuate before it compounds"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_opportunity_patient_01",
+    "title": "Patient Opening",
+    "tags": [
+      "opportunity",
+      "information",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "populated",
+      "derelict",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "opportunity": 2
+      }
+    },
+    "effect_vector_template": {
+      "opportunity": [
+        2,
+        4
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "time_pressure": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Something valuable becomes available, but only to those willing to wait and watch.",
+      "sensory": [
+        "quiet availability",
+        "scheduled absence",
+        "predictable patterns"
+      ],
+      "immediate_choice": [
+        "Claim it methodically",
+        "Pass on the slow play"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_supply_shift_01",
+    "title": "Supply Lines Adjust",
+    "tags": [
+      "consequence",
+      "information",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "open"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Routes and suppliers recalibrate around what happened, new channels open or close.",
+      "sensory": [
+        "redirected shipments",
+        "changed schedules",
+        "new vendors"
+      ],
+      "immediate_choice": [
+        "Secure alternate sources",
+        "Accept the new constraints"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_boundary_respect_01",
+    "title": "Boundary Emerges",
+    "tags": [
+      "social_friction",
+      "information",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      3
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "position_shift": [
+        0,
+        1
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "An invisible line forms, locals treat certain spaces or topics differently now.",
+      "sensory": [
+        "detours taken",
+        "topics avoided",
+        "unspoken rules"
+      ],
+      "immediate_choice": [
+        "Respect the boundary",
+        "Test its firmness"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_attention_residue_01",
+    "title": "Attention Lingers",
+    "tags": [
+      "visibility",
+      "information",
+      "heat"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "visibility": 2,
+        "heat": 1
+      }
+    },
+    "effect_vector_template": {
+      "heat": [
+        1,
+        3
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Eyes linger longer than usual, someone is still processing what they saw.",
+      "sensory": [
+        "prolonged glances",
+        "remembered faces",
+        "subtle tracking"
+      ],
+      "immediate_choice": [
+        "Address it directly",
+        "Fade until it passes"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_trust_strained_01",
+    "title": "Trust Quietly Damaged",
+    "tags": [
+      "social_friction",
+      "information",
+      "consequence"
+    ],
+    "allowed_environments": [
+      "populated",
+      "confined",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "consequence": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone close doubts you now, the crack is invisible but weight-bearing.",
+      "sensory": [
+        "hesitant agreement",
+        "measured words",
+        "new carefulness"
+      ],
+      "immediate_choice": [
+        "Address it directly",
+        "Give it time to heal"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_promise_hollow_01",
+    "title": "Promise Rings Hollow",
+    "tags": [
+      "social_friction",
+      "consequence",
+      "information"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "open"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "An assurance you gave earlier now feels impossible to keep, others remember it.",
+      "sensory": [
+        "expectant faces",
+        "mentioned commitment",
+        "calendar pressure"
+      ],
+      "immediate_choice": [
+        "Find a way to deliver",
+        "Renegotiate the terms"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_tempo_slows_01",
+    "title": "Tempo Grinds",
+    "tags": [
+      "consequence",
+      "cost",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "confined",
+      "open",
+      "derelict",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "time_pressure": [
+        0,
+        2
+      ],
+      "information": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Everything takes longer than it should, friction you can't see accumulates.",
+      "sensory": [
+        "dragging minutes",
+        "repeated checks",
+        "slow responses"
+      ],
+      "immediate_choice": [
+        "Accept the new pace",
+        "Force speed and accept errors"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_route_forgotten_01",
+    "title": "Path Quietly Closes",
+    "tags": [
+      "terrain",
+      "information",
+      "consequence"
+    ],
+    "allowed_environments": [
+      "open",
+      "derelict",
+      "populated"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      3
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "terrain": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ],
+      "position_shift": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "A route you relied on is no longer safe or permitted, the change wasn't announced.",
+      "sensory": [
+        "blocked passage",
+        "new barriers",
+        "redirected traffic"
+      ],
+      "immediate_choice": [
+        "Learn the new routes",
+        "Keep using the old one carefully"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_weight_carried_01",
+    "title": "Weight Settles In",
+    "tags": [
+      "consequence",
+      "cost",
+      "information"
+    ],
+    "allowed_environments": [
+      "confined",
+      "open",
+      "populated",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "information": [
+        0,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "What you did sits differently now that it's done, the choice doesn't feel clean anymore.",
+      "sensory": [
+        "quiet reflection",
+        "second thoughts",
+        "lingering unease"
+      ],
+      "immediate_choice": [
+        "Process it and move forward",
+        "Bury it and keep moving"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_price_emerges_01",
+    "title": "True Cost Surfaces",
+    "tags": [
+      "consequence",
+      "information",
+      "cost"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "consequence": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        3
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Only now does the full price become clear, consequences you didn't see coming arrive.",
+      "sensory": [
+        "unexpected bill",
+        "delayed impact",
+        "compound effect"
+      ],
+      "immediate_choice": [
+        "Pay it now",
+        "Negotiate or defer"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_pattern_noticed_01",
+    "title": "Pattern Becomes Visible",
+    "tags": [
+      "information",
+      "visibility",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        2,
+        4
+      ],
+      "opportunity": [
+        1,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Multiple incidents connect in hindsight, something larger shows its shape.",
+      "sensory": [
+        "overlapping details",
+        "recurring elements",
+        "sudden clarity"
+      ],
+      "immediate_choice": [
+        "Act on the pattern",
+        "Keep watching for more"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_connection_burns_01",
+    "title": "Bridge Quietly Burns",
+    "tags": [
+      "social_friction",
+      "consequence",
+      "cost"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "consequence": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        3
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "A relationship you needed is quietly damaged, repair will cost more than maintaining it would have.",
+      "sensory": [
+        "formal distance",
+        "unreturned contact",
+        "closed door"
+      ],
+      "immediate_choice": [
+        "Invest in repair",
+        "Find alternate connections"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_delay_compounds_01",
+    "title": "Delay Multiplies",
+    "tags": [
+      "consequence",
+      "time_pressure",
+      "cost"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "consequence": 2
+      }
+    },
+    "effect_vector_template": {
+      "time_pressure": [
+        0,
+        2
+      ],
+      "cost": [
+        1,
+        2
+      ],
+      "information": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "What should have taken hours now needs days, cascading dependencies reveal themselves.",
+      "sensory": [
+        "waiting periods",
+        "blocked queues",
+        "linked delays"
+      ],
+      "immediate_choice": [
+        "Find workarounds",
+        "Accept the slower timeline"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_moral_stain_01",
+    "title": "Line Crossed",
+    "tags": [
+      "consequence",
+      "information",
+      "social_friction"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.7,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "consequence": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "A boundary was crossed that can't be uncrossed, the group knows it even if no one speaks it.",
+      "sensory": [
+        "quiet shame",
+        "avoided topic",
+        "shared weight"
+      ],
+      "immediate_choice": [
+        "Name it and own it",
+        "Let silence harden around it"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_context_delayed_01",
+    "title": "Context Arrives Late",
+    "tags": [
+      "information",
+      "consequence",
+      "opportunity"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      2,
+      5
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        2,
+        4
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "You learn what was really happening only after acting, the full picture reframes everything.",
+      "sensory": [
+        "sinking realization",
+        "overheard explanation",
+        "delayed report"
+      ],
+      "immediate_choice": [
+        "Adjust based on new information",
+        "Hold course despite the revelation"
+      ]
+    }
+  },
+  {
+    "event_id": "aftermath_responsibility_assigned_01",
+    "title": "Responsibility Quietly Assumed",
+    "tags": [
+      "social_friction",
+      "consequence",
+      "cost"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "open"
+    ],
+    "allowed_scene_phases": [
+      "aftermath"
+    ],
+    "severity_band": [
+      1,
+      4
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2,
+        "consequence": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        0,
+        2
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "opportunity": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Others now assume you'll handle this kind of thing, the expectation sets without discussion.",
+      "sensory": [
+        "assumed nods",
+        "redirected questions",
+        "default assignment"
+      ],
+      "immediate_choice": [
+        "Accept the role",
+        "Clarify boundaries"
+      ]
+    }
   }
 ]
