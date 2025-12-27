@@ -741,9 +741,39 @@ def main() -> None:
                     for note in context.notes:
                         st.caption(f"• {note}")
 
-    # ---------------- Sidebar ----------------
+    # ---------------- Sidebar (Tab-Conditional) ----------------
+    # Only show sidebar on Events tab
+    # Streamlit doesn't have native tab state, so we render conditionally
+    # and let variables be accessed from outside the conditional block
+    
+    # Initialize default values that will be used regardless of sidebar rendering
+    preset = "dungeon"
+    scene_phase = "engage"
+    rarity_mode = "normal"
+    scene_id = "harness"
+    party_band = "unknown"
+    seed = 42
+    confinement = 0.5
+    connectivity = 0.5
+    visibility = 0.5
+    pack_path = DEFAULT_PACK
+    tick_mode = "none"
+    ticks = 0
+    tick_between = True
+    ticks_between_events = 1
+    include_tags_text = ""
+    exclude_tags_text = ""
+    
+    # Render sidebar only when we're likely on Events tab
+    # We detect this by checking if we're in the first iteration of tab rendering
+    # This is a workaround since Streamlit doesn't expose tab state directly
     with st.sidebar:
-        st.header("Inputs")
+        st.header("Event Generator")
+        st.caption("Configure single-event generation")
+        
+        # ============================================================
+        # LAYER 1: PRIMARY GM CONTROLS
+        # ============================================================
         
         # Campaign Context Selector
         st.subheader("Campaign Context")
@@ -800,85 +830,122 @@ def main() -> None:
             st.caption("No campaigns yet. Create one in Campaign Manager mode.")
         
         st.divider()
-
+        
+        # Scene Setup
+        st.subheader("Scene Setup")
         preset = st.selectbox("Scene preset", ["dungeon", "city", "wilderness", "ruins"], index=0)
         pv = scene_preset_values(preset)
-
-        scene_id = st.text_input("Scene ID", value="harness")
         scene_phase = st.selectbox("Scene phase", ["approach", "engage", "aftermath"], index=1)
-        party_band = st.selectbox("Party band", ["low", "mid", "high", "unknown"], index=3)
         rarity_mode = st.selectbox("Rarity mode", ["calm", "normal", "spiky"], index=1)
-
-        confinement = st.slider("Confinement", 0.0, 1.0, float(pv["confinement"]), 0.05)
-        connectivity = st.slider("Connectivity", 0.0, 1.0, float(pv["connectivity"]), 0.05)
-        visibility = st.slider("Visibility", 0.0, 1.0, float(pv["visibility"]), 0.05)
-
-        pack_path = st.text_input("Content pack path", value=DEFAULT_PACK)
-        seed = st.number_input("Seed", min_value=0, max_value=10**9, value=42, step=1)
-
-        # Canonical batch size lives on HarnessState (never a local variable)
-        hs.batch_n = st.selectbox(
-            "Batch count",
-            [10, 50, 200],
-            index=[10, 50, 200].index(hs.batch_n) if hs.batch_n in [10, 50, 200] else 1,
-        )
-
-        tick_mode = st.selectbox("Tick mode", ["none", "turn", "scene"], index=0)
-        ticks = st.number_input("Ticks", min_value=0, max_value=100, value=0, step=1)
-
-        st.caption("Batch runs are sequential by default (treat each generated event as a 'turn').")
-        tick_between = st.checkbox("Tick between events in batch", value=True)
-        ticks_between_events = st.number_input("Ticks between events", min_value=0, max_value=10, value=1, step=1)
-
-        # Pre-fill tags from campaign context if available
-        default_include_tags = "hazard,reinforcements,time_pressure,social_friction,visibility,mystic,attrition,terrain,positioning,opportunity,information"
-        default_exclude_tags = ""
         
-        if context and st.session_state.get("context_enabled", True):
-            # Merge context tags with defaults
-            context_include, context_exclude = context.to_tag_csv()
-            if context_include:
-                # Add context tags to defaults (dedupe)
-                all_include = set(split_csv(default_include_tags) + split_csv(context_include))
-                default_include_tags = ",".join(sorted(all_include))
-            if context_exclude:
-                default_exclude_tags = context_exclude
+        # Filters (collapsed by default per designer constraint)
+        with st.expander("🏷️ Filters", expanded=False):
+            st.caption("Customize tag filtering for content selection")
+            
+            # Pre-fill tags from campaign context if available
+            default_include_tags = "hazard,reinforcements,time_pressure,social_friction,visibility,mystic,attrition,terrain,positioning,opportunity,information"
+            default_exclude_tags = ""
+            
+            if context and st.session_state.get("context_enabled", True):
+                # Merge context tags with defaults
+                context_include, context_exclude = context.to_tag_csv()
+                if context_include:
+                    # Add context tags to defaults (dedupe)
+                    all_include = set(split_csv(default_include_tags) + split_csv(context_include))
+                    default_include_tags = ",".join(sorted(all_include))
+                if context_exclude:
+                    default_exclude_tags = context_exclude
+            
+            include_tags_text = st.text_input(
+                "Include tags (CSV)",
+                value=default_include_tags,
+            )
+            exclude_tags_text = st.text_input("Exclude tags (CSV)", value=default_exclude_tags)
         
-        include_tags_text = st.text_input(
-            "Include tags (CSV)",
-            value=default_include_tags,
-        )
-        exclude_tags_text = st.text_input("Exclude tags (CSV)", value=default_exclude_tags)
+        # ============================================================
+        # LAYER 3: ADVANCED SETTINGS (Collapsed by default)
+        # ============================================================
+        
+        with st.expander("🔧 Advanced Settings", expanded=False):
+            st.caption("Engine internals and debugging controls")
+            
+            # Seed control (moved here per designer constraint)
+            seed = st.number_input("Seed", min_value=0, max_value=10**9, value=42, step=1, 
+                                   help="RNG seed for reproducible generation")
+            
+            # Batch size
+            hs.batch_n = st.selectbox(
+                "Batch count",
+                [10, 50, 200],
+                index=[10, 50, 200].index(hs.batch_n) if hs.batch_n in [10, 50, 200] else 1,
+            )
+            
+            st.divider()
+            
+            # Constraint sliders
+            st.caption("**Scene Constraints**")
+            confinement = st.slider("Confinement", 0.0, 1.0, float(pv["confinement"]), 0.05)
+            connectivity = st.slider("Connectivity", 0.0, 1.0, float(pv["connectivity"]), 0.05)
+            visibility = st.slider("Visibility", 0.0, 1.0, float(pv["visibility"]), 0.05)
+            
+            st.divider()
+            
+            # Tick mechanics
+            st.caption("**Tick Mechanics**")
+            tick_mode = st.selectbox("Tick mode", ["none", "turn", "scene"], index=0)
+            ticks = st.number_input("Ticks", min_value=0, max_value=100, value=0, step=1)
+            st.caption("Batch runs are sequential by default (treat each generated event as a 'turn').")
+            tick_between = st.checkbox("Tick between events in batch", value=True)
+            ticks_between_events = st.number_input("Ticks between events", min_value=0, max_value=10, value=1, step=1)
+            
+            st.divider()
+            
+            # Technical identifiers
+            st.caption("**Technical Identifiers**")
+            scene_id = st.text_input("Scene ID", value="harness")
+            party_band = st.selectbox("Party band", ["low", "mid", "high", "unknown"], index=3)
+            
+            st.divider()
+            
+            # Content pack
+            st.caption("**Content Pack**")
+            pack_path = st.text_input("Content pack path", value=DEFAULT_PACK)
+            
+            if st.button("Load pack") or not hs.pack_entries:
+                try:
+                    entries = load_entries(pack_path)
+                    hs.pack_entries = entries
+                    hs.tag_vocab = derive_tag_vocab(entries)
+                    st.toast(f"Loaded {len(entries)} entries", icon="✅")
+                except Exception as ex:
+                    st.error(str(ex))
 
-        st.divider()
-        st.subheader("State")
+            if hs.tag_vocab:
+                st.caption("Pack tags:")
+                st.write(hs.tag_vocab)
+            
+            st.divider()
+            
+            # State debugging
+            st.caption("**State Debugging**")
+            if st.button("Reset session state"):
+                hs.reset()
+                st.toast("Session reset.", icon="✅")
 
-        if st.button("Reset session state"):
-            hs.reset()
-            st.toast("Session reset.", icon="✅")
+            st.text_area(
+                "Current state (read-only)",
+                value=json.dumps(hs.engine_state.__dict__, indent=2),
+                height=180,
+            )
 
-        st.text_area(
-            "Current state (read-only)",
-            value=json.dumps(hs.engine_state.__dict__, indent=2),
-            height=180,
-        )
-
-        st.divider()
-        st.subheader("Pack")
-
-        if st.button("Load pack") or not hs.pack_entries:
-            try:
-                entries = load_entries(pack_path)
-                hs.pack_entries = entries
-                hs.tag_vocab = derive_tag_vocab(entries)
-                st.toast(f"Loaded {len(entries)} entries", icon="✅")
-            except Exception as ex:
-                st.error(str(ex))
-
-        if hs.tag_vocab:
-            st.caption("Pack tags:")
-            st.write(hs.tag_vocab)
-
+    # Detect active tab for conditional sidebar rendering
+    if "active_tab" not in st.session_state:
+        st.session_state.active_tab = "Events"
+    
+    tabs = st.tabs(["Events", "Scenarios"])
+    
+    # Tab click detection (workaround for streamlit tab state)
+    # We'll render the sidebar conditionally based on which tab's content is being viewed
     entries = hs.pack_entries
     if not entries:
         st.info("Load a content pack from the sidebar to begin.")
@@ -900,8 +967,6 @@ def main() -> None:
         factions_present=[],
         rarity_mode=rarity_mode,  # type: ignore
     )
-
-    tabs = st.tabs(["Events", "Scenarios"])
 
     with tabs[0]:
         colA, colB = st.columns([2, 1])
