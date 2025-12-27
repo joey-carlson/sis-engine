@@ -307,7 +307,13 @@ def run_batch(
     tick_between: bool,
     ticks_between: int,
     verbose: bool,
+    generator_type: str = "event",
 ) -> Dict[str, Any]:
+    """Run batch generation with specified generator type.
+    
+    Args:
+        generator_type: "event" or "loot" - which generator to use
+    """
     state = starting_engine_state
     rng = TraceRNG(seed=int(seed))
     events: List[Dict[str, Any]] = []
@@ -320,7 +326,14 @@ def run_batch(
             state = tick_state(state, ticks=tick_amount)
 
         rng.trace.clear()
-        ev = generate_event(scene, state, selection, entries, rng)
+        
+        # Route to appropriate generator
+        if generator_type == "loot":
+            from spar_engine.loot import generate_loot
+            ev = generate_loot(scene, state, selection, entries, rng)
+        else:
+            ev = generate_event(scene, state, selection, entries, rng)
+        
         state = apply_state_delta(state, ev.state_delta)
         events.append(event_to_dict(ev))
 
@@ -332,6 +345,7 @@ def run_batch(
         "summary": summary,
         "events": events if verbose else None,
         "events_sample": None if verbose else events[:10],
+        "generator_type": generator_type,
     }
 
 
@@ -446,33 +460,42 @@ def run_scenario_from_json(
     scenario: Dict[str, Any],
     entries,
     engine_state_class,
+    generator_type: str = "event",
 ) -> Dict[str, Any]:
     """Execute a scenario definition and return results.
     
     Supports two execution modes:
     - matrix (default): Cartesian product of presets × phases × rarity_modes with fresh state per run
     - campaign: Sequential scene_sequence with shared state across all scenes
+    
+    Args:
+        generator_type: "event" or "loot" - passed to scenario runners for generator routing
     """
     execution_mode = scenario.get("execution_mode", "matrix")
     
     if execution_mode == "campaign":
-        return run_campaign_scenario(scenario, entries, engine_state_class)
+        return run_campaign_scenario(scenario, entries, engine_state_class, generator_type)
     else:
-        return run_matrix_scenario(scenario, entries, engine_state_class)
+        return run_matrix_scenario(scenario, entries, engine_state_class, generator_type)
 
 
 def run_matrix_scenario(
     scenario: Dict[str, Any],
     entries,
     engine_state_class,
+    generator_type: str = "event",
 ) -> Dict[str, Any]:
     """Execute scenario as Cartesian product with fresh state per run (original behavior)."""
     # Resolve base_seed (supports "random" or integer)
     resolved_base_seed = resolve_seed_value(scenario["base_seed"])
     
+    # Resolve generator type (backward compatible - defaults to "event")
+    gen_type = scenario.get("generator_type", generator_type)
+    
     report: Dict[str, Any] = {
         "execution_mode": "matrix",
         "suite": scenario.get("name", "Custom scenario"),
+        "generator_type": gen_type,
         "batch_n": int(scenario["batch_size"]),
         "base_seed": resolved_base_seed,
         "presets": scenario["presets"],
@@ -523,6 +546,7 @@ def run_matrix_scenario(
                     tick_between=bool(scenario.get("tick_between", True)),
                     ticks_between=int(scenario.get("ticks_between", 1)),
                     verbose=bool(scenario.get("verbose", False)),
+                    generator_type=gen_type,
                 )
                 report["runs"].append({
                     "preset": preset_name,
@@ -539,6 +563,7 @@ def run_campaign_scenario(
     scenario: Dict[str, Any],
     entries,
     engine_state_class,
+    generator_type: str = "event",
 ) -> Dict[str, Any]:
     """Execute scenario as ordered sequence with shared state across all scenes."""
     # Validate required fields for campaign mode
@@ -552,12 +577,16 @@ def run_campaign_scenario(
     # Resolve base_seed
     resolved_base_seed = resolve_seed_value(scenario["base_seed"])
     
+    # Resolve generator type (backward compatible - defaults to "event")
+    gen_type = scenario.get("generator_type", generator_type)
+    
     # Initialize shared state for entire campaign
     shared_state = engine_state_class.default()
     
     report: Dict[str, Any] = {
         "execution_mode": "campaign",
         "suite": scenario.get("name", "Campaign scenario"),
+        "generator_type": gen_type,
         "base_seed": resolved_base_seed,
         "scene_count": len(scene_sequence),
         "batch_size_per_scene": int(scenario["batch_size"]),
@@ -617,6 +646,7 @@ def run_campaign_scenario(
             tick_between=bool(scenario.get("tick_between", True)),
             ticks_between=int(scenario.get("ticks_between", 1)),
             verbose=bool(scenario.get("verbose", False)),
+            generator_type=gen_type,
         )
         
         # Update shared state from result's final state
@@ -1405,7 +1435,18 @@ def main() -> None:
 
     with tabs[1]:
         st.header("Test Profiles")
-        st.caption("Run predefined test profiles for SOC validation and content regression testing. Internal tool.")
+        st.caption("Run multi-run simulations to validate generator behavior and content packs. Not used during normal play.")
+        
+        # Generator selector for diagnostics
+        diag_gen_type = st.selectbox(
+            "Generator",
+            ["⚔️ Event", "💰 Loot"],
+            index=0,
+            key="diagnostics_generator_type",
+            help="Select which generator to test. Event: Complications. Loot: Resource shocks."
+        )
+        
+        st.divider()
         
         # JSON Scenario Import/Export Section
         st.subheader("JSON Scenario Import/Export")
@@ -1552,11 +1593,15 @@ def main() -> None:
             
             if run_and_save and loaded_scenario:
                 try:
+                    # Convert UI generator selection to internal format
+                    gen_type_internal = "loot" if diag_gen_type == "💰 Loot" else "event"
+                    
                     with st.spinner(f"Running scenario: {loaded_scenario['name']}..."):
                         report = run_scenario_from_json(
                             loaded_scenario,
                             entries,
-                            hs.engine_state.__class__
+                            hs.engine_state.__class__,
+                            generator_type=gen_type_internal
                         )
                         hs.last_suite_report = report
                     
@@ -1668,12 +1713,16 @@ def main() -> None:
         save_template = st.button("Save as Template", use_container_width=True)
         
         if save_template:
+            # Convert UI generator selection to internal format
+            gen_type_internal = "loot" if diag_gen_type == "💰 Loot" else "event"
+            
             # Export current settings as scenario JSON
             current_scenario = {
                 "schema_version": "1.0",
                 "name": suite,
                 "description": f"Exported from hardcoded suite: {suite}",
                 "output_basename": default_basename,
+                "generator_type": gen_type_internal,
                 "presets": presets,
                 "phases": phases,
                 "rarity_modes": rarity_modes,
@@ -1697,8 +1746,12 @@ def main() -> None:
                 st.error("Please specify a template path")
         if run_suite:
             try:
+                # Convert UI generator selection to internal format
+                gen_type_internal = "loot" if diag_gen_type == "💰 Loot" else "event"
+                
                 suite_report: Dict[str, Any] = {
                     "suite": suite,
+                    "generator_type": gen_type_internal,
                     "batch_n": int(batchN),
                     "base_seed": int(base_seed),
                     "presets": presets,
@@ -1749,6 +1802,7 @@ def main() -> None:
                                 tick_between=bool(tick_between_suite),
                                 ticks_between=int(ticks_between_suite),
                                 verbose=bool(verbose_report),
+                                generator_type=gen_type_internal,
                             )
                             suite_report["runs"].append(
                                 {
