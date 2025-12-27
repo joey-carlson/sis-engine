@@ -57,7 +57,7 @@ def test_aftermath_batch_completes_without_ticking(entries):
     This was the original failure case: aftermath has only 8 events,
     and without ticking, cooldowns would accumulate and exhaust the pool.
     
-    Note: Using dungeon instead of wilderness because wilderness aftermath
+    Note: Using confined instead of open because open aftermath
     has only 3 events (all sharing "attrition" tag), which is insufficient.
     """
     scene = SceneContext(

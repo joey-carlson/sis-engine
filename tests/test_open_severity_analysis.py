@@ -1,4 +1,4 @@
-"""Analysis of wilderness severity band distribution issue."""
+"""Analysis of open severity band distribution issue."""
 
 from pathlib import Path
 from collections import Counter
@@ -9,11 +9,11 @@ from spar_engine.rng import TraceRNG
 from spar_engine.severity import compute_alpha, sample_severity
 
 
-def analyze_wilderness_severity_distribution():
+def analyze_open_severity_distribution():
     """Analyze what events are available at different severity levels."""
     entries = load_pack("data/core_complications.json")
     
-    # Get wilderness engage events
+    # Get open engage events
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
     state = EngineState.default()
     
@@ -73,4 +73,4 @@ def analyze_wilderness_severity_distribution():
 
 
 if __name__ == "__main__":
-    analyze_wilderness_severity_distribution()
+    analyze_open_severity_distribution()

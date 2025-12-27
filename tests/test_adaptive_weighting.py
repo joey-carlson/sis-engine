@@ -97,8 +97,8 @@ def run_frequency_analysis(
     }
 
 
-def test_normal_dungeon_event_variety(entries):
-    """Verify no single event dominates Normal dungeon batches."""
+def test_normal_confined_event_variety(entries):
+    """Verify no single event dominates Normal confined batches."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
     stats = run_frequency_analysis(
@@ -111,7 +111,7 @@ def test_normal_dungeon_event_variety(entries):
         entries=entries,
     )
     
-    print(f"\nNormal Dungeon (Engage, n=200):")
+    print(f"\nNormal Confined (Engage, n=200):")
     print(f"  Unique events: {stats['unique_events']}")
     print(f"  Max frequency: {stats['max_count']} ({stats['max_percentage']:.1f}%)")
     print(f"  Top 5 events:")
@@ -129,8 +129,8 @@ def test_normal_dungeon_event_variety(entries):
         print(f"  ⚠️  Max frequency {stats['max_percentage']:.1f}% exceeds stretch goal of ≤15%")
 
 
-def test_spiky_dungeon_event_variety(entries):
-    """Verify no single event dominates Spiky dungeon batches."""
+def test_spiky_confined_event_variety(entries):
+    """Verify no single event dominates Spiky confined batches."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
     stats = run_frequency_analysis(
@@ -143,7 +143,7 @@ def test_spiky_dungeon_event_variety(entries):
         entries=entries,
     )
     
-    print(f"\nSpiky Dungeon (Engage, n=200):")
+    print(f"\nSpiky Confined (Engage, n=200):")
     print(f"  Unique events: {stats['unique_events']}")
     print(f"  Max frequency: {stats['max_count']} ({stats['max_percentage']:.1f}%)")
     print(f"  Top 5 events:")
@@ -157,8 +157,8 @@ def test_spiky_dungeon_event_variety(entries):
     )
 
 
-def test_wilderness_event_variety(entries):
-    """Verify wilderness variety within content constraints.
+def test_open_event_variety(entries):
+    """Verify open variety within content constraints.
     
     Known limitation: Wilderness has only 3 events with severity_band starting at 1,
     and Normal mode samples severity=1 ~50% of the time. This creates structural
@@ -167,7 +167,7 @@ def test_wilderness_event_variety(entries):
     Adaptive weighting IS working: it keeps the three events balanced instead of 
     allowing one to dominate at 40-50%.
     
-    Resolution requires content expansion: add 2-3 more wilderness events with 
+    Resolution requires content expansion: add 2-3 more open events with 
     severity_band starting at 1 to dilute the structural bottleneck.
     """
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
@@ -182,7 +182,7 @@ def test_wilderness_event_variety(entries):
         entries=entries,
     )
     
-    print(f"\nNormal Wilderness (Engage, n=200):")
+    print(f"\nNormal Open (Engage, n=200):")
     print(f"  Unique events: {stats['unique_events']}")
     print(f"  Max frequency: {stats['max_count']} ({stats['max_percentage']:.1f}%)")
     print(f"  Top 5 events:")
@@ -202,8 +202,8 @@ def test_wilderness_event_variety(entries):
     )
 
 
-def test_ruins_event_variety(entries):
-    """Verify no single event dominates Ruins batches."""
+def test_derelict_event_variety(entries):
+    """Verify no single event dominates Derelict batches."""
     constraints = Constraints(confinement=0.7, connectivity=0.3, visibility=0.6)
     
     stats = run_frequency_analysis(
@@ -216,7 +216,7 @@ def test_ruins_event_variety(entries):
         entries=entries,
     )
     
-    print(f"\nNormal Ruins (Engage, n=200):")
+    print(f"\nNormal Derelict (Engage, n=200):")
     print(f"  Unique events: {stats['unique_events']}")
     print(f"  Max frequency: {stats['max_count']} ({stats['max_percentage']:.1f}%)")
     print(f"  Top 5 events:")
@@ -230,7 +230,7 @@ def test_ruins_event_variety(entries):
 
 
 def test_variety_comparison_across_rarity_modes(entries):
-    """Compare event variety across rarity modes for dungeon preset."""
+    """Compare event variety across rarity modes for confined preset."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
     modes = ["calm", "normal", "spiky"]
@@ -248,7 +248,7 @@ def test_variety_comparison_across_rarity_modes(entries):
         )
         results[mode] = stats
     
-    print(f"\nDungeon Variety Comparison:")
+    print(f"\nConfined Variety Comparison:")
     for mode in modes:
         stats = results[mode]
         print(f"  {mode.capitalize():6s}: unique={stats['unique_events']}, max={stats['max_percentage']:.1f}%")

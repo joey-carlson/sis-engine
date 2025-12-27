@@ -1,4 +1,4 @@
-"""Debug script to understand wilderness adaptive weighting behavior."""
+"""Debug script to understand open adaptive weighting behavior."""
 
 from pathlib import Path
 
@@ -15,14 +15,14 @@ from spar_engine.severity import compute_alpha, compute_severity_cap, sample_sev
 from spar_engine.state import apply_state_delta, tick_state
 
 
-def debug_wilderness_selection():
-    """Debug why terrain_fog_01 dominates wilderness batches."""
+def debug_open_selection():
+    """Debug why terrain_fog_01 dominates open batches."""
     entries = load_pack("data/core_complications.json")
     
     # Wilderness setup
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
     scene = SceneContext(
-        scene_id="debug_wilderness",
+        scene_id="debug_open",
         scene_phase="engage",
         environment=["open"],
         tone=["gritty"],
@@ -139,4 +139,4 @@ def debug_wilderness_selection():
 
 
 if __name__ == "__main__":
-    debug_wilderness_selection()
+    debug_open_selection()
