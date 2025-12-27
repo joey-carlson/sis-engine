@@ -687,7 +687,7 @@ def main() -> None:
     st.title("SPAR Event Generator v0.1")
     st.caption("Single-event testing and multi-run scenario validation. Not a product UI.")
     
-    # Campaign Context Strip
+    # Campaign Context Strip (v0.3: Faction Influence)
     context = get_campaign_context()
     if context and st.session_state.get("context_enabled", True):
         with st.container(border=True):
@@ -695,19 +695,51 @@ def main() -> None:
             
             with col1:
                 st.markdown(f"**🎯 Campaign Context:** {context.campaign_name}")
-                st.caption(context.get_summary_text())
+                
+                # Faction spotlight (with full names, not just IDs)
+                if context.suggested_factions and context.faction_influence_notes:
+                    # Show just faction names in summary line
+                    faction_names = []
+                    for note in context.faction_influence_notes:
+                        # Extract name before the score
+                        name_part = note.split(" (score:")[0] if " (score:" in note else note
+                        faction_names.append(name_part)
+                    
+                    factions_display = ", ".join(faction_names[:2])
+                    if len(faction_names) > 2:
+                        factions_display += f" +{len(faction_names)-2}"
+                    
+                    st.caption(f"👥 Faction focus: {factions_display}")
+                
+                # Bands summary
+                st.caption(f"🎚️ {context.pressure_band.title()} pressure • 🌡️ {context.heat_band.title()} heat")
             
             with col2:
-                if st.button("View", key="view_context"):
+                if st.button("Details", key="view_context"):
                     st.session_state.show_context_details = not st.session_state.get("show_context_details", False)
-                if st.button("Disable", key="disable_context"):
+                if st.button("Disable", key="disable_context", help="Disable campaign context for this run"):
                     st.session_state.context_enabled = False
                     st.rerun()
             
+            # Expanded details view
             if st.session_state.get("show_context_details", False):
-                st.markdown("**Why this context?**")
-                for note in context.notes:
-                    st.caption(f"• {note}")
+                st.markdown("**Faction Influence:**")
+                if context.faction_influence_notes:
+                    for note in context.faction_influence_notes:
+                        st.caption(f"• {note}")
+                else:
+                    st.caption("• No factions with significant attention")
+                
+                # Show tag bias if present
+                if context.faction_tag_bias:
+                    st.markdown("**Tag Nudges from Factions:**")
+                    st.caption(f"🏷️ {', '.join(context.faction_tag_bias)}")
+                
+                # Show other context notes
+                if context.notes:
+                    st.markdown("**Other Context:**")
+                    for note in context.notes:
+                        st.caption(f"• {note}")
 
     # ---------------- Sidebar ----------------
     with st.sidebar:
