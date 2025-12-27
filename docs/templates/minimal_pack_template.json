@@ -1,0 +1,157 @@
+{
+  "name": "My Custom Pack",
+  "generator_type": "event",
+  "description": "Brief description of your pack's theme or focus",
+  "entries": [
+    {
+      "_template_notes": "TEMPLATE A: Minimal Pack - For quick manual authoring. This field is non-runtime and ignored by the engine. Delete or keep as notes.",
+      "event_id": "custom_situation_01",
+      "title": "Your Situation Title",
+      "tags": [
+        "hazard",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "confined",
+        "populated"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "hazard": 2,
+          "time_pressure": 1
+        }
+      },
+      "effect_vector_template": {
+        "threat": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Describe what happens - focus on consequences not resolution.",
+        "sensory": [
+          "sense detail 1",
+          "sense detail 2"
+        ],
+        "immediate_choice": [
+          "Option that accepts the cost",
+          "Option that changes the situation"
+        ]
+      }
+    },
+    {
+      "event_id": "custom_situation_02",
+      "title": "Another Situation",
+      "tags": [
+        "opportunity",
+        "information"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        4
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          1,
+          3
+        ],
+        "information": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Present a choice with implied consequences.",
+        "sensory": [
+          "what they see",
+          "what they hear"
+        ],
+        "immediate_choice": [
+          "Act on it now",
+          "Note it for later"
+        ]
+      }
+    },
+    {
+      "event_id": "custom_situation_03",
+      "title": "Third Example",
+      "tags": [
+        "social_friction",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated"
+      ],
+      "allowed_scene_phases": [
+        "approach"
+      ],
+      "severity_band": [
+        2,
+        5
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "social_friction": 2
+        }
+      },
+      "effect_vector_template": {
+        "heat": [
+          0,
+          2
+        ],
+        "information": [
+          0,
+          2
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Someone or something complicates your approach.",
+        "sensory": [
+          "observed detail",
+          "heard element"
+        ],
+        "immediate_choice": [
+          "Navigate it directly",
+          "Work around it"
+        ]
+      }
+    }
+  ]
+}

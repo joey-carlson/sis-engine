@@ -741,5 +741,9 @@
       "related_scars": [],
       "notes": null
     }
+  ],
+  "enabled_content_packs": [
+    "data/core_complications 2.json",
+    "data/core_complications.json"
   ]
 }

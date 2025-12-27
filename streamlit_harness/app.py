@@ -1175,18 +1175,40 @@ def main() -> None:
                 # Determine which generator to use
                 use_loot_gen = (gen_type == "💰 Loot")
                 
-                # Load appropriate content
+                # Load appropriate content using campaign-enabled packs
                 gen_entries = entries
                 if use_loot_gen:
-                    # Try to load loot pack
+                    # Try to load loot packs from campaign selection
                     try:
-                        loot_pack_path = "data/core_loot_situations.json"
-                        gen_entries = load_entries(loot_pack_path)
-                        if not gen_entries:
-                            st.error("Loot pack is empty. Using event pack as fallback.")
+                        from spar_engine.content import load_packs_by_generator_type
+                        
+                        # Get campaign to check enabled packs
+                        current_campaign_id = st.session_state.get("current_campaign_id")
+                        loot_entries = []
+                        
+                        if current_campaign_id:
+                            from streamlit_harness.campaign_ui import Campaign
+                            campaign = Campaign.load(current_campaign_id)
+                            if campaign and campaign.enabled_content_packs:
+                                # Load loot-specific packs from campaign
+                                loot_entries = load_packs_by_generator_type(
+                                    campaign.enabled_content_packs,
+                                    "loot"
+                                )
+                        
+                        # Fallback to core loot pack if no loot packs enabled
+                        if not loot_entries:
+                            loot_pack_path = "data/core_loot_situations.json"
+                            loot_entries = load_entries(loot_pack_path)
+                        
+                        if loot_entries:
+                            gen_entries = loot_entries
+                        else:
+                            st.warning("No loot packs available. Using event pack as fallback.")
+                            use_loot_gen = False
                             gen_entries = entries
                     except Exception as ex:
-                        st.warning(f"Could not load loot pack: {ex}. Using event pack as fallback.")
+                        st.warning(f"Could not load loot packs: {ex}. Using event pack as fallback.")
                         use_loot_gen = False
                         gen_entries = entries
                 

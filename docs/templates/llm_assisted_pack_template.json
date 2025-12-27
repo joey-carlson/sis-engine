@@ -1,0 +1,488 @@
+{
+  "name": "Frontier Pack",
+  "generator_type": "event",
+  "description": "Situations in remote territory - isolation, resource scarcity, territorial disputes",
+  "_generator_type_guidance": "Set generator_type to 'event' for standard complications or 'loot' for resource gains. Loot packs use same structure but focus on finding/gaining resources with consequences. See core_loot_situations.json for loot examples.",
+  "entries": [
+    {
+      "_template_notes": "TEMPLATE C: LLM-Assisted Pack - Use LLMs safely as writing assistants. These templates show recommended patterns, not hard limits. Delete this field when creating your pack.",
+      "_llm_prompt_guidance": "SUGGESTED LLM PROMPT: Generate 10 narrative situation entries for a tabletop RPG event generator. Each entry must be a situation that forces a choice and implies consequences. Requirements: Use only these tags (hazard, reinforcements, time_pressure, social_friction, visibility, mystic, attrition, terrain, positioning, opportunity, information, cost, threat, heat, consequence, obligation). Use only these environments (confined, populated, open, derelict, industrial, sea, planar). Use only these phases (approach, engage, aftermath). Do not invent new mechanics, tags, or rules. Do not include genre-specific nouns (avoid: orcs, lasers, spells by name). Focus on consequences not resolution. Use neutral phrasing. Severity (1-10) measures instability not importance.",
+      "_llm_constraints": "STRICT CONSTRAINTS: No new tags. No new effect vectors. No numeric tuning beyond severity_band and effect ranges. No item stats. No lore dumps. No named factions. No resolution text. Every entry must present a situation with implied consequences.",
+      "_llm_examples_good_vs_bad": "GOOD: 'A structural weakness becomes obvious mid-fight' (situation). BAD: 'You find a +3 sword' (loot/resolution). GOOD: 'Someone with authority demands immediate compliance' (social pressure). BAD: 'The Orc Chieftain attacks' (genre-specific). GOOD: 'A resource you relied on is depleted' (consequence). BAD: 'You cast fireball and win' (resolution/mechanics).",
+      "_llm_loot_pack_guidance": "FOR LOOT PACKS: Set generator_type='loot' and focus on resource gain situations. Prompt: 'Generate loot situations where finding/gaining resources creates complications or consequences. Each entry shows a resource gain paired with a cost, risk, or obligation.' Use tags: opportunity, cost, obligation, information, social_friction. Severity = how much the gain destabilizes the situation (not value). Example: 'Hidden cache discovered, but someone else claims ownership.'",
+      "event_id": "frontier_approach_claim_01",
+      "title": "Disputed Claim",
+      "tags": [
+        "social_friction",
+        "information",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "approach"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "social_friction": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          2
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Two parties claim the same ground, neither recognizes the other's right.",
+        "sensory": [
+          "stakes driven",
+          "boundary markers",
+          "tense standoff"
+        ],
+        "immediate_choice": [
+          "Negotiate between them",
+          "Pick a side"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_approach_weather_read_01",
+      "title": "Weather Warning",
+      "tags": [
+        "information",
+        "time_pressure",
+        "hazard"
+      ],
+      "allowed_environments": [
+        "open",
+        "sea"
+      ],
+      "allowed_scene_phases": [
+        "approach"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "hazard": 1,
+          "information": 1
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          3
+        ],
+        "time_pressure": [
+          1,
+          2
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Sky and wind patterns suggest incoming conditions, you have time to adapt or shelter.",
+        "sensory": [
+          "pressure change",
+          "animal behavior",
+          "cloud formation"
+        ],
+        "immediate_choice": [
+          "Adjust plans for weather",
+          "Race it to destination"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_engage_supply_line_01",
+      "title": "Supply Line Threatened",
+      "tags": [
+        "attrition",
+        "positioning",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "attrition": 2,
+          "positioning": 1
+        }
+      },
+      "effect_vector_template": {
+        "cost": [
+          1,
+          3
+        ],
+        "time_pressure": [
+          1,
+          2
+        ],
+        "position_shift": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Your connection to supplies is being cut, decisions must factor in isolation.",
+        "sensory": [
+          "blocked trails",
+          "intercepted messages",
+          "abandoned caches"
+        ],
+        "immediate_choice": [
+          "Secure the supply route",
+          "Accept operating lean"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_engage_terrain_advantage_01",
+      "title": "Defensive Ground",
+      "tags": [
+        "terrain",
+        "positioning",
+        "opportunity"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "terrain": 1,
+          "positioning": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          1,
+          3
+        ],
+        "position_shift": [
+          1,
+          2
+        ],
+        "threat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Natural features favor defense, someone can hold this with fewer numbers.",
+        "sensory": [
+          "natural barriers",
+          "sight lines",
+          "elevation"
+        ],
+        "immediate_choice": [
+          "Contest the position",
+          "Force them to abandon it"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_engage_isolation_factor_01",
+      "title": "No Help Coming",
+      "tags": [
+        "information",
+        "cost",
+        "consequence"
+      ],
+      "allowed_environments": [
+        "open",
+        "sea"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "information": 2,
+          "consequence": 1
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          3
+        ],
+        "cost": [
+          1,
+          2
+        ],
+        "threat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Distance and conditions make support impossible, you're operating alone now.",
+        "sensory": [
+          "failed signals",
+          "empty horizon",
+          "calculated distance"
+        ],
+        "immediate_choice": [
+          "Adapt tactics for self-reliance",
+          "Withdraw to safer ground"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_engage_resource_competition_01",
+      "title": "Water Source Contested",
+      "tags": [
+        "opportunity",
+        "social_friction",
+        "cost"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "social_friction": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          3
+        ],
+        "threat": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "A critical resource has multiple claimants, access becomes a point of conflict.",
+        "sensory": [
+          "protective positioning",
+          "calculating stares",
+          "stated boundaries"
+        ],
+        "immediate_choice": [
+          "Negotiate shared access",
+          "Secure exclusive control"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_aftermath_exposure_cost_01",
+      "title": "Exposure Accumulates",
+      "tags": [
+        "consequence",
+        "cost",
+        "hazard"
+      ],
+      "allowed_environments": [
+        "open",
+        "sea"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        5
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "consequence": 2,
+          "cost": 1
+        }
+      },
+      "effect_vector_template": {
+        "cost": [
+          1,
+          3
+        ],
+        "information": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Time in harsh conditions leaves its mark, the toll becomes measurable.",
+        "sensory": [
+          "weathered gear",
+          "fatigue lines",
+          "worn edges"
+        ],
+        "immediate_choice": [
+          "Rest and repair",
+          "Push through degraded condition"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_aftermath_reputation_frontier_01",
+      "title": "Word Spreads Slowly",
+      "tags": [
+        "information",
+        "social_friction",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        4
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "information": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          3
+        ],
+        "heat": [
+          0,
+          2
+        ],
+        "opportunity": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "In sparse populations, news travels slowly but thoroughly, your actions will be known eventually.",
+        "sensory": [
+          "travelers passing",
+          "smoke signals",
+          "rider departing"
+        ],
+        "immediate_choice": [
+          "Control the narrative now",
+          "Let it spread naturally"
+        ]
+      }
+    },
+    {
+      "event_id": "frontier_aftermath_territory_understood_01",
+      "title": "Boundaries Clarified",
+      "tags": [
+        "information",
+        "consequence",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        4
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "information": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          2,
+          3
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Who controls what is now clearer, invisible lines become understood.",
+        "sensory": [
+          "recognized markers",
+          "changed behavior",
+          "respected distance"
+        ],
+        "immediate_choice": [
+          "Operate within boundaries",
+          "Test the edges"
+        ]
+      }
+    }
+  ]
+}

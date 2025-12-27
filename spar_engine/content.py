@@ -7,11 +7,27 @@ from typing import Iterable, List, Sequence
 from .models import ContentEntry, ScenePhase, AdapterHints
 
 def load_pack(path: str | Path) -> List[ContentEntry]:
-    """Load a single content pack from JSON file."""
+    """Load a single content pack from JSON file.
+    
+    Supports two formats:
+    - Legacy: JSON array of entries
+    - New: JSON object with metadata (name, generator_type, entries array)
+    
+    Backward compatible - automatically detects format.
+    """
     p = Path(path)
     data = json.loads(p.read_text())
+    
+    # Detect format: object with "entries" field vs array
+    if isinstance(data, dict) and "entries" in data:
+        # New format: object with metadata
+        raw_entries = data["entries"]
+    else:
+        # Legacy format: array of entries
+        raw_entries = data
+    
     entries: List[ContentEntry] = []
-    for raw in data:
+    for raw in raw_entries:
         hints = raw.get("adapter_hints")
         adapter_hints = None
         if hints:
@@ -39,6 +55,32 @@ def load_pack(path: str | Path) -> List[ContentEntry]:
             )
         )
     return entries
+
+
+def get_pack_metadata(path: str | Path) -> dict[str, str]:
+    """Get pack metadata without loading all entries.
+    
+    Returns:
+        Dictionary with keys: name, generator_type, description
+        Defaults: generator_type="event" for backward compatibility
+    """
+    p = Path(path)
+    data = json.loads(p.read_text())
+    
+    # New format: object with metadata
+    if isinstance(data, dict) and "entries" in data:
+        return {
+            "name": data.get("name", p.stem),
+            "generator_type": data.get("generator_type", "event"),
+            "description": data.get("description", ""),
+        }
+    else:
+        # Legacy format: array (defaults to event)
+        return {
+            "name": p.stem,
+            "generator_type": "event",
+            "description": "",
+        }
 
 
 def load_packs(paths: Iterable[str | Path]) -> List[ContentEntry]:
@@ -71,6 +113,37 @@ def load_packs(paths: Iterable[str | Path]) -> List[ContentEntry]:
             all_entries.append(entry)
     
     return all_entries
+
+
+def load_packs_by_generator_type(
+    paths: Iterable[str | Path],
+    generator_type: str
+) -> List[ContentEntry]:
+    """Load and merge packs filtered by generator type.
+    
+    Args:
+        paths: Iterable of file paths to content pack JSON files
+        generator_type: Target generator type (e.g., "event", "loot")
+        
+    Returns:
+        Merged list of content entries from packs matching generator_type
+        
+    Notes:
+        - Packs without generator_type metadata default to "event"
+        - Returns empty list if no matching packs found
+    """
+    matching_paths = []
+    
+    for path in paths:
+        try:
+            metadata = get_pack_metadata(path)
+            if metadata["generator_type"] == generator_type:
+                matching_paths.append(path)
+        except Exception:
+            # Skip packs that fail to load
+            continue
+    
+    return load_packs(matching_paths)
 
 def _any_tag_on_cooldown(entry: ContentEntry, tag_cooldowns: dict[str, int]) -> bool:
     for t in entry.tags:

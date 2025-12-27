@@ -134,6 +134,7 @@ class Campaign:
     ledger: List[Dict[str, Any]] = field(default_factory=list)
     sources: List[Source] = field(default_factory=list)
     prep_queue: List[PrepItem] = field(default_factory=list)
+    enabled_content_packs: List[str] = field(default_factory=lambda: ["data/core_complications.json", "data/core_loot_situations.json"])
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -147,11 +148,12 @@ class Campaign:
             "ledger": self.ledger,
             "sources": [s.to_dict() for s in self.sources],
             "prep_queue": [p.to_dict() for p in self.prep_queue],
+            "enabled_content_packs": self.enabled_content_packs,
         }
     
     @staticmethod
     def from_dict(data: Dict[str, Any]) -> "Campaign":
-        """Deserialize from dictionary."""
+        """Deserialize from dictionary with backward compatibility."""
         campaign_state = None
         if data.get("campaign_state"):
             campaign_state = CampaignState.from_dict(data["campaign_state"])
@@ -161,6 +163,9 @@ class Campaign:
         
         prep_queue_data = data.get("prep_queue", [])
         prep_queue = [PrepItem.from_dict(p) for p in prep_queue_data]
+        
+        # Backward compatibility: default to core pack if not specified
+        enabled_packs = data.get("enabled_content_packs", ["data/core_complications.json"])
         
         return Campaign(
             campaign_id=data["campaign_id"],
@@ -172,6 +177,7 @@ class Campaign:
             ledger=data.get("ledger", []),
             sources=sources,
             prep_queue=prep_queue,
+            enabled_content_packs=enabled_packs,
         )
     
     def get_path(self) -> Path:
@@ -225,6 +231,68 @@ def init_campaign_session() -> None:
         st.session_state.current_campaign_id = None
     if "campaign_page" not in st.session_state:
         st.session_state.campaign_page = "selector"  # selector, dashboard, session, finalize
+
+
+def discover_content_packs() -> List[Dict[str, Any]]:
+    """Discover available content packs from data/ directory.
+    
+    Returns list of pack metadata dictionaries with:
+    - path: File path to pack JSON
+    - name: Display name
+    - generator_type: "event", "loot", etc.
+    - description: Pack description
+    - entry_count: Number of entries in pack
+    - is_core: Whether this is a core pack
+    
+    Scans data/ directory for all .json files with valid pack structure.
+    Supports both legacy (array) and new (object with metadata) formats.
+    """
+    from spar_engine.content import load_pack, get_pack_metadata
+    
+    packs = []
+    data_dir = Path("data")
+    
+    if not data_dir.exists():
+        return packs
+    
+    # Scan all JSON files in data/ directory
+    for pack_file in sorted(data_dir.glob("*.json")):
+        # Skip draft files and backups
+        if any(skip in pack_file.name.lower() for skip in ["draft", "batch", "backup"]):
+            continue
+        
+        try:
+            # Get metadata first
+            metadata = get_pack_metadata(str(pack_file))
+            
+            # Load entries to count them
+            entries = load_pack(str(pack_file))
+            
+            # Detect core packs by filename
+            is_core_complications = pack_file.name == "core_complications.json"
+            is_core_loot = pack_file.name == "core_loot_situations.json"
+            is_core = is_core_complications or is_core_loot
+            
+            packs.append({
+                "path": str(pack_file),
+                "name": metadata["name"],
+                "generator_type": metadata["generator_type"],
+                "description": metadata["description"],
+                "entry_count": len(entries),
+                "is_core": is_core,
+            })
+        except Exception:
+            # Skip files that don't load as valid content packs
+            continue
+    
+    # Sort: core packs first, then by generator type, then alphabetically
+    packs.sort(key=lambda p: (
+        not p.get("is_core", False),
+        p.get("generator_type", "event"),
+        p["name"]
+    ))
+    
+    return packs
 
 
 def _save_override_promote_to_faction(campaign_id: str, entity_name: str, from_category: str) -> None:
@@ -1094,6 +1162,226 @@ def render_campaign_dashboard() -> None:
         campaign.canon_summary.append("New development...")
         campaign.save()
         st.rerun()
+    
+    st.divider()
+    
+    # Content Packs (v1.1: Scalable UI for 1000+ packs)
+    col_header, col_help = st.columns([10, 2])
+    with col_header:
+        st.subheader("🎲 Content Packs")
+    with col_help:
+        if st.button("❓ Help", key="content_pack_help_btn", help="How to create your own packs"):
+            st.session_state.show_pack_help = not st.session_state.get("show_pack_help", False)
+    
+    # Help panel (inline, toggleable)
+    if st.session_state.get("show_pack_help", False):
+        with st.container(border=True):
+            st.markdown("### 📚 Content Pack Authoring Guide")
+            
+            # Section 1: What is a Content Pack?
+            st.markdown("**What is a Content Pack?**")
+            st.caption(
+                "Content packs add situations, not rules. Each pack contributes new narrative problems "
+                "the generator can draw from, using the same tags and mechanics as the core system. "
+                "Packs change the voice of play, not how the engine works."
+            )
+            
+            st.divider()
+            
+            # Section 2: How to Create Your Own
+            st.markdown("**How to Create Your Own**")
+            st.caption("Quick checklist:")
+            st.markdown("""
+- Copy a content pack template
+- Write new situations using existing tags and severity
+- Save to `data/` directory with a `.json` filename
+- Enable the pack for your campaign
+- Let the generator combine it with other packs automatically
+            """)
+            st.caption("💡 You don't need to understand the engine to write a pack.")
+            
+            st.divider()
+            
+            # Section 3: Templates & Help
+            st.markdown("**Templates & Help**")
+            st.caption("Copy-pasteable starting points:")
+            
+            template_col1, template_col2, template_col3 = st.columns(3)
+            
+            with template_col1:
+                # Minimal template
+                try:
+                    minimal_path = Path("docs/templates/minimal_pack_template.json")
+                    if minimal_path.exists():
+                        with open(minimal_path, 'r') as f:
+                            minimal_content = f.read()
+                        st.download_button(
+                            "📥 Minimal Pack",
+                            data=minimal_content,
+                            file_name="minimal_pack_template.json",
+                            mime="application/json",
+                            help="3-5 entries for quick manual authoring",
+                            use_container_width=True,
+                            key="download_minimal"
+                        )
+                except Exception:
+                    st.caption("Minimal template unavailable")
+            
+            with template_col2:
+                # Thematic template
+                try:
+                    thematic_path = Path("docs/templates/thematic_pack_template.json")
+                    if thematic_path.exists():
+                        with open(thematic_path, 'r') as f:
+                            thematic_content = f.read()
+                        st.download_button(
+                            "📥 Thematic Pack",
+                            data=thematic_content,
+                            file_name="thematic_pack_template.json",
+                            mime="application/json",
+                            help="10 entries showing best practices",
+                            use_container_width=True,
+                            key="download_thematic"
+                        )
+                except Exception:
+                    st.caption("Thematic template unavailable")
+            
+            with template_col3:
+                # LLM-assisted template
+                try:
+                    llm_path = Path("docs/templates/llm_assisted_pack_template.json")
+                    if llm_path.exists():
+                        with open(llm_path, 'r') as f:
+                            llm_content = f.read()
+                        st.download_button(
+                            "📥 LLM-Assisted",
+                            data=llm_content,
+                            file_name="llm_assisted_pack_template.json",
+                            mime="application/json",
+                            help="Template + LLM prompting guidance",
+                            use_container_width=True,
+                            key="download_llm"
+                        )
+                except Exception:
+                    st.caption("LLM template unavailable")
+            
+            # Link to full documentation
+            st.divider()
+            st.caption("📖 Full documentation: `docs/templates/README.md`")
+            
+            # Conservative LLM messaging
+            with st.expander("⚠️ LLM Usage Guidelines", expanded=False):
+                st.caption(
+                    "**LLMs are writing assistants, not system designers.** "
+                    "Ask them to produce situations, not rules. Review every entry carefully to ensure: "
+                    "no new tags, no mechanics, no genre-specific nouns, no resolution text."
+                )
+        
+        st.divider()
+    
+    # Discover all available packs
+    available_packs = discover_content_packs()
+    
+    # Show currently enabled packs (compact summary)
+    if campaign.enabled_content_packs:
+        # Calculate total entries
+        total_entries = 0
+        for pack_path in campaign.enabled_content_packs:
+            matching = [p for p in available_packs if p["path"] == pack_path]
+            if matching:
+                total_entries += matching[0]["entry_count"]
+        
+        st.caption(f"**Active: {len(campaign.enabled_content_packs)} pack(s), {total_entries} entries**")
+        
+        # Show each enabled pack with remove button
+        for pack_path in campaign.enabled_content_packs:
+            # Find pack metadata
+            matching = [p for p in available_packs if p["path"] == pack_path]
+            if matching:
+                pack = matching[0]
+                col1, col2 = st.columns([10, 2])
+                with col1:
+                    # Generator type indicator
+                    gen_icon = {"event": "⚔️", "loot": "💰", "rumor": "💬", "npc": "👤"}.get(pack.get("generator_type", "event"), "📦")
+                    is_core = pack.get("is_core", False)
+                    core_marker = "⭐ " if is_core else ""
+                    st.caption(f"{core_marker}{gen_icon} {pack['name']} ({pack['entry_count']} entries)")
+                with col2:
+                    if st.button("✕", key=f"remove_{pack_path}", help="Remove pack"):
+                        campaign.enabled_content_packs.remove(pack_path)
+                        campaign.save()
+                        st.rerun()
+            else:
+                # Pack file not found (may have been deleted)
+                col1, col2 = st.columns([10, 2])
+                with col1:
+                    st.caption(f"• {Path(pack_path).stem} (not found)")
+                with col2:
+                    if st.button("✕", key=f"remove_{pack_path}", help="Remove pack"):
+                        campaign.enabled_content_packs.remove(pack_path)
+                        campaign.save()
+                        st.rerun()
+    else:
+        st.caption("No packs selected")
+    
+    st.divider()
+    
+    # Add packs section (collapsed by default, scalable for 1000+ packs)
+    with st.expander("➕ Add Content Packs", expanded=False):
+        st.caption("Search and add packs to this campaign")
+        
+        if not available_packs:
+            st.warning("No content packs found in data/ directory")
+        else:
+            # Filter out already enabled packs
+            available_to_add = [p for p in available_packs if p["path"] not in campaign.enabled_content_packs]
+            
+            if not available_to_add:
+                st.info("All available packs are already enabled")
+            else:
+                # Search box for filtering
+                search_query = st.text_input(
+                    "Search packs",
+                    placeholder="Filter by name...",
+                    key="pack_search",
+                    help="Type to filter the pack list"
+                )
+                
+                # Filter packs by search
+                filtered_packs = available_to_add
+                if search_query:
+                    search_lower = search_query.lower()
+                    filtered_packs = [p for p in available_to_add if search_lower in p["name"].lower()]
+                
+                if not filtered_packs:
+                    st.caption("No packs match your search")
+                else:
+                    st.caption(f"Showing {min(10, len(filtered_packs))} of {len(filtered_packs)} available packs")
+                    
+                    # Show filtered packs (max 10 at a time)
+                    for pack in filtered_packs[:10]:
+                        with st.container(border=True):
+                            col1, col2 = st.columns([10, 2])
+                            
+                            with col1:
+                                # Generator type indicator
+                                gen_icon = {"event": "⚔️", "loot": "💰", "rumor": "💬", "npc": "👤"}.get(pack.get("generator_type", "event"), "📦")
+                                gen_type_label = pack.get("generator_type", "event").title()
+                                is_core = pack.get("is_core", False)
+                                core_marker = "⭐ " if is_core else ""
+                                
+                                st.markdown(f"{core_marker}{gen_icon} **{pack['name']}** ({pack['entry_count']} entries)")
+                                st.caption(f"{gen_type_label} Pack • {pack['description']}")
+                            
+                            with col2:
+                                if st.button("+ Add", key=f"add_{pack['path']}", use_container_width=True):
+                                    campaign.enabled_content_packs.append(pack["path"])
+                                    campaign.save()
+                                    st.rerun()
+                    
+                    # Show pagination hint if more results
+                    if len(filtered_packs) > 10:
+                        st.caption(f"💡 {len(filtered_packs) - 10} more packs available. Refine your search to see them.")
     
     st.divider()
     

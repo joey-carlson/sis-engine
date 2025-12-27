@@ -1,0 +1,595 @@
+{
+  "name": "Urban Decay Pack",
+  "generator_type": "event",
+  "description": "Situations in crumbling city infrastructure - gritty, immediate, grounded",
+  "entries": [
+    {
+      "_template_notes": "TEMPLATE B: Thematic Pack - Best practice example showing tone consistency and phase balance. This pack demonstrates 'Urban Decay' theme - situations in crumbling city infrastructure. These templates show recommended patterns, not hard limits. Delete this field when creating your pack.",
+      "_theme_guidance": "Urban Decay theme emphasizes: infrastructure failure, social breakdown, resource scarcity. Tone: gritty, immediate, grounded. Phase balance: 25% approach, 50% engage, 25% aftermath. Avoid: apocalypse terminology, zombie tropes, named factions.",
+      "event_id": "urban_decay_approach_scout_01",
+      "title": "Blocked Access Route",
+      "tags": [
+        "terrain",
+        "information",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "confined",
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "approach"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "terrain": 2
+        }
+      },
+      "effect_vector_template": {
+        "position_shift": [
+          1,
+          2
+        ],
+        "information": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Your planned route is barricaded with makeshift debris, someone lives here now.",
+        "sensory": [
+          "rusted shopping carts",
+          "spray paint warnings"
+        ],
+        "immediate_choice": [
+          "Find another way",
+          "Clear it and risk attention"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_approach_patrol_01",
+      "title": "Irregular Patrol Pattern",
+      "tags": [
+        "visibility",
+        "information",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "approach"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "visibility": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          2
+        ],
+        "heat": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Security sweeps are unpredictable here, someone walks the line without schedule.",
+        "sensory": [
+          "distant footsteps",
+          "flashlight sweep"
+        ],
+        "immediate_choice": [
+          "Wait for the gap",
+          "Move during the sweep"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_engage_utility_01",
+      "title": "Utility Grid Fluctuates",
+      "tags": [
+        "hazard",
+        "terrain",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "industrial",
+        "populated",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "hazard": 2,
+          "terrain": 1
+        }
+      },
+      "effect_vector_template": {
+        "threat": [
+          1,
+          3
+        ],
+        "position_shift": [
+          0,
+          2
+        ],
+        "visibility": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Power surges and drops, lights strobe, equipment whines unpredictably.",
+        "sensory": [
+          "fluorescent flicker",
+          "electrical hum"
+        ],
+        "immediate_choice": [
+          "Exploit the darkness",
+          "Use the light to move fast"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_engage_scavenger_01",
+      "title": "Scavenger Claim",
+      "tags": [
+        "social_friction",
+        "opportunity",
+        "cost"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "social_friction": 2
+        }
+      },
+      "effect_vector_template": {
+        "cost": [
+          0,
+          3
+        ],
+        "opportunity": [
+          0,
+          2
+        ],
+        "heat": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Someone already claimed this space, they're territorial about salvage rights.",
+        "sensory": [
+          "defensive posture",
+          "makeshift weapons"
+        ],
+        "immediate_choice": [
+          "Negotiate access",
+          "Assert control"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_engage_floor_01",
+      "title": "Floor Integrity Fails",
+      "tags": [
+        "hazard",
+        "terrain",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        4,
+        8
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "hazard": 2,
+          "terrain": 2
+        }
+      },
+      "effect_vector_template": {
+        "threat": [
+          2,
+          4
+        ],
+        "position_shift": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Rotted supports give way, the floor becomes unreliable terrain.",
+        "sensory": [
+          "splintering crack",
+          "dust plume",
+          "void below"
+        ],
+        "immediate_choice": [
+          "Test each step carefully",
+          "Move fast before more collapses"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_engage_water_01",
+      "title": "Pipe Rupture",
+      "tags": [
+        "hazard",
+        "terrain",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "confined",
+        "industrial",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "hazard": 2
+        }
+      },
+      "effect_vector_template": {
+        "threat": [
+          1,
+          3
+        ],
+        "time_pressure": [
+          1,
+          2
+        ],
+        "position_shift": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Corroded pipes burst, water floods the space rapidly.",
+        "sensory": [
+          "rushing water",
+          "chemical smell",
+          "slick floors"
+        ],
+        "immediate_choice": [
+          "Move to higher ground",
+          "Use the flood as cover"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_engage_squatter_01",
+      "title": "Squatter Territory",
+      "tags": [
+        "social_friction",
+        "visibility",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "populated"
+      ],
+      "allowed_scene_phases": [
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "social_friction": 2
+        }
+      },
+      "effect_vector_template": {
+        "heat": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "position_shift": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Makeshift camps and territorial markers, you're trespassing on claimed ground.",
+        "sensory": [
+          "watching eyes",
+          "defensive arrangement",
+          "quiet challenge"
+        ],
+        "immediate_choice": [
+          "Respect the claim and negotiate",
+          "Assert dominance"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_aftermath_collapse_echo_01",
+      "title": "Secondary Collapse",
+      "tags": [
+        "hazard",
+        "terrain",
+        "consequence"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "hazard": 2,
+          "terrain": 1
+        }
+      },
+      "effect_vector_template": {
+        "threat": [
+          0,
+          2
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "The fight weakened something structural, delayed collapse follows.",
+        "sensory": [
+          "grinding concrete",
+          "settling dust",
+          "new gaps"
+        ],
+        "immediate_choice": [
+          "Leave immediately",
+          "Salvage what you can first"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_aftermath_reputation_01",
+      "title": "Street Word Spreads",
+      "tags": [
+        "social_friction",
+        "information",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        5
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "social_friction": 2,
+          "information": 1
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          3
+        ],
+        "heat": [
+          0,
+          2
+        ],
+        "opportunity": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Locals reinterpret what happened, your name attaches to it whether you like it or not.",
+        "sensory": [
+          "whispered accounts",
+          "changed glances",
+          "new caution"
+        ],
+        "immediate_choice": [
+          "Shape the narrative",
+          "Let reputation form naturally"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_aftermath_salvage_01",
+      "title": "Salvage Window",
+      "tags": [
+        "opportunity",
+        "information",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        4
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "information": [
+          0,
+          2
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "The fight exposed valuable components, scavengers will notice soon.",
+        "sensory": [
+          "exposed wiring",
+          "intact equipment",
+          "quiet value"
+        ],
+        "immediate_choice": [
+          "Take what you can now",
+          "Mark it for later return"
+        ]
+      }
+    },
+    {
+      "event_id": "urban_decay_aftermath_route_memory_01",
+      "title": "Routes Remembered",
+      "tags": [
+        "information",
+        "consequence",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        4
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "information": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          1,
+          3
+        ],
+        "heat": [
+          0,
+          2
+        ],
+        "opportunity": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Your passage through the district gets noted, locals will expect you back.",
+        "sensory": [
+          "recognized faces",
+          "tracked movement",
+          "established pattern"
+        ],
+        "immediate_choice": [
+          "Change future routes",
+          "Accept the predictability"
+        ]
+      }
+    }
+  ]
+}

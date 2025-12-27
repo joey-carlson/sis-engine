@@ -4,6 +4,21 @@
 
 ### Major Release: Campaign Memory System
 
+**Multi-Pack Content Loading v0.1 (Phase 2 - UI Integration):**
+- Campaign-level content pack selection and management
+- Added `enabled_content_packs` field to Campaign model (defaults to core pack only)
+- Dashboard UI section for toggling content packs (core pack always enabled, grayed)
+- Event Generator automatically uses campaign's selected packs via `load_packs()`
+- Context strip shows active pack names ("📦 Pack: Core" or "📦 Packs: Core + Urban")
+- Pack discovery function ready for future `data/packs/` directory scanning
+- Backward compatible: Existing campaigns auto-migrate with default core pack
+- 9 comprehensive tests added, 171/171 tests passing
+- See `docs/IMPLEMENTATION_SUMMARY_multi_pack_ui_v0.1.md` for complete details
+- Phase 1 (Core Pack Extension: 107 entries) completed earlier
+- Phase 3 (Thematic Pack Creation) and Phase 4 (Directory Scanning) parked for future
+
+### Major Release: Campaign Memory System
+
 SPAR Tool Engine v1.0 delivers a complete campaign memory system integrating event generation with persistent campaign state. The generator now "remembers" your campaign through faction attention tracking, deterministic influence scoring, and curated narrative exports.
 
 **Event Generator UI v1.0 (New):**
