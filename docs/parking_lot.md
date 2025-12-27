@@ -1,222 +1,115 @@
-*Last updated: 2025-12-25*
+# SPAR Tool Parking Lot (Post-v1.0)
 
+_Last updated: 2025-12-26_
 
-# SPAR Engine Parking Lot
+This is the single source of truth for **deferred** work. Everything here is optional and additive; it is not required for v1.0 to function.
 
-This document contains ideas, features, and improvements that have been considered for future versions of the SPAR Engine. Items here are **not yet prioritized or scheduled** but serve as a record of potential enhancements.
-
-## Distribution & Sampling Features
-
-### Alternative Severity Distributions
-- **Tension Pool Mode**: Instead of truncated heavy-tail, accumulate "tension points" that release in bursts
-- **Context-Aware Alpha**: Dynamic adjustment of power-law exponent based on scene constraints
-- **Multi-Modal Distributions**: Support for scenarios with multiple severity peaks (e.g., "safe but occasionally catastrophic")
-- **Time-Based Decay**: Severity that naturally decreases over time within encounters
-
-### Advanced Cutoff Behaviors
-- **Narrative Cutoff Conversion**: Transform high-severity events into story hooks or character development opportunities
-- **Player Agency Cutoffs**: Allow players to "spend" narrative currency to reduce severity
-- **Escalation Ladders**: Chain cutoffs to create escalation paths (threat → complication → crisis)
-
-## Content & Narrative Features
-
-### Dynamic Content Generation
-- **Procedural Fiction**: AI/ML-generated narrative elements based on scene parameters
-- **Modular Event Components**: Mix-and-match event building blocks for more variety
-- **Cultural/Setting Adaptation**: Content packs that adapt tone and style to specific campaign settings
-
-### State & Memory Systems
-- **Persistent Campaign State**: Track complications across multiple sessions
-- **Character-Specific Memories**: NPCs remember past complications involving specific PCs
-- **Location State**: Places develop "histories" of complications that affect future events
-
-## Interface & Tooling Features
-
-### Advanced UI Components
-- **Distribution Visualizer**: Real-time histograms showing severity distributions
-- **State Tracker**: Visual representation of tension, heat, and other state variables
-- **Scenario Simulator**: "What-if" testing of different parameter combinations
-- **Content Authoring Tools**: GUI for creating and testing new complication entries
-
-### Integration Features
-- **API Endpoints**: RESTful API for external integrations
-- **Plugin Architecture**: Support for third-party adapters and content packs
-- **Multi-Platform Support**: Web, desktop, and mobile interfaces
-
-## System Adapter Ideas
-
-### TTRPG System Support
-- **D&D 5e Complications**: Map severity to DCs, damage, and encounter difficulty
-- **Pathfinder 2e**: Leverage complex action economy for complication timing
-- **Powered by the Apocalypse**: Integrate with move-specific complication tables
-- **Generic RPG Framework**: Configurable adapters for any dice-based system
-
-### Non-TTRPG Applications
-- **Board Game Complications**: Procedural events for strategy and eurogames
-- **Narrative Generators**: Story complication engines for fiction writing
-- **Educational Tools**: Scenario-based learning with adaptive difficulty
-
-## Technical Improvements
-
-### Performance & Scalability
-- **Async Processing**: Non-blocking event generation for real-time applications
-- **Caching System**: Intelligent caching of filtered content pools
-- **Database Integration**: Support for large content libraries with efficient querying
-
-### Testing & Quality Assurance
-- **Property-Based Testing**: Generate test cases from mathematical properties
-- **Distribution Analysis Tools**: Statistical validation of output distributions
-- **Load Testing**: Performance benchmarking for high-frequency generation
-
-## Research & Innovation
-
-### Algorithmic Enhancements
-- **Multi-Agent Complications**: Events that involve multiple NPCs or factions
-- **Causal Chains**: Complications that create prerequisites for future events
-- **Adaptive Learning**: Engine that learns from GM feedback to improve relevance
-
-### Academic Applications
-- **Game Design Research**: Tools for studying procedural narrative systems
-- **Psychology Studies**: Research into player experience with random complications
-- **AI Training Data**: Generate datasets for training narrative AI systems
-
-## Community & Ecosystem
-
-### Collaboration Features
-- **Shared Content Packs**: Community marketplace for user-created complications
-- **Template System**: Standardized formats for sharing event templates
-- **Version Compatibility**: Backward compatibility guarantees for content packs
-
-### Documentation & Education
-- **Interactive Tutorials**: Guided experiences for learning engine parameters
-- **Case Studies**: Real campaign examples showing engine usage
-- **Best Practices Guide**: Recommendations for different play styles and group sizes
-
-## Meta-Features
-
-### Engine Evolution
-- **Self-Modifying Rules**: Engine that can adjust its own parameters based on usage patterns
-- **A/B Testing Framework**: Compare different distribution algorithms in practice
-- **Telemetry & Analytics**: Optional data collection for improving the engine (GDPR compliant)
+## How to use this list
+- **Next up** items are the best ROI and lowest risk.
+- **Later** items are valuable but should wait until there is real user demand.
+- **Deep R&D** items are experiments; only pursue if we have a specific pain to solve.
+- When an item is unparked, it should move into a dated implementation plan and be removed from this list.
 
 ---
 
-## Contribution Guidelines
+## Next up (highest ROI, lowest risk)
 
-When proposing new parking lot items:
-- **Be Specific**: Include enough detail to understand the idea without over-engineering
-- **Link to Requirements**: Reference how this serves TTRPG design goals
-- **Estimate Complexity**: High/Medium/Low implementation complexity
-- **Note Dependencies**: Any prerequisites or related features needed first
+### 1) Thematic content packs (Events + Loot)
+**Why now:** The engine is stable; perceived intelligence now scales with content breadth.  
+**What:** Produce 2–4 high-quality packs with distinct voices (setting-neutral), plus campaign-specific packs when needed.
+- Events: Urban Intrigue, Frontier Survival, Horror Pressure, Institutional/Political
+- Loot: Salvage & Black Market is done; next: Patronage/Institutional Rewards; Smuggler’s Cache; Relic Curios
+**Notes:** No new mechanics. Packs only.
 
-Items move from parking lot to roadmap when:
-- They align with project vision and current priorities
-- Sufficient research/demand exists
-- Implementation complexity is manageable
-- Dependencies are resolved
+### 2) Pack authoring ergonomics and quality gates
+**Why now:** Community packs will drift without guardrails.  
+**What:** Lightweight tooling and docs (no heavy UI) to keep packs consistent.
+- Pack lint/validator (schema + tag vocabulary + phase coverage checks)
+- Pack “smoke test” runner (small batch generation + sanity metrics)
+- Pack provenance display (show which pack an output came from)
+- Optional: “pack cookbook” examples (short, practical)
+
+### 3) Source list import (deep) for external datasets
+**Why now:** You’ve proven metadata-only sources; next step is real mapping from spreadsheets/CSVs into packs.  
+**What:** Import/mapping pipeline with review step (no silent commits).
+- Supported inputs: CSV/XLSX/JSON
+- Mapping profiles per source (column → fields/tags/severity bands)
+- Normalization rules (dedupe, tag hygiene)
+- Output: generated pack(s) with provenance + version stamp
+**Non-goals:** live syncing, web scraping, hosted parsing.
 
 ---
 
-Content Ingestion & Community Loot Systems (Deferred)
+## Later (valuable, but wait for demand)
 
-Community Loot Table as Content Pack Precedent
+### 4) Campaign story web view (read-only)
+**Why:** Exports are clean; web view is presentation-layer value.  
+**What:** Render story-facing campaign history and sessions as a browsable timeline.
+- Filters: factions, scars, threads
+- “Player-safe” view toggle (hides GM private notes)
+- Static export (HTML) or lightweight local server
+**Non-goals:** editing in the web view (v1.x).
 
-Context:
-Reviewed an older community project (“The One Loot Table to Rule Them All”) that implements a large, shared loot table using a spreadsheet-backed dataset with filter views and lightweight rarity logic. This serves as a useful reference model for how large, community-driven content collections evolve over time.
+### 5) Canon Summary curation heuristics tuning
+**Why:** Canon is now GM-authored; heuristics can help but must not overwrite.  
+**What:** Better deterministic suggestions + optional prompts.
+- Suggest 1–3 candidate canon bullets per session
+- Provide templates by campaign tone
+- Never auto-append; always GM review
 
-Key Takeaway:
-The spreadsheet functions as a content pack + tag system + filter UI, with clear parallels to the SPAR Engine’s content-entry model.
+### 6) Cross-system adapters
+**Why:** Broadens adoption; not required for core value.  
+**What:** Map outputs into system-specific forms as optional overlays.
+- D&D 5e complications adapter
+- GURPS complications adapter
+- VtM complications adapter
+**Notes:** Prefer presets + vocabulary + content packs, not engine forks.
 
-⸻
+### 7) Docx/PDF exports
+**Why:** Nice-to-have for publishing workflows.  
+**What:** Add DOCX export for story-facing campaign history and sessions (Markdown remains canonical).
 
-Future Feature: Spreadsheet / External Content Importer
+### 8) Multi-GM / shared-world operations
+**Why:** Only needed for living-campaign play at scale.  
+**What:** Merge session packets, coordinator review, conflict resolution tooling.
+- Session packet signing/versioning
+- Merge UI for competing edits
+- Canon publishing workflow
 
-Idea:
-Design a future importer that converts spreadsheet-based datasets into SPAR-compatible content packs.
+---
 
-Potential workflow:
-	1.	Ingest rows from a canonical “data sheet” (ignore UI/filter sheets).
-	2.	Map columns to engine schema:
-	•	Item name → title
-	•	Description → description / fiction prompt
-	•	Category / Properties / Requirements → normalized tag families
-	•	Rarity → severity band or adapter hint
-	•	Value → adapter-facing numeric (gp for D&D, Wealth Level for SPAR)
-	3.	Emit validated JSON content packs.
+## Deep R&D (only if there is a concrete pain)
 
-Notes:
-	•	Importer should explicitly ignore spreadsheet UI logic and formulas.
-	•	Spreadsheet-based projects often accumulate entropy; importer must enforce schema hygiene.
+### 9) Alternative SOC sampling modes
+**Why:** Experimental. Only pursue if the current SOC feel isn’t matching table experience.
+- Tension pool / burst release modes
+- Multi-modal severity distributions
+- Context-aware alpha variations beyond current knobs
 
-⸻
+### 10) Advanced cutoff behaviors
+- New conversion modes (beyond omen/clock_tick/downshift) only if needed
+- Phase-sensitive cutoff families
 
-Tag Hygiene & Schema Discipline (Lessons Learned)
+### 11) Advanced diagnostics UI
+**Why:** Current diagnostics are adequate; enhance only if contributors need it.
+- Distribution visualizer dashboards
+- State tracker graphs
+- Parameter “what-if” simulator
 
-Observed issues in community loot tables:
-	•	Overloaded or inconsistent categories
-	•	“Misc” becoming a junk drawer
-	•	Near-duplicate tags drifting over time
-	•	Dominant outcomes when filters narrow the pool
+### 12) API / plugin architecture
+**Why:** Adds maintenance burden.  
+**What:** Only if you need integrations (web app, mobile, external tools).
+- REST API
+- Plugin/connector model for packs/adapters
 
-Parking-lot guidance for SPAR:
-	•	Tags must be normalized (lowercase, underscore, no synonyms).
-	•	Use tag families for properties and requirements (e.g., property:light, requires:attunement).
-	•	Every content entry should include:
-	•	At least one category-style tag
-	•	A rarity/severity signal
-	•	Optional source/author metadata
+---
 
-This prevents long-term degradation seen in large spreadsheet-driven projects.
-
-⸻
-
-Adapter-Specific Interpretation of Loot Data
-
-Design intent:
-The same loot content pack should support multiple interpretations:
-	•	D&D Adapter
-	•	Rarity tiers
-	•	GP value
-	•	Attunement / usage requirements
-	•	SPAR Adapter
-	•	Wealth Level bands
-	•	Access gates (faction, region, certifications)
-	•	Narrative or logistical constraints instead of raw prices
-
-This reinforces the engine/adaptor separation and avoids duplicating content.
-
-⸻
-
-Community Contribution Model (Long-Term)
-
-Inspiration:
-The “Form Submissions” sheet in the community project is a strong pattern.
-
-Future ideas:
-	•	Allow structured community submissions of content entries.
-	•	Validate against schema + tag rules before inclusion.
-	•	Track author/source metadata for attribution.
-	•	Treat UI/filter views as disposable; data schema is canonical.
-
-⸻
-
-Status
-
-Deferred.
-This work is explicitly not part of current tuning or engine stability milestones.
-
-Prerequisites before revisiting:
-	•	Cutoff tuning finalized
-	•	Adaptive weighting validated
-	•	Content coverage stabilized for core environments
-
-This item should be revisited when:
-	•	Content scale becomes a bottleneck
-	•	Community contribution is a goal
-	•	Tooling focus shifts from engine correctness to ecosystem growth
-
-⸻
-
-If you want, next time we touch this area I can also:
-	•	extract a formal “Importer Target Schema” from this parking-lot entry, or
-	•	draft a Loot Pack v0.1 spec (D&D-first or SPAR-first) without implementing it yet.
+## Done and locked (for reference)
+These are explicitly **not parked** and should not be revisited without a versioned proposal:
+- Story vs system data contract and exports
+- Campaign Manager loop (Prep Queue → Session Draft → Commit)
+- Campaign history import (structured + natural + unstructured fallbacks)
+- Faction CRUD and faction influence on generator context
+- Multi-generator pack typing and discovery
+- Loot generator v1.0 diagnostics + thematic pack baseline
+- Event generator UI simplification and Diagnostics reframe
