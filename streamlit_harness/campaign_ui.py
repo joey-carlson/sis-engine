@@ -387,80 +387,207 @@ def render_campaign_selector() -> None:
         if st.button("📥 Import Campaign History", use_container_width=True):
             st.session_state.show_history_import = True
     
-    # New campaign form
+    # New campaign form (v1.0: Two-path launchpad)
     if st.session_state.get("show_new_campaign_form", False):
-        with st.form("new_campaign_form"):
-            st.subheader("Create New Campaign")
-            
-            campaign_name = st.text_input("Campaign Name", placeholder="e.g., City of Fog")
-            
-            st.caption("Initial Factions (optional)")
-            faction1 = st.text_input("Faction 1", placeholder="e.g., City Watch")
-            faction2 = st.text_input("Faction 2", placeholder="e.g., Merchant Guild")
-            faction3 = st.text_input("Faction 3", placeholder="")
-            faction4 = st.text_input("Faction 4", placeholder="")
-            
-            submitted = st.form_submit_button("Create Campaign", type="primary")
-            cancel = st.form_submit_button("Cancel")
-            
-            if submitted and campaign_name:
-                # Create new campaign
-                campaign_id = f"campaign_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-                timestamp = datetime.now().isoformat()
+        st.subheader("Create New Campaign")
+        st.caption("Choose your approach")
+        
+        # Path selector
+        creation_path = st.radio(
+            "Creation path",
+            ["🚀 Start Playing Now (recommended)", "⚙️ Set Up Structure"],
+            index=0,
+            help="Start Playing Now: Get to your first session in 2 clicks. Set Up Structure: Configure factions and settings before playing."
+        )
+        
+        if creation_path == "🚀 Start Playing Now (recommended)":
+            # Path A: Fast start launchpad
+            with st.form("quick_start_form"):
+                st.markdown("**Fast Start**")
+                st.caption("Get to your first session immediately")
                 
-                # Initialize campaign state
-                campaign_state = CampaignState.default()
+                campaign_name = st.text_input("Campaign Name*", placeholder="e.g., City of Fog")
                 
-                # Add initial factions if provided
-                initial_factions = {}
-                for f_name in [faction1, faction2, faction3, faction4]:
-                    if f_name:
-                        fid = f_name.lower().replace(" ", "_")
+                starting_situation = st.text_area(
+                    "Starting Situation (optional)",
+                    placeholder="e.g., The crew is broke and hunted by the City Watch...",
+                    height=80,
+                    help="1-2 sentences describing the opening situation. Shows in context, no automatic tag parsing."
+                )
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    create = st.form_submit_button("🎬 Create & Run First Session", type="primary", use_container_width=True)
+                with col2:
+                    cancel = st.form_submit_button("Cancel", use_container_width=True)
+                
+                if create and campaign_name:
+                    # Create minimal campaign optimized for immediate play
+                    campaign_id = f"campaign_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    timestamp = datetime.now().isoformat()
+                    
+                    # Initialize with default state (no factions yet)
+                    campaign_state = CampaignState.default()
+                    
+                    # Build canon summary
+                    canon = []
+                    if starting_situation.strip():
+                        # Add situation as explicit "Initial Situation" canon bullet
+                        canon.append(f"Initial Situation: {starting_situation.strip()}")
+                    else:
+                        # Default opening
+                        canon.append(f"Campaign '{campaign_name}' begins...")
+                    
+                    campaign = Campaign(
+                        campaign_id=campaign_id,
+                        name=campaign_name,
+                        created=timestamp,
+                        last_played=timestamp,
+                        canon_summary=canon,
+                        campaign_state=campaign_state,
+                        ledger=[],
+                    )
+                    
+                    campaign.save()
+                    st.session_state.current_campaign_id = campaign_id
+                    st.session_state.show_new_campaign_form = False
+                    # Path A: Direct to Session Workspace
+                    st.session_state.campaign_page = "session"
+                    st.rerun()
+                
+                if cancel:
+                    st.session_state.show_new_campaign_form = False
+                    st.rerun()
+        
+        else:
+            # Path B: Structured setup
+            with st.form("structured_setup_form"):
+                st.markdown("**Structured Setup**")
+                st.caption("Configure factions and details before your first session")
+                
+                campaign_name = st.text_input("Campaign Name*", placeholder="e.g., City of Fog")
+                
+                campaign_notes = st.text_area(
+                    "Campaign Notes (optional)",
+                    placeholder="Setting notes, themes, planned arcs...",
+                    height=80
+                )
+                
+                st.markdown("**Initial Factions (1-2 recommended)**")
+                
+                # Faction 1
+                faction1_name = st.text_input("Faction 1 Name", placeholder="e.g., City Watch")
+                if faction1_name:
+                    faction1_desc = st.text_area(
+                        "What are they / what do they want?",
+                        placeholder="e.g., Local law enforcement maintaining order",
+                        height=60,
+                        key="faction1_desc"
+                    )
+                
+                # Faction 2
+                faction2_name = st.text_input("Faction 2 Name", placeholder="e.g., Merchant Guild")
+                if faction2_name:
+                    faction2_desc = st.text_area(
+                        "What are they / what do they want?",
+                        placeholder="e.g., Trade consortium controlling city commerce",
+                        height=60,
+                        key="faction2_desc"
+                    )
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    create = st.form_submit_button("✅ Create Campaign", type="primary", use_container_width=True)
+                with col2:
+                    cancel = st.form_submit_button("Cancel", use_container_width=True)
+                
+                if create and campaign_name:
+                    # Create structured campaign
+                    campaign_id = f"campaign_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    timestamp = datetime.now().isoformat()
+                    
+                    # Initialize campaign state
+                    campaign_state = CampaignState.default()
+                    
+                    # Add initial factions if provided (up to 2)
+                    initial_factions = {}
+                    
+                    if faction1_name:
+                        fid = faction1_name.lower().replace(" ", "_").replace("-", "_")
+                        # faction1_desc is only defined if faction1_name was entered (form renders conditionally)
+                        faction1_description = locals().get('faction1_desc', "")
                         initial_factions[fid] = FactionState(
                             faction_id=fid,
-                            name=f_name,  # Display name
-                            description="",
+                            name=faction1_name,
+                            description=faction1_description.strip() if faction1_description else "",
                             attention=0,
                             disposition=0,
                             notes=None,
                             is_active=True,
                         )
-                
-                if initial_factions:
-                    from spar_campaign.campaign import apply_campaign_delta
-                    from spar_campaign.models import CampaignDelta
-                    # Apply empty delta with faction setup
-                    campaign_state = CampaignState(
-                        version="0.2",
-                        campaign_pressure=0,
-                        heat=0,
-                        scars=[],
-                        factions=initial_factions,
-                        total_scenes_run=0,
-                        total_cutoffs_seen=0,
-                        highest_severity_seen=0,
-                        _legacy_scars=set(),
+                    
+                    if faction2_name:
+                        fid = faction2_name.lower().replace(" ", "_").replace("-", "_")
+                        # faction2_desc is only defined if faction2_name was entered (form renders conditionally)
+                        faction2_description = locals().get('faction2_desc', "")
+                        initial_factions[fid] = FactionState(
+                            faction_id=fid,
+                            name=faction2_name,
+                            description=faction2_description.strip() if faction2_description else "",
+                            attention=0,
+                            disposition=0,
+                            notes=None,
+                            is_active=True,
+                        )
+                    
+                    if initial_factions:
+                        campaign_state = CampaignState(
+                            version="0.2",
+                            campaign_pressure=0,
+                            heat=0,
+                            scars=[],
+                            factions=initial_factions,
+                            total_scenes_run=0,
+                            total_cutoffs_seen=0,
+                            highest_severity_seen=0,
+                            _legacy_scars=set(),
+                        )
+                    
+                    # Build canon summary
+                    canon = []
+                    if campaign_notes.strip():
+                        # Add campaign notes as first canon bullet
+                        canon.append(campaign_notes.strip())
+                    
+                    # Add faction descriptions to canon if provided
+                    for fid, faction in initial_factions.items():
+                        if faction.description:
+                            canon.append(f"{faction.name}: {faction.description}")
+                    
+                    # Default if nothing provided
+                    if not canon:
+                        canon.append(f"Campaign '{campaign_name}' begins...")
+                    
+                    campaign = Campaign(
+                        campaign_id=campaign_id,
+                        name=campaign_name,
+                        created=timestamp,
+                        last_played=timestamp,
+                        canon_summary=canon,
+                        campaign_state=campaign_state,
+                        ledger=[],
                     )
+                    
+                    campaign.save()
+                    st.session_state.current_campaign_id = campaign_id
+                    st.session_state.show_new_campaign_form = False
+                    # Path B: To dashboard for structured setup
+                    st.session_state.campaign_page = "dashboard"
+                    st.rerun()
                 
-                campaign = Campaign(
-                    campaign_id=campaign_id,
-                    name=campaign_name,
-                    created=timestamp,
-                    last_played=timestamp,
-                    canon_summary=[f"Campaign '{campaign_name}' begins..."],
-                    campaign_state=campaign_state,
-                    ledger=[],
-                )
-                
-                campaign.save()
-                st.session_state.current_campaign_id = campaign_id
-                st.session_state.show_new_campaign_form = False
-                st.session_state.campaign_page = "dashboard"
-                st.rerun()
-            
-            if cancel:
-                st.session_state.show_new_campaign_form = False
-                st.rerun()
+                if cancel:
+                    st.session_state.show_new_campaign_form = False
+                    st.rerun()
     
     # History Import Form (Flow D: New Campaign)
     if st.session_state.get("show_history_import", False):
