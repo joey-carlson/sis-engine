@@ -24,7 +24,7 @@ def debug_wilderness_selection():
     scene = SceneContext(
         scene_id="debug_wilderness",
         scene_phase="engage",
-        environment=["wilderness"],
+        environment=["open"],
         tone=["gritty"],
         constraints=constraints,
         party_band="mid",

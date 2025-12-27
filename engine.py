@@ -35,14 +35,14 @@ def _split_csv(v: str) -> List[str]:
 
 def _scene_preset(preset: str) -> Tuple[Constraints, str]:
     preset = (preset or "").strip().lower()
-    if preset == "dungeon":
-        return Constraints(confinement=0.8, connectivity=0.3, visibility=0.6), "dungeon"
-    if preset == "city":
-        return Constraints(confinement=0.4, connectivity=0.8, visibility=0.7), "city"
-    if preset == "wilderness":
-        return Constraints(confinement=0.3, connectivity=0.5, visibility=0.4), "wilderness"
-    if preset == "ruins":
-        return Constraints(confinement=0.6, connectivity=0.4, visibility=0.5), "ruins"
+    if preset == "confined":
+        return Constraints(confinement=0.8, connectivity=0.3, visibility=0.6), "confined"
+    if preset == "populated":
+        return Constraints(confinement=0.4, connectivity=0.8, visibility=0.7), "populated"
+    if preset == "open":
+        return Constraints(confinement=0.3, connectivity=0.5, visibility=0.4), "open"
+    if preset == "derelict":
+        return Constraints(confinement=0.6, connectivity=0.4, visibility=0.5), "derelict"
     return Constraints(confinement=0.5, connectivity=0.5, visibility=0.5), ""
 
 
@@ -56,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     # Scene inputs
     p.add_argument("--scene", default="cli", help="Scene identifier (arbitrary label).")
     p.add_argument("--scene-phase", choices=["approach", "engage", "aftermath"], default="engage")
-    p.add_argument("--scene-preset", choices=["dungeon", "city", "wilderness", "ruins"], default=None,
+    p.add_argument("--scene-preset", choices=["confined", "populated", "open", "derelict"], default=None,
                    help="Optional preset that sets morphology defaults and env if env not provided.")
     p.add_argument("--env", default="", help="Comma-separated environment tags, e.g. dungeon,ruins")
     p.add_argument("--tone", default="gritty", help="Comma-separated tone tags, e.g. gritty,noir")
@@ -118,7 +118,7 @@ def main() -> int:
     entries = load_pack(Path(args.pack))
 
     preset_constraints, preset_env = _scene_preset(args.scene_preset) if args.scene_preset else (_scene_preset("")[0], "")
-    env = _split_csv(args.env) if args.env else ([preset_env] if preset_env else ["dungeon"])
+    env = _split_csv(args.env) if args.env else ([preset_env] if preset_env else ["confined"])
     tone = _split_csv(args.tone)
     spotlight = _split_csv(args.spotlight)
 

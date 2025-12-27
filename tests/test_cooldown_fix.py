@@ -63,7 +63,7 @@ def test_aftermath_batch_completes_without_ticking(entries):
     scene = SceneContext(
         scene_id="test_aftermath",
         scene_phase="aftermath",
-        environment=["dungeon"],
+        environment=["confined"],
         tone=["test"],
         constraints=Constraints(confinement=0.8, connectivity=0.3, visibility=0.6),
         party_band="unknown",
@@ -102,7 +102,7 @@ def test_tick_between_still_respected(entries):
     scene = SceneContext(
         scene_id="test_tick",
         scene_phase="engage",
-        environment=["dungeon"],
+        environment=["confined"],
         tone=["test"],
         constraints=Constraints(confinement=0.8, connectivity=0.3, visibility=0.6),
         party_band="unknown",
@@ -136,8 +136,8 @@ def test_tick_between_still_respected(entries):
 def test_all_phases_complete_with_batch_200(entries):
     """Verify all phases can complete 200-event batches without errors."""
     presets = [
-        ("dungeon", {"confinement": 0.8, "connectivity": 0.3, "visibility": 0.6}),
-        ("wilderness", {"confinement": 0.3, "connectivity": 0.5, "visibility": 0.4}),
+        ("confined", {"confinement": 0.8, "connectivity": 0.3, "visibility": 0.6}),
+        ("open", {"confinement": 0.3, "connectivity": 0.5, "visibility": 0.4}),
     ]
     phases = ["approach", "engage", "aftermath"]
 
@@ -179,7 +179,7 @@ def test_cooldown_decay_rate(entries):
     scene = SceneContext(
         scene_id="test_decay",
         scene_phase="engage",
-        environment=["dungeon"],
+        environment=["confined"],
         tone=["test"],
         constraints=Constraints(confinement=0.5, connectivity=0.5, visibility=0.5),
         party_band="unknown",

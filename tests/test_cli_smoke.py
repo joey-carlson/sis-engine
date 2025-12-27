@@ -22,7 +22,7 @@ def test_cli_event_alias_and_preset():
     cmd = [
         sys.executable,
         str(repo / "engine.py"),
-        "--scene-preset", "dungeon",
+        "--scene-preset", "confined",
         "--event", "hazard_smoke_01",
         "--format", "jsonl",
         "--seed", "1",

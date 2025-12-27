@@ -115,7 +115,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "ruins",
+        "preset": "derelict",
         "phase": "engage",
         "rarity_mode": "spiky",
         "seed": 43
@@ -137,7 +137,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "ruins",
+        "preset": "derelict",
         "phase": "engage",
         "rarity_mode": "spiky",
         "seed": 43
@@ -159,7 +159,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "ruins",
+        "preset": "derelict",
         "phase": "engage",
         "rarity_mode": "spiky",
         "seed": 43
@@ -181,7 +181,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -203,7 +203,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -225,7 +225,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -247,7 +247,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -269,7 +269,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -291,7 +291,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -313,7 +313,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -335,7 +335,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -357,7 +357,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -379,7 +379,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -401,7 +401,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -423,7 +423,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -445,7 +445,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -467,7 +467,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -489,7 +489,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -511,7 +511,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -533,7 +533,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -555,7 +555,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -577,7 +577,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -599,7 +599,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -621,7 +621,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -643,7 +643,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -665,7 +665,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -687,7 +687,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -709,7 +709,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -731,7 +731,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42

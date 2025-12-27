@@ -3,7 +3,7 @@
   "name": "Phase Weighting Validation - Scenario B",
   "description": "Presets × (Approach/Engage/Aftermath) × Spiky mode - Same seed as Scenario A for direct comparison of rarity mode impact on phase differentiation",
   "output_basename": "phase_validation_spiky",
-  "presets": ["dungeon", "city", "wilderness", "ruins"],
+  "presets": ["confined", "populated", "open", "derelict"],
   "phases": ["approach", "engage", "aftermath"],
   "rarity_modes": ["spiky"],
   "batch_size": 200,

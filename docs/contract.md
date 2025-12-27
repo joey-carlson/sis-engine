@@ -27,7 +27,7 @@ The core design principle is **material independence with macro-constraint contr
 {
   "scene_id": "string",
   "scene_phase": "approach|engage|aftermath",
-  "environment": ["dungeon","city","wilderness","sea","ruins","industrial","planar"],
+  "environment": ["confined","populated","open","sea","derelict","industrial","planar"],
   "tone": ["gritty","heroic","weird","noir","gonzo"],
   "constraints": {
     "confinement": 0.0,

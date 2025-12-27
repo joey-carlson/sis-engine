@@ -279,7 +279,7 @@ class TestScenarioLoading:
         """Verify valid scenario JSON loads successfully."""
         valid_json = json.dumps({
             "name": "Test Scenario",
-            "presets": ["dungeon"],
+            "presets": ["confined"],
             "phases": ["engage"],
             "rarity_modes": ["normal"],
             "batch_size": 10,
@@ -300,7 +300,7 @@ class TestScenarioLoading:
         # Missing 'base_seed'
         incomplete_json = json.dumps({
             "name": "Test",
-            "presets": ["dungeon"],
+            "presets": ["confined"],
             "phases": ["engage"],
             "rarity_modes": ["normal"],
             "batch_size": 10
@@ -314,7 +314,7 @@ class TestScenarioLoading:
         scenario_json = json.dumps({
             "name": "Test Scenario",
             "description": "Test description",
-            "presets": ["dungeon"],
+            "presets": ["confined"],
             "phases": ["engage"],
             "rarity_modes": ["normal"],
             "batch_size": 10,
@@ -408,7 +408,7 @@ class TestScenarioExecution:
         """Verify scenarios can use 'random' base_seed."""
         scenario = {
             "name": "Random Test",
-            "presets": ["dungeon"],
+            "presets": ["confined"],
             "phases": ["engage"],
             "rarity_modes": ["normal"],
             "batch_size": 1,
@@ -523,7 +523,7 @@ class TestScenarioValidation:
         """Verify scenario validation passes with all required fields."""
         scenario_json = json.dumps({
             "name": "Valid Scenario",
-            "presets": ["dungeon", "city"],
+            "presets": ["confined", "populated"],
             "phases": ["approach", "engage"],
             "rarity_modes": ["calm", "normal"],
             "batch_size": 50,

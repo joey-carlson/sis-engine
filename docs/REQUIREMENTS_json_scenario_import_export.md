@@ -73,7 +73,7 @@ Scenarios support two execution modes:
   "name": "Scenario Name",
   "description": "Brief description of validation purpose",
   "output_basename": "clean_filename_base",
-  "presets": ["dungeon", "city", "wilderness", "ruins"],
+  "presets": ["confined", "populated", "open", "derelict"],
   "phases": ["approach", "engage", "aftermath"],
   "rarity_modes": ["normal"],
   "batch_size": 200,
@@ -95,12 +95,12 @@ Scenarios support two execution modes:
   "description": "Tests multi-scene narrative rhythm with shared state",
   "output_basename": "campaign_rhythm",
   "scene_sequence": [
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"}
+    {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"}
   ],
   "batch_size": 50,
   "base_seed": 5000,

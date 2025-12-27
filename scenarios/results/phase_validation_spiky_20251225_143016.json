@@ -3,10 +3,10 @@
   "batch_n": 200,
   "base_seed": 1000,
   "presets": [
-    "dungeon",
-    "city",
-    "wilderness",
-    "ruins"
+    "confined",
+    "populated",
+    "open",
+    "derelict"
   ],
   "phases": [
     "approach",
@@ -23,7 +23,7 @@
   "verbose": false,
   "runs": [
     {
-      "preset": "dungeon",
+      "preset": "confined",
       "phase": "approach",
       "rarity_mode": "spiky",
       "seed": 1001,
@@ -953,7 +953,7 @@
       }
     },
     {
-      "preset": "dungeon",
+      "preset": "confined",
       "phase": "engage",
       "rarity_mode": "spiky",
       "seed": 1002,
@@ -1909,7 +1909,7 @@
       }
     },
     {
-      "preset": "dungeon",
+      "preset": "confined",
       "phase": "aftermath",
       "rarity_mode": "spiky",
       "seed": 1003,
@@ -2828,7 +2828,7 @@
       }
     },
     {
-      "preset": "city",
+      "preset": "populated",
       "phase": "approach",
       "rarity_mode": "spiky",
       "seed": 1004,
@@ -3766,7 +3766,7 @@
       }
     },
     {
-      "preset": "city",
+      "preset": "populated",
       "phase": "engage",
       "rarity_mode": "spiky",
       "seed": 1005,
@@ -4718,7 +4718,7 @@
       }
     },
     {
-      "preset": "city",
+      "preset": "populated",
       "phase": "aftermath",
       "rarity_mode": "spiky",
       "seed": 1006,
@@ -5600,7 +5600,7 @@
       }
     },
     {
-      "preset": "wilderness",
+      "preset": "open",
       "phase": "approach",
       "rarity_mode": "spiky",
       "seed": 1007,
@@ -6495,7 +6495,7 @@
       }
     },
     {
-      "preset": "wilderness",
+      "preset": "open",
       "phase": "engage",
       "rarity_mode": "spiky",
       "seed": 1008,
@@ -7426,7 +7426,7 @@
       }
     },
     {
-      "preset": "wilderness",
+      "preset": "open",
       "phase": "aftermath",
       "rarity_mode": "spiky",
       "seed": 1009,
@@ -8292,7 +8292,7 @@
       }
     },
     {
-      "preset": "ruins",
+      "preset": "derelict",
       "phase": "approach",
       "rarity_mode": "spiky",
       "seed": 1010,
@@ -9241,7 +9241,7 @@
       }
     },
     {
-      "preset": "ruins",
+      "preset": "derelict",
       "phase": "engage",
       "rarity_mode": "spiky",
       "seed": 1011,
@@ -10196,7 +10196,7 @@
       }
     },
     {
-      "preset": "ruins",
+      "preset": "derelict",
       "phase": "aftermath",
       "rarity_mode": "spiky",
       "seed": 1012,

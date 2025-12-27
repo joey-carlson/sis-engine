@@ -48,8 +48,8 @@ def main():
 
         environment = st.multiselect(
             "Environment",
-            ["dungeon", "city", "wilderness", "industrial", "ruins", "sea", "planar"],
-            default=["dungeon", "city", "wilderness"],
+            ["confined", "populated", "open", "industrial", "derelict", "sea", "planar"],
+            default=["confined", "populated", "open"],
             help="Where the encounter takes place (leave empty to allow all)"
         )
 

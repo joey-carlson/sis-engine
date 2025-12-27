@@ -16,7 +16,7 @@ Scenario JSON files enable:
 {
   "name": "Scenario Name",
   "description": "Purpose and context",
-  "presets": ["dungeon", "city", "wilderness", "ruins"],
+  "presets": ["confined", "populated", "open", "derelict"],
   "phases": ["approach", "engage", "aftermath"],
   "rarity_modes": ["normal"],
   "batch_size": 200,

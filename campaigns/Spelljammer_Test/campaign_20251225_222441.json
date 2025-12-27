@@ -212,7 +212,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -234,7 +234,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42
@@ -256,7 +256,7 @@
       ],
       "source": {
         "scenario_name": "Event Generator",
-        "preset": "dungeon",
+        "preset": "confined",
         "phase": "engage",
         "rarity_mode": "normal",
         "seed": 42

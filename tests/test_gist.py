@@ -13,7 +13,7 @@ def test_gist_generate_events_deterministic_and_safe():
     scene = SceneContext(
         scene_id="gist",
         scene_phase="approach",
-        environment=["dungeon"],
+        environment=["confined"],
         tone=["gritty"],
         constraints=Constraints(confinement=0.8, connectivity=0.2, visibility=0.7),
         party_band="low",

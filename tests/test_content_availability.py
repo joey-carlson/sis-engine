@@ -12,10 +12,10 @@ def test_content_availability_by_preset_phase():
     entries = load_pack("data/core_complications.json")
     
     presets = {
-        "dungeon": {"env": ["dungeon"], "confinement": 0.8, "connectivity": 0.3, "visibility": 0.6},
-        "city": {"env": ["city"], "confinement": 0.4, "connectivity": 0.8, "visibility": 0.7},
-        "wilderness": {"env": ["wilderness"], "confinement": 0.3, "connectivity": 0.5, "visibility": 0.4},
-        "ruins": {"env": ["ruins"], "confinement": 0.6, "connectivity": 0.4, "visibility": 0.5},
+        "confined": {"env": ["confined"], "confinement": 0.8, "connectivity": 0.3, "visibility": 0.6},
+        "populated": {"env": ["populated"], "confinement": 0.4, "connectivity": 0.8, "visibility": 0.7},
+        "open": {"env": ["open"], "confinement": 0.3, "connectivity": 0.5, "visibility": 0.4},
+        "derelict": {"env": ["derelict"], "confinement": 0.6, "connectivity": 0.4, "visibility": 0.5},
     }
     
     phases: list[ScenePhase] = ["approach", "engage", "aftermath"]
@@ -72,7 +72,7 @@ def test_aftermath_content_by_environment():
     print("\nAftermath Phase Content by Environment:")
     print("=" * 70)
     
-    environments = ["dungeon", "city", "wilderness", "ruins", "industrial", "sea", "planar"]
+    environments = ["confined", "populated", "open", "derelict", "industrial", "sea", "planar"]
     
     include_tags = [
         "hazard", "reinforcements", "time_pressure", "social_friction",

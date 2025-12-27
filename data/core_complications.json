@@ -9,8 +9,8 @@
     ],
     "allowed_environments": [
       "industrial",
-      "dungeon",
-      "city"
+      "confined",
+      "populated"
     ],
     "allowed_scene_phases": [
       "engage",
@@ -80,9 +80,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "dungeon",
-      "city",
-      "ruins"
+      "confined",
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -138,8 +138,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
+      "confined",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -197,7 +197,7 @@
       "cost"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -254,9 +254,9 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "wilderness",
-      "ruins",
+      "confined",
+      "open",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -314,8 +314,8 @@
     ],
     "allowed_environments": [
       "planar",
-      "ruins",
-      "dungeon"
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -373,8 +373,8 @@
     ],
     "allowed_environments": [
       "industrial",
-      "city",
-      "ruins"
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "engage",
@@ -430,9 +430,9 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness",
+      "open",
       "sea",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -488,10 +488,10 @@
       "threat"
     ],
     "allowed_environments": [
-      "dungeon",
-      "wilderness",
-      "city",
-      "ruins"
+      "confined",
+      "open",
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -547,9 +547,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -610,10 +610,10 @@
       "cost"
     ],
     "allowed_environments": [
-      "dungeon",
+      "confined",
       "industrial",
-      "ruins",
-      "city"
+      "derelict",
+      "populated"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -669,7 +669,7 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness",
+      "open",
       "sea"
     ],
     "allowed_scene_phases": [
@@ -726,9 +726,9 @@
       "positioning"
     ],
     "allowed_environments": [
-      "dungeon",
+      "confined",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -785,9 +785,9 @@
       "positioning"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
-      "city"
+      "confined",
+      "derelict",
+      "populated"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -843,7 +843,7 @@
       "information"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -900,9 +900,9 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "wilderness",
-      "ruins",
-      "city"
+      "open",
+      "derelict",
+      "populated"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -958,9 +958,9 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "wilderness",
-      "ruins",
+      "confined",
+      "open",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -1018,9 +1018,9 @@
     ],
     "allowed_environments": [
       "industrial",
-      "dungeon",
+      "confined",
       "sea",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1076,10 +1076,10 @@
       "cost"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
-      "city",
-      "wilderness"
+      "confined",
+      "derelict",
+      "populated",
+      "open"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1135,9 +1135,9 @@
       "positioning"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -1193,9 +1193,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "wilderness",
-      "city",
-      "ruins"
+      "open",
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -1251,8 +1251,8 @@
     ],
     "allowed_environments": [
       "planar",
-      "ruins",
-      "dungeon"
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -1307,9 +1307,9 @@
       "information"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1365,9 +1365,9 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "wilderness",
-      "ruins",
-      "city"
+      "open",
+      "derelict",
+      "populated"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1423,8 +1423,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins"
+      "confined",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1480,8 +1480,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "wilderness",
-      "dungeon",
+      "open",
+      "confined",
       "sea"
     ],
     "allowed_scene_phases": [
@@ -1538,9 +1538,9 @@
       "information"
     ],
     "allowed_environments": [
-      "dungeon",
-      "city",
-      "ruins",
+      "confined",
+      "populated",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -1595,10 +1595,10 @@
       "visibility"
     ],
     "allowed_environments": [
-      "dungeon",
-      "city",
+      "confined",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1654,8 +1654,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
+      "confined",
+      "derelict",
       "sea"
     ],
     "allowed_scene_phases": [
@@ -1713,9 +1713,9 @@
       "social_friction"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1771,7 +1771,7 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness"
+      "open"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -1827,7 +1827,7 @@
       "heat"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -1885,8 +1885,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
+      "confined",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -1943,9 +1943,9 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "city",
-      "ruins"
+      "confined",
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -2002,8 +2002,8 @@
     ],
     "allowed_environments": [
       "planar",
-      "ruins",
-      "dungeon"
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "approach",
@@ -2059,9 +2059,9 @@
       "terrain"
     ],
     "allowed_environments": [
-      "wilderness",
-      "ruins",
-      "city"
+      "open",
+      "derelict",
+      "populated"
     ],
     "allowed_scene_phases": [
       "engage"
@@ -2116,7 +2116,7 @@
       "terrain"
     ],
     "allowed_environments": [
-      "wilderness"
+      "open"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2168,7 +2168,7 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness"
+      "open"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2219,7 +2219,7 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness",
+      "open",
       "sea"
     ],
     "allowed_scene_phases": [
@@ -2271,8 +2271,8 @@
       "visibility"
     ],
     "allowed_environments": [
-      "city",
-      "ruins"
+      "populated",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2323,7 +2323,7 @@
       "social_friction"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -2376,8 +2376,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins"
+      "confined",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2433,7 +2433,7 @@
       "heat"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -2485,8 +2485,8 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "ruins",
-      "dungeon"
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2640,9 +2640,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2694,7 +2694,7 @@
       "time_pressure"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -2745,9 +2745,9 @@
       "information"
     ],
     "allowed_environments": [
-      "city",
-      "wilderness",
-      "ruins"
+      "populated",
+      "open",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2798,8 +2798,8 @@
       "mystic"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
+      "confined",
+      "derelict",
       "planar"
     ],
     "allowed_scene_phases": [
@@ -2848,9 +2848,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "wilderness",
-      "ruins",
-      "dungeon"
+      "open",
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -2902,8 +2902,8 @@
       "social_friction"
     ],
     "allowed_environments": [
-      "city",
-      "ruins",
+      "populated",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -2955,9 +2955,9 @@
       "positioning"
     ],
     "allowed_environments": [
-      "wilderness",
-      "dungeon",
-      "ruins"
+      "open",
+      "confined",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3009,7 +3009,7 @@
       "information"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -3061,9 +3061,9 @@
       "terrain"
     ],
     "allowed_environments": [
-      "ruins",
-      "dungeon",
-      "wilderness"
+      "derelict",
+      "confined",
+      "open"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3109,9 +3109,9 @@
       "information"
     ],
     "allowed_environments": [
-      "city",
-      "wilderness",
-      "ruins"
+      "populated",
+      "open",
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3162,10 +3162,10 @@
       "cost"
     ],
     "allowed_environments": [
-      "dungeon",
-      "city",
-      "wilderness",
-      "ruins",
+      "confined",
+      "populated",
+      "open",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -3218,9 +3218,9 @@
       "opportunity"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3272,9 +3272,9 @@
       "consequence"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "ruins"
+      "derelict"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3326,9 +3326,9 @@
       "consequence"
     ],
     "allowed_environments": [
-      "dungeon",
-      "ruins",
-      "wilderness"
+      "confined",
+      "derelict",
+      "open"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3380,9 +3380,9 @@
       "visibility"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial",
-      "wilderness"
+      "open"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3435,9 +3435,9 @@
       "social_friction"
     ],
     "allowed_environments": [
-      "city",
-      "ruins",
-      "dungeon"
+      "populated",
+      "derelict",
+      "confined"
     ],
     "allowed_scene_phases": [
       "aftermath"
@@ -3490,9 +3490,9 @@
       "cost"
     ],
     "allowed_environments": [
-      "dungeon",
-      "wilderness",
-      "ruins",
+      "confined",
+      "open",
+      "derelict",
       "industrial"
     ],
     "allowed_scene_phases": [
@@ -3545,7 +3545,7 @@
       "opportunity"
     ],
     "allowed_environments": [
-      "city",
+      "populated",
       "industrial"
     ],
     "allowed_scene_phases": [

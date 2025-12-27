@@ -102,8 +102,8 @@ def test_normal_dungeon_event_variety(entries):
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
     stats = run_frequency_analysis(
-        preset_name="dungeon",
-        environment=["dungeon"],
+        preset_name="confined",
+        environment=["confined"],
         constraints=constraints,
         phase="engage",
         rarity_mode="normal",
@@ -134,8 +134,8 @@ def test_spiky_dungeon_event_variety(entries):
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
     stats = run_frequency_analysis(
-        preset_name="dungeon",
-        environment=["dungeon"],
+        preset_name="confined",
+        environment=["confined"],
         constraints=constraints,
         phase="engage",
         rarity_mode="spiky",
@@ -173,8 +173,8 @@ def test_wilderness_event_variety(entries):
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
     
     stats = run_frequency_analysis(
-        preset_name="wilderness",
-        environment=["wilderness"],
+        preset_name="open",
+        environment=["open"],
         constraints=constraints,
         phase="engage",
         rarity_mode="normal",
@@ -207,8 +207,8 @@ def test_ruins_event_variety(entries):
     constraints = Constraints(confinement=0.7, connectivity=0.3, visibility=0.6)
     
     stats = run_frequency_analysis(
-        preset_name="ruins",
-        environment=["ruins"],
+        preset_name="derelict",
+        environment=["derelict"],
         constraints=constraints,
         phase="engage",
         rarity_mode="normal",
@@ -238,8 +238,8 @@ def test_variety_comparison_across_rarity_modes(entries):
     
     for mode in modes:
         stats = run_frequency_analysis(
-            preset_name="dungeon",
-            environment=["dungeon"],
+            preset_name="confined",
+            environment=["confined"],
             constraints=constraints,
             phase="engage",
             rarity_mode=mode,

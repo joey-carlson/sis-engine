@@ -3,7 +3,7 @@
   "name": "Phase Weighting Validation - Scenario A",
   "description": "Presets × (Approach/Engage/Aftermath) × Normal mode - Validates that phase alone produces differentiated severity profiles and narrative tone without special-case rules",
   "output_basename": "phase_validation_normal",
-  "presets": ["dungeon", "city", "wilderness", "ruins"],
+  "presets": ["confined", "populated", "open", "derelict"],
   "phases": ["approach", "engage", "aftermath"],
   "rarity_modes": ["normal"],
   "batch_size": 200,

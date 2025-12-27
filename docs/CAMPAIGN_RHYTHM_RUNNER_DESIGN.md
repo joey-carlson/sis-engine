@@ -22,12 +22,12 @@ Add optional `execution_mode` field to scenario JSON:
 {
   "execution_mode": "campaign",  // NEW: "standard" (default) or "campaign"
   "scene_sequence": [             // NEW: Ordered list of scenes for campaign mode
-    {"preset": "dungeon", "phase": "approach"},
-    {"preset": "dungeon", "phase": "engage"},
-    {"preset": "dungeon", "phase": "aftermath"},
-    {"preset": "dungeon", "phase": "approach"},
-    {"preset": "dungeon", "phase": "engage"},
-    {"preset": "dungeon", "phase": "aftermath"}
+    {"preset": "confined", "phase": "approach"},
+    {"preset": "confined", "phase": "engage"},
+    {"preset": "confined", "phase": "aftermath"},
+    {"preset": "confined", "phase": "approach"},
+    {"preset": "confined", "phase": "engage"},
+    {"preset": "confined", "phase": "aftermath"}
   ],
   "rarity_modes": ["normal"],     // Applied to all scenes in sequence
   "batch_size": 50,               // Events per scene
@@ -110,12 +110,12 @@ def run_campaign_scenario(scenario, entries, engine_state_class):
   "output_basename": "campaign_rhythm_normal",
   
   "scene_sequence": [
-    {"preset": "dungeon", "phase": "approach"},
-    {"preset": "dungeon", "phase": "engage"},
-    {"preset": "dungeon", "phase": "aftermath"},
-    {"preset": "dungeon", "phase": "approach"},
-    {"preset": "dungeon", "phase": "engage"},
-    {"preset": "dungeon", "phase": "aftermath"}
+    {"preset": "confined", "phase": "approach"},
+    {"preset": "confined", "phase": "engage"},
+    {"preset": "confined", "phase": "aftermath"},
+    {"preset": "confined", "phase": "approach"},
+    {"preset": "confined", "phase": "engage"},
+    {"preset": "confined", "phase": "aftermath"}
   ],
   
   "rarity_modes": ["normal"],

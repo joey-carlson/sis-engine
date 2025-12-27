@@ -4,7 +4,7 @@ def test_exclude_tags_filters_out_entries():
     entries = load_pack("data/core_complications.json")
     out = filter_entries(
         entries=entries,
-        environment=["dungeon"],
+        environment=["confined"],
         phase="engage",
         include_tags=["hazard","reinforcements","time_pressure","social_friction","visibility"],
         exclude_tags=["mystic"],
@@ -18,7 +18,7 @@ def test_recent_event_id_blocks_repeat():
     some = entries[0].event_id
     out = filter_entries(
         entries=entries,
-        environment=["dungeon"],
+        environment=["confined"],
         phase="engage",
         include_tags=["hazard","reinforcements","time_pressure","social_friction","visibility","mystic"],
         exclude_tags=[],

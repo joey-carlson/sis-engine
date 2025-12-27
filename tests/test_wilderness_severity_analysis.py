@@ -19,7 +19,7 @@ def analyze_wilderness_severity_distribution():
     
     candidates = filter_entries(
         entries=entries,
-        environment=["wilderness"],
+        environment=["open"],
         phase="engage",
         include_tags=[],
         exclude_tags=[],

@@ -6,12 +6,12 @@
   "output_basename": "campaign_rhythm_spiky",
   
   "scene_sequence": [
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "spiky"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "spiky"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "spiky"},
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "spiky"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "spiky"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "spiky"}
+    {"preset": "confined", "phase": "approach", "rarity_mode": "spiky"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "spiky"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "spiky"},
+    {"preset": "confined", "phase": "approach", "rarity_mode": "spiky"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "spiky"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "spiky"}
   ],
   
   "batch_size": 50,

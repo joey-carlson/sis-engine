@@ -61,15 +61,15 @@ def split_csv(v: str) -> List[str]:
 
 def scene_preset_values(preset: str) -> Dict[str, Any]:
     preset = (preset or "").strip().lower()
-    if preset == "dungeon":
-        return {"env": ["dungeon"], "confinement": 0.8, "connectivity": 0.3, "visibility": 0.6}
-    if preset == "city":
-        return {"env": ["city"], "confinement": 0.4, "connectivity": 0.8, "visibility": 0.7}
-    if preset == "wilderness":
-        return {"env": ["wilderness"], "confinement": 0.3, "connectivity": 0.5, "visibility": 0.4}
-    if preset == "ruins":
-        return {"env": ["ruins"], "confinement": 0.6, "connectivity": 0.4, "visibility": 0.5}
-    return {"env": ["dungeon"], "confinement": 0.5, "connectivity": 0.5, "visibility": 0.5}
+    if preset == "confined":
+        return {"env": ["confined"], "confinement": 0.8, "connectivity": 0.3, "visibility": 0.6}
+    if preset == "populated":
+        return {"env": ["populated"], "confinement": 0.4, "connectivity": 0.8, "visibility": 0.7}
+    if preset == "open":
+        return {"env": ["open"], "confinement": 0.3, "connectivity": 0.5, "visibility": 0.4}
+    if preset == "derelict":
+        return {"env": ["derelict"], "confinement": 0.6, "connectivity": 0.4, "visibility": 0.5}
+    return {"env": ["confined"], "confinement": 0.5, "connectivity": 0.5, "visibility": 0.5}
 
 
 def get_hs() -> HarnessState:
@@ -747,7 +747,7 @@ def main() -> None:
     # and let variables be accessed from outside the conditional block
     
     # Initialize default values that will be used regardless of sidebar rendering
-    preset = "dungeon"
+    preset = "confined"
     scene_phase = "engage"
     rarity_mode = "normal"
     scene_id = "harness"
@@ -833,7 +833,14 @@ def main() -> None:
         
         # Scene Setup
         st.subheader("Scene Setup")
-        preset = st.selectbox("Scene preset", ["dungeon", "city", "wilderness", "ruins"], index=0)
+        st.caption("Environmental constraints, not genre")
+        
+        preset = st.selectbox(
+            "Scene preset", 
+            ["confined", "populated", "open", "derelict"], 
+            index=0,
+            help="Confined: tight space, limited exits • Populated: crowds, witnesses, institutions • Open: exposure, distance, limited support • Derelict: unstable structures, decay"
+        )
         pv = scene_preset_values(preset)
         scene_phase = st.selectbox("Scene phase", ["approach", "engage", "aftermath"], index=1)
         rarity_mode = st.selectbox("Rarity mode", ["calm", "normal", "spiky"], index=1)
@@ -1408,7 +1415,7 @@ def main() -> None:
             index=0,
         )
 
-        presets = ["dungeon", "city", "wilderness", "ruins"]
+        presets = ["confined", "populated", "open", "derelict"]
 
         if suite == "Presets × Engage × Normal (quick)":
             phases = ["engage"]

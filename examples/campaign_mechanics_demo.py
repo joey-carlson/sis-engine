@@ -47,12 +47,12 @@ def run_campaign_demo():
     
     # Define a sequence of scenes (approach → engage → aftermath cycle)
     scenes: list[tuple[str, ScenePhase, str, RarityMode]] = [
-        ("Scene 1", "approach", "dungeon", "normal"),
-        ("Scene 2", "engage", "dungeon", "normal"),
-        ("Scene 3", "aftermath", "dungeon", "normal"),
-        ("Scene 4", "approach", "city", "normal"),
-        ("Scene 5", "engage", "city", "spiky"),  # Escalation
-        ("Scene 6", "aftermath", "city", "normal"),
+        ("Scene 1", "approach", "confined", "normal"),
+        ("Scene 2", "engage", "confined", "normal"),
+        ("Scene 3", "aftermath", "confined", "normal"),
+        ("Scene 4", "approach", "populated", "normal"),
+        ("Scene 5", "engage", "populated", "spiky"),  # Escalation
+        ("Scene 6", "aftermath", "populated", "normal"),
     ]
     
     base_tags = [
@@ -94,8 +94,8 @@ def run_campaign_demo():
             environment=[env],
             tone=["gritty"],
             constraints=Constraints(
-                confinement=0.7 if env == "dungeon" else 0.4,
-                connectivity=0.3 if env == "dungeon" else 0.7,
+                confinement=0.7 if env == "confined" else 0.4,
+                connectivity=0.3 if env == "confined" else 0.7,
                 visibility=0.6,
             ),
         )

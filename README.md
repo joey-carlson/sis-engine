@@ -42,7 +42,7 @@ rng = TraceRNG(seed=123)
 scene = SceneContext(
     scene_id="demo",
     scene_phase="engage",
-    environment=["dungeon"],
+    environment=["confined"],
     tone=["gritty"],
     constraints=Constraints(confinement=0.8, connectivity=0.2, visibility=0.7),
     party_band="mid",

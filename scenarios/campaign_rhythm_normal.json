@@ -6,12 +6,12 @@
   "output_basename": "campaign_rhythm_normal",
   
   "scene_sequence": [
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-    {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"}
+    {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+    {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"}
   ],
   
   "batch_size": 50,

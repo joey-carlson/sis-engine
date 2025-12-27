@@ -8,7 +8,7 @@
   "description": "Detailed description of what this scenario validates or tests. Include purpose, expected outcomes, and any special considerations.",
   "output_basename": "your_scenario_basename",
   
-  "presets": ["dungeon", "city", "wilderness", "ruins"],
+  "presets": ["confined", "populated", "open", "derelict"],
   "phases": ["approach", "engage", "aftermath"],
   "rarity_modes": ["normal"],
   
@@ -46,7 +46,7 @@
     "minimal_scenario": {
       "execution_mode": "matrix",
       "name": "Quick Dungeon Test",
-      "presets": ["dungeon"],
+      "presets": ["confined"],
       "phases": ["engage"],
       "rarity_modes": ["normal"],
       "batch_size": 50,
@@ -56,7 +56,7 @@
     "random_seed_scenario": {
       "execution_mode": "matrix",
       "name": "Random Seed Test",
-      "presets": ["dungeon"],
+      "presets": ["confined"],
       "phases": ["engage"],
       "rarity_modes": ["normal"],
       "batch_size": 50,
@@ -68,7 +68,7 @@
       "name": "Full Phase Coverage Test",
       "description": "Tests all combinations for complete coverage analysis",
       "output_basename": "full_coverage",
-      "presets": ["dungeon", "city", "wilderness", "ruins"],
+      "presets": ["confined", "populated", "open", "derelict"],
       "phases": ["approach", "engage", "aftermath"],
       "rarity_modes": ["calm", "normal", "spiky"],
       "batch_size": 200,
@@ -79,7 +79,7 @@
       "name": "Spiky Mode Cutoff Analysis",
       "description": "Validates cutoff frequency targets in Spiky mode",
       "output_basename": "spiky_cutoff_analysis",
-      "presets": ["dungeon", "ruins", "wilderness"],
+      "presets": ["confined", "derelict", "open"],
       "phases": ["engage"],
       "rarity_modes": ["spiky"],
       "batch_size": 200,
@@ -91,12 +91,12 @@
       "description": "Tests multi-scene narrative rhythm with shared state across 6 scenes (2 full cycles of approach/engage/aftermath)",
       "output_basename": "campaign_rhythm",
       "scene_sequence": [
-        {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-        {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-        {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"},
-        {"preset": "dungeon", "phase": "approach", "rarity_mode": "normal"},
-        {"preset": "dungeon", "phase": "engage", "rarity_mode": "normal"},
-        {"preset": "dungeon", "phase": "aftermath", "rarity_mode": "normal"}
+        {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+        {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+        {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"},
+        {"preset": "confined", "phase": "approach", "rarity_mode": "normal"},
+        {"preset": "confined", "phase": "engage", "rarity_mode": "normal"},
+        {"preset": "confined", "phase": "aftermath", "rarity_mode": "normal"}
       ],
       "batch_size": 50,
       "base_seed": 5000,

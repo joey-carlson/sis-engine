@@ -60,7 +60,7 @@ def count_cutoffs(
 def test_spiky_dungeon_cutoff_rate():
     """Spiky dungeon should have 5-10% cutoff rate."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
-    _, rate = count_cutoffs("dungeon", ["dungeon"], constraints, "spiky")
+    _, rate = count_cutoffs("confined", ["confined"], constraints, "spiky")
     print(f"Spiky dungeon cutoff rate: {rate:.1f}%")
     assert 5.0 <= rate <= 10.0, f"Expected 5-10%, got {rate:.1f}%"
 
@@ -68,7 +68,7 @@ def test_spiky_dungeon_cutoff_rate():
 def test_spiky_ruins_cutoff_rate():
     """Spiky ruins should have 5-10% cutoff rate."""
     constraints = Constraints(confinement=0.7, connectivity=0.3, visibility=0.6)
-    _, rate = count_cutoffs("ruins", ["ruins"], constraints, "spiky")
+    _, rate = count_cutoffs("derelict", ["derelict"], constraints, "spiky")
     print(f"Spiky ruins cutoff rate: {rate:.1f}%")
     assert 5.0 <= rate <= 10.0, f"Expected 5-10%, got {rate:.1f}%"
 
@@ -76,7 +76,7 @@ def test_spiky_ruins_cutoff_rate():
 def test_spiky_wilderness_cutoff_rate():
     """Spiky wilderness should have 2-5% cutoff rate."""
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
-    _, rate = count_cutoffs("wilderness", ["wilderness"], constraints, "spiky")
+    _, rate = count_cutoffs("open", ["open"], constraints, "spiky")
     print(f"Spiky wilderness cutoff rate: {rate:.1f}%")
     assert 2.0 <= rate <= 5.0, f"Expected 2-5%, got {rate:.1f}%"
 
@@ -84,7 +84,7 @@ def test_spiky_wilderness_cutoff_rate():
 def test_normal_dungeon_cutoff_rate():
     """Normal dungeon should have ≤3% cutoff rate."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
-    _, rate = count_cutoffs("dungeon", ["dungeon"], constraints, "normal")
+    _, rate = count_cutoffs("confined", ["confined"], constraints, "normal")
     print(f"Normal dungeon cutoff rate: {rate:.1f}%")
     assert rate <= 3.0, f"Expected ≤3%, got {rate:.1f}%"
 
@@ -92,7 +92,7 @@ def test_normal_dungeon_cutoff_rate():
 def test_normal_wilderness_cutoff_rate():
     """Normal wilderness should have ≤3% cutoff rate."""
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
-    _, rate = count_cutoffs("wilderness", ["wilderness"], constraints, "normal")
+    _, rate = count_cutoffs("open", ["open"], constraints, "normal")
     print(f"Normal wilderness cutoff rate: {rate:.1f}%")
     assert rate <= 3.0, f"Expected ≤3%, got {rate:.1f}%"
 
@@ -100,7 +100,7 @@ def test_normal_wilderness_cutoff_rate():
 def test_calm_dungeon_cutoff_rate():
     """Calm dungeon should have ≤1% cutoff rate."""
     constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
-    _, rate = count_cutoffs("dungeon", ["dungeon"], constraints, "calm")
+    _, rate = count_cutoffs("confined", ["confined"], constraints, "calm")
     print(f"Calm dungeon cutoff rate: {rate:.1f}%")
     assert rate <= 1.0, f"Expected ≤1%, got {rate:.1f}%"
 
@@ -108,7 +108,7 @@ def test_calm_dungeon_cutoff_rate():
 def test_calm_wilderness_cutoff_rate():
     """Calm wilderness should have ≤1% cutoff rate."""
     constraints = Constraints(confinement=0.3, connectivity=0.6, visibility=0.4)
-    _, rate = count_cutoffs("wilderness", ["wilderness"], constraints, "calm")
+    _, rate = count_cutoffs("open", ["open"], constraints, "calm")
     print(f"Calm wilderness cutoff rate: {rate:.1f}%")
     assert rate <= 1.0, f"Expected ≤1%, got {rate:.1f}%"
 
@@ -117,9 +117,9 @@ def test_rarity_mode_cutoff_differences():
     """Verify cutoff rates differ meaningfully between rarity modes."""
     dungeon_constraints = Constraints(confinement=0.8, connectivity=0.2, visibility=0.7)
     
-    _, calm_rate = count_cutoffs("dungeon", ["dungeon"], dungeon_constraints, "calm")
-    _, normal_rate = count_cutoffs("dungeon", ["dungeon"], dungeon_constraints, "normal")
-    _, spiky_rate = count_cutoffs("dungeon", ["dungeon"], dungeon_constraints, "spiky")
+    _, calm_rate = count_cutoffs("confined", ["confined"], dungeon_constraints, "calm")
+    _, normal_rate = count_cutoffs("confined", ["confined"], dungeon_constraints, "normal")
+    _, spiky_rate = count_cutoffs("confined", ["confined"], dungeon_constraints, "spiky")
     
     print(f"Dungeon cutoff rates - Calm: {calm_rate:.1f}%, Normal: {normal_rate:.1f}%, Spiky: {spiky_rate:.1f}%")
     

@@ -12,7 +12,7 @@ def test_distribution_sanity_normal_mode_majority_low():
     scene = SceneContext(
         scene_id="dist",
         scene_phase="engage",
-        environment=["dungeon"],
+        environment=["confined"],
         tone=["gritty"],
         constraints=Constraints(confinement=0.7, connectivity=0.3, visibility=0.6),
         party_band="mid",

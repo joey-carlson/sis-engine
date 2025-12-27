@@ -166,7 +166,7 @@ def test_prep_item_serialization_preserves_all_fields():
         title="Test Event",
         summary="Event summary",
         tags=["hazard", "social"],
-        source={"preset": "dungeon", "phase": "engage"},
+        source={"preset": "confined", "phase": "engage"},
         status="queued",
         related_factions=["city_watch"],
         related_scars=["wounded"],
@@ -182,7 +182,7 @@ def test_prep_item_serialization_preserves_all_fields():
     assert loaded.title == "Test Event"
     assert loaded.summary == "Event summary"
     assert loaded.tags == ["hazard", "social"]
-    assert loaded.source["preset"] == "dungeon"
+    assert loaded.source["preset"] == "confined"
     assert loaded.status == "queued"
     assert loaded.notes == "Prep notes"
 

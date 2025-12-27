@@ -4,10 +4,10 @@
   "description": "Exported from hardcoded suite: Presets \u00d7 Engage \u00d7 (Calm/Normal/Spiky)",
   "output_basename": "presets_x_engage_x_calm/normal/spiky",
   "presets": [
-    "dungeon",
-    "city",
-    "wilderness",
-    "ruins"
+    "confined",
+    "populated",
+    "open",
+    "derelict"
   ],
   "phases": [
     "engage"

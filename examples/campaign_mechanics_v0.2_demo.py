@@ -62,11 +62,11 @@ def run_v02_demo():
     
     # Campaign sequence with explicit consequences
     scenes: List[tuple[str, ScenePhase, str, RarityMode, List[str], Optional[List[Scar]]]] = [
-        ("Scene 1: Infiltration", "approach", "city", "normal", ["city_watch"], None),
-        ("Scene 2: Confrontation", "engage", "city", "normal", ["city_watch"], None),
-        ("Scene 3: Escape", "aftermath", "city", "normal", [], None),
+        ("Scene 1: Infiltration", "approach", "populated", "normal", ["city_watch"], None),
+        ("Scene 2: Confrontation", "engage", "populated", "normal", ["city_watch"], None),
+        ("Scene 3: Escape", "aftermath", "populated", "normal", [], None),
         # Add a scar from the first encounter
-        ("Scene 4: Regroup", "approach", "ruins", "normal", [], [
+        ("Scene 4: Regroup", "approach", "derelict", "normal", [], [
             Scar(
                 scar_id="known_to_city_watch",
                 category="reputation",
@@ -76,10 +76,10 @@ def run_v02_demo():
                 notes="Faces seen by city watch during escape"
             )
         ]),
-        ("Scene 5: New Deal", "engage", "city", "normal", ["merchant_guild"], None),
-        ("Scene 6: Complications", "engage", "city", "spiky", ["city_watch", "merchant_guild"], None),
+        ("Scene 5: New Deal", "engage", "populated", "normal", ["merchant_guild"], None),
+        ("Scene 6: Complications", "engage", "populated", "spiky", ["city_watch", "merchant_guild"], None),
         # Add resource scar from extended conflict
-        ("Scene 7: Depleted", "aftermath", "city", "normal", [], [
+        ("Scene 7: Depleted", "aftermath", "populated", "normal", [], [
             Scar(
                 scar_id="supplies_depleted",
                 category="resource",
@@ -89,7 +89,7 @@ def run_v02_demo():
                 notes="Critical supplies exhausted in prolonged conflict"
             )
         ]),
-        ("Scene 8: Fallout", "aftermath", "city", "normal", ["underground"], None),
+        ("Scene 8: Fallout", "aftermath", "populated", "normal", ["underground"], None),
     ]
     
     base_tags = [

@@ -3,10 +3,10 @@
   "batch_n": 50,
   "base_seed": 1000,
   "presets": [
-    "dungeon",
-    "city",
-    "wilderness",
-    "ruins"
+    "confined",
+    "populated",
+    "open",
+    "derelict"
   ],
   "phases": [
     "engage"
@@ -21,7 +21,7 @@
   "verbose": true,
   "runs": [
     {
-      "preset": "dungeon",
+      "preset": "confined",
       "phase": "engage",
       "rarity_mode": "normal",
       "seed": 1001,
@@ -4136,7 +4136,7 @@
       }
     },
     {
-      "preset": "city",
+      "preset": "populated",
       "phase": "engage",
       "rarity_mode": "normal",
       "seed": 1002,
@@ -8238,7 +8238,7 @@
       }
     },
     {
-      "preset": "wilderness",
+      "preset": "open",
       "phase": "engage",
       "rarity_mode": "normal",
       "seed": 1003,
@@ -12281,7 +12281,7 @@
       }
     },
     {
-      "preset": "ruins",
+      "preset": "derelict",
       "phase": "engage",
       "rarity_mode": "normal",
       "seed": 1004,
