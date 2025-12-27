@@ -5076,5 +5076,925 @@
         "Clarify boundaries"
       ]
     }
+  },
+  {
+    "event_id": "engage_leverage_revealed_01",
+    "title": "Leverage Flips",
+    "tags": [
+      "opportunity",
+      "information",
+      "social_friction"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "engage"
+    ],
+    "severity_band": [
+      3,
+      7
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "opportunity": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "opportunity": [
+        2,
+        4
+      ],
+      "information": [
+        1,
+        3
+      ],
+      "position_shift": [
+        1,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "A weakness or resource you didn't see before becomes obvious, power shifts suddenly.",
+      "sensory": [
+        "exposed vulnerability",
+        "sudden advantage",
+        "tactical shift"
+      ],
+      "immediate_choice": [
+        "Press the advantage hard",
+        "Use it to force terms"
+      ]
+    }
+  },
+  {
+    "event_id": "engage_coordination_breaks_01",
+    "title": "Coordination Fractures",
+    "tags": [
+      "social_friction",
+      "time_pressure",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "engage"
+    ],
+    "severity_band": [
+      3,
+      7
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "social_friction": 2,
+        "positioning": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        3
+      ],
+      "time_pressure": [
+        1,
+        2
+      ],
+      "position_shift": [
+        1,
+        3
+      ],
+      "threat": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Plans fragment mid-execution, everyone assumed someone else would handle it.",
+      "sensory": [
+        "confused signals",
+        "overlapping orders",
+        "hesitation"
+      ],
+      "immediate_choice": [
+        "Take command decisively",
+        "Adapt to independent action"
+      ]
+    }
+  },
+  {
+    "event_id": "engage_resource_contested_01",
+    "title": "Resource Suddenly Contested",
+    "tags": [
+      "opportunity",
+      "threat",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict",
+      "open"
+    ],
+    "allowed_scene_phases": [
+      "engage"
+    ],
+    "severity_band": [
+      4,
+      8
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "opportunity": 2,
+        "threat": 1
+      }
+    },
+    "effect_vector_template": {
+      "threat": [
+        1,
+        3
+      ],
+      "opportunity": [
+        1,
+        3
+      ],
+      "time_pressure": [
+        1,
+        2
+      ],
+      "position_shift": [
+        1,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Something valuable becomes a point of conflict, multiple parties converge on it.",
+      "sensory": [
+        "competing movement",
+        "tension spike",
+        "narrowing window"
+      ],
+      "immediate_choice": [
+        "Fight for control",
+        "Deny it to everyone"
+      ]
+    }
+  },
+  {
+    "event_id": "engage_authority_intervenes_01",
+    "title": "Authority Arrives",
+    "tags": [
+      "social_friction",
+      "visibility",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "engage"
+    ],
+    "severity_band": [
+      4,
+      8
+    ],
+    "weight": 0.7,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2,
+        "visibility": 1
+      }
+    },
+    "effect_vector_template": {
+      "heat": [
+        2,
+        4
+      ],
+      "time_pressure": [
+        1,
+        3
+      ],
+      "threat": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Official presence imposes itself, the scene must end or escalate further.",
+      "sensory": [
+        "authoritative voice",
+        "displayed symbols",
+        "forming perimeter"
+      ],
+      "immediate_choice": [
+        "Comply and control the narrative",
+        "Finish before they can act"
+      ]
+    }
+  },
+  {
+    "event_id": "engage_misread_cascades_01",
+    "title": "Misread Compounds",
+    "tags": [
+      "information",
+      "time_pressure",
+      "cost"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "engage"
+    ],
+    "severity_band": [
+      3,
+      7
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2,
+        "time_pressure": 1
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        3
+      ],
+      "time_pressure": [
+        1,
+        3
+      ],
+      "information": [
+        0,
+        2
+      ],
+      "position_shift": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "An earlier mistake cascades into the current moment, corrections become costly.",
+      "sensory": [
+        "sinking recognition",
+        "compounding error",
+        "narrowing options"
+      ],
+      "immediate_choice": [
+        "Cut losses and adapt",
+        "Double down and push through"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_route_watched_01",
+    "title": "Route Under Watch",
+    "tags": [
+      "visibility",
+      "information",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "visibility": 2,
+        "information": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "heat": [
+        0,
+        2
+      ],
+      "position_shift": [
+        1,
+        2
+      ],
+      "time_pressure": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone is monitoring this approach, your movement is noted before you arrive.",
+      "sensory": [
+        "careful observation",
+        "positioned watchers",
+        "tracked passage"
+      ],
+      "immediate_choice": [
+        "Change route and lose time",
+        "Accept the exposure"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_timing_narrow_01",
+    "title": "Window Tightens",
+    "tags": [
+      "time_pressure",
+      "information",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "time_pressure": 2
+      }
+    },
+    "effect_vector_template": {
+      "time_pressure": [
+        1,
+        3
+      ],
+      "information": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Patterns shift sooner than expected, the ideal moment compresses.",
+      "sensory": [
+        "changing schedules",
+        "early movement",
+        "closing window"
+      ],
+      "immediate_choice": [
+        "Move now with less preparation",
+        "Wait and accept harder conditions"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_information_gaps_01",
+    "title": "Blind Spots Emerge",
+    "tags": [
+      "information",
+      "visibility",
+      "cost"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "time_pressure": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Key details remain obscured, you'll have to act without full knowledge.",
+      "sensory": [
+        "obstructed sightlines",
+        "missing reports",
+        "uncertain variables"
+      ],
+      "immediate_choice": [
+        "Spend time to gather more",
+        "Proceed and adapt"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_terrain_restricts_01",
+    "title": "Terrain Dictates",
+    "tags": [
+      "terrain",
+      "positioning",
+      "cost"
+    ],
+    "allowed_environments": [
+      "confined",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "terrain": 2,
+        "positioning": 1
+      }
+    },
+    "effect_vector_template": {
+      "position_shift": [
+        1,
+        3
+      ],
+      "cost": [
+        0,
+        2
+      ],
+      "time_pressure": [
+        0,
+        2
+      ]
+    },
+    "fiction": {
+      "prompt": "Geography forces choices, good angles are limited or costly to reach.",
+      "sensory": [
+        "narrow paths",
+        "exposed approaches",
+        "defensive ground"
+      ],
+      "immediate_choice": [
+        "Accept the terrain's terms",
+        "Spend time finding alternatives"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_preparation_rushed_01",
+    "title": "Preparation Cut Short",
+    "tags": [
+      "time_pressure",
+      "cost",
+      "information"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "industrial"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "time_pressure": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        2
+      ],
+      "time_pressure": [
+        1,
+        3
+      ],
+      "information": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Something forces you to move before you're ready, gaps in preparation become visible.",
+      "sensory": [
+        "unfinished checks",
+        "missing equipment",
+        "incomplete planning"
+      ],
+      "immediate_choice": [
+        "Go anyway and improvise",
+        "Delay despite pressure"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_rival_aware_01",
+    "title": "Rival Already Moving",
+    "tags": [
+      "social_friction",
+      "time_pressure",
+      "information"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      3,
+      7
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "time_pressure": [
+        1,
+        2
+      ],
+      "information": [
+        1,
+        3
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "heat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone else is pursuing the same objective, they have a head start.",
+      "sensory": [
+        "fresh signs",
+        "recent passage",
+        "competitive urgency"
+      ],
+      "immediate_choice": [
+        "Race them to it",
+        "Let them arrive first and adapt"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_access_negotiated_01",
+    "title": "Gatekeeper Wants Terms",
+    "tags": [
+      "social_friction",
+      "opportunity",
+      "cost"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 3,
+      "tags": {
+        "social_friction": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        0,
+        3
+      ],
+      "opportunity": [
+        0,
+        2
+      ],
+      "information": [
+        0,
+        2
+      ],
+      "time_pressure": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone controls the route or access, they'll permit passage at a price.",
+      "sensory": [
+        "crossed arms",
+        "stated conditions",
+        "expectant pause"
+      ],
+      "immediate_choice": [
+        "Pay the cost",
+        "Find another way"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_pattern_recognized_01",
+    "title": "Pattern Detected",
+    "tags": [
+      "information",
+      "visibility",
+      "heat"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "confined"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2,
+        "visibility": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "heat": [
+        1,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Your approach follows a recognizable pattern, someone connects it to prior activity.",
+      "sensory": [
+        "knowing recognition",
+        "communicated warning",
+        "predictive movement"
+      ],
+      "immediate_choice": [
+        "Break the pattern now",
+        "Complete it and deal with awareness"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_condition_degrades_01",
+    "title": "Condition Worsens En Route",
+    "tags": [
+      "attrition",
+      "cost",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "open",
+      "confined",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "attrition": 2
+      }
+    },
+    "effect_vector_template": {
+      "cost": [
+        1,
+        3
+      ],
+      "time_pressure": [
+        0,
+        2
+      ],
+      "threat": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone or something isn't holding up well, arrival will be messier than planned.",
+      "sensory": [
+        "labored breathing",
+        "worsening symptoms",
+        "declining performance"
+      ],
+      "immediate_choice": [
+        "Slow pace to stabilize",
+        "Push through to destination"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_unexpected_presence_01",
+    "title": "Unexpected Presence",
+    "tags": [
+      "information",
+      "visibility",
+      "positioning"
+    ],
+    "allowed_environments": [
+      "confined",
+      "populated",
+      "open",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      7
+    ],
+    "weight": 0.9,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "information": 2,
+        "visibility": 1
+      }
+    },
+    "effect_vector_template": {
+      "information": [
+        1,
+        3
+      ],
+      "position_shift": [
+        1,
+        2
+      ],
+      "heat": [
+        0,
+        2
+      ],
+      "time_pressure": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Someone or something is already here that shouldn't be, plans need fast revision.",
+      "sensory": [
+        "unexpected movement",
+        "occupied space",
+        "timeline collision"
+      ],
+      "immediate_choice": [
+        "Withdraw and reassess",
+        "Adapt plan in motion"
+      ]
+    }
+  },
+  {
+    "event_id": "approach_distraction_opportunity_01",
+    "title": "Distraction Presents",
+    "tags": [
+      "opportunity",
+      "information",
+      "time_pressure"
+    ],
+    "allowed_environments": [
+      "populated",
+      "industrial",
+      "derelict"
+    ],
+    "allowed_scene_phases": [
+      "approach"
+    ],
+    "severity_band": [
+      2,
+      6
+    ],
+    "weight": 0.8,
+    "cooldown": {
+      "event": 2,
+      "tags": {
+        "opportunity": 2
+      }
+    },
+    "effect_vector_template": {
+      "opportunity": [
+        1,
+        3
+      ],
+      "information": [
+        0,
+        2
+      ],
+      "time_pressure": [
+        0,
+        2
+      ],
+      "cost": [
+        0,
+        1
+      ]
+    },
+    "fiction": {
+      "prompt": "Attention is diverted elsewhere, the approach becomes easier if you move now.",
+      "sensory": [
+        "distant commotion",
+        "redirected focus",
+        "temporary opening"
+      ],
+      "immediate_choice": [
+        "Exploit the distraction",
+        "Use normal approach to avoid suspicion"
+      ]
+    }
   }
 ]
