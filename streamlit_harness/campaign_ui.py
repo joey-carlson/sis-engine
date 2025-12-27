@@ -1818,28 +1818,35 @@ def render_campaign_dashboard() -> None:
                         # Collect referenced factions from this session
                         referenced_faction_ids = set()
                         
-                        # From manual entries
+                        # From manual entries (explicit references)
                         manual_entries = entry.get('manual_entries', [])
                         if manual_entries:
                             for manual_entry in manual_entries:
                                 if manual_entry.get('related_factions'):
                                     referenced_faction_ids.update(manual_entry['related_factions'])
                         
-                        # From session deltas (faction attention changes)
-                        if entry.get('deltas', {}).get('faction_attention_change'):
-                            # Check if faction was updated via checkbox
-                            # Scan manual entries for faction mentions in text as fallback
-                            for manual_entry in manual_entries or []:
-                                title_lower = manual_entry.get('title', '').lower()
-                                desc_lower = manual_entry.get('description', '').lower()
-                                if campaign.campaign_state:
-                                    for fid, faction in campaign.campaign_state.factions.items():
-                                        if faction.name.lower() in title_lower or faction.name.lower() in desc_lower:
+                        # Fallback: scan text ONLY if no explicit related_factions
+                        # Conservative whole-word matching to avoid false positives
+                        if not referenced_faction_ids and manual_entries and campaign.campaign_state:
+                            import re
+                            for manual_entry in manual_entries:
+                                title_text = manual_entry.get('title', '')
+                                desc_text = manual_entry.get('description', '')
+                                combined_text = f"{title_text} {desc_text}".lower()
+                                
+                                # Only check active factions with attention > 0
+                                for fid, faction in campaign.campaign_state.factions.items():
+                                    if faction.is_active and faction.attention > 0:
+                                        # Normalized whole-word match (avoid false positives)
+                                        faction_name_normalized = faction.name.lower().strip()
+                                        # Word boundary pattern: faction name as complete word(s)
+                                        pattern = r'\b' + re.escape(faction_name_normalized) + r'\b'
+                                        if re.search(pattern, combined_text):
                                             referenced_faction_ids.add(fid)
                         
-                        # Show faction context for referenced factions
+                        # Show faction context for referenced factions (current status)
                         if referenced_faction_ids and campaign.campaign_state:
-                            lines.append("## Factions")
+                            lines.append("## Factions (current status)")
                             lines.append("")
                             
                             for fid in sorted(referenced_faction_ids):
@@ -1852,7 +1859,7 @@ def render_campaign_dashboard() -> None:
                                         
                                         lines.append(f"**{faction.name}** *({attention_band}, {disp_label})*")
                                         
-                                        # Include description (story-facing)
+                                        # Include description (story-facing) but NOT notes (GM-private)
                                         if faction.description:
                                             lines.append(f"{faction.description}")
                                         
