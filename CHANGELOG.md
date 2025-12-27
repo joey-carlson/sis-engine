@@ -6,6 +6,16 @@
 
 SPAR Tool Engine v1.0 delivers a complete campaign memory system integrating event generation with persistent campaign state. The generator now "remembers" your campaign through faction attention tracking, deterministic influence scoring, and curated narrative exports.
 
+**Event Generator UI v1.0 (New):**
+- 3-layer progressive disclosure hierarchy separating GM controls from diagnostics
+- Primary GM layer: Campaign context, scene setup (preset/phase/rarity), collapsed filters
+- Advanced Settings expander: Seed, batch size, constraints, tick mechanics, state debugging
+- Seed moved out of primary layer (debugging tool, not GM control)
+- Tags behind collapsed Filters expander (powerful but not default-visible)
+- Default view fits on one screen without scrolling
+- All functionality preserved, just reorganized for clarity
+- Resolves cognitive overload from mixing GM/developer/analyst controls
+
 **Campaign Management (Complete):**
 - Multi-campaign manager with living state tracking
 - Faction CRUD v0.1 with attention/disposition bands
