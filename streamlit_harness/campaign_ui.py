@@ -1053,10 +1053,237 @@ def render_campaign_dashboard() -> None:
     
     st.caption(f"Campaign ID: {campaign.campaign_id} | Last played: {campaign.last_played[:16]}")
     
-    # Primary action button
-    if st.button("▶️ Run Session", type="primary", use_container_width=True):
-        st.session_state.campaign_page = "session"
-        st.rerun()
+    # Primary action buttons
+    col_run, col_export = st.columns([2, 1])
+    with col_run:
+        if st.button("▶️ Run Session", type="primary", use_container_width=True):
+            st.session_state.campaign_page = "session"
+            st.rerun()
+    with col_export:
+        if st.button("📤 Export", use_container_width=True):
+            st.session_state.show_export_menu = not st.session_state.get("show_export_menu", False)
+    
+    # Export menu (inline dropdown)
+    if st.session_state.get("show_export_menu", False):
+        with st.container(border=True):
+            st.markdown("**📤 Export Campaign**")
+            
+            # Campaign History Export
+            st.caption("**Export Campaign History (Markdown)**")
+            normalized_name = campaign.name.lower().replace(' ', '_').replace('/', '_')
+            campaign_dir = normalize_campaign_name_to_dir(campaign.name)
+            default_history_path = f"campaigns/{campaign_dir}/{normalized_name}_campaign_history_{datetime.now().strftime('%Y%m%d')}.md"
+            
+            history_path = st.text_input(
+                "Campaign history path",
+                value=default_history_path,
+                key="header_history_export_path",
+                help="Path for campaign history markdown file"
+            )
+            
+            if st.button("📥 Export Campaign History", use_container_width=True, key="header_export_history"):
+                if history_path:
+                    # Generate markdown content
+                    lines = []
+                    lines.append(f"# {campaign.name}")
+                    lines.append(f"*Campaign history exported: {datetime.now().strftime('%Y-%m-%d %H:%M')}*")
+                    lines.append("")
+                    
+                    # Canon Summary
+                    lines.append("## Canon Summary")
+                    lines.append("")
+                    for bullet in campaign.canon_summary:
+                        lines.append(f"- {bullet}")
+                    lines.append("")
+                    
+                    # Factions Roster
+                    if campaign.campaign_state and campaign.campaign_state.factions:
+                        active_factions = {fid: f for fid, f in campaign.campaign_state.factions.items() if f.is_active}
+                        if active_factions:
+                            lines.append("## Factions")
+                            lines.append("")
+                            for fid, faction in active_factions.items():
+                                attention_band = faction.get_attention_band()
+                                disp_label = faction.get_disposition_label().split()[1]
+                                lines.append(f"**{faction.name}** *({attention_band}, {disp_label})*")
+                                if faction.description:
+                                    lines.append(f"{faction.description}")
+                                lines.append("")
+                    
+                    # Campaign Ledger
+                    if campaign.ledger:
+                        lines.append("## Campaign Ledger")
+                        lines.append("")
+                        
+                        valid_entries = [
+                            e for e in campaign.ledger
+                            if e.get('entry_type') != 'admin_action'
+                            and e.get('what_happened')
+                            and any(item.strip() for item in e.get('what_happened', []))
+                        ]
+                        
+                        for entry in valid_entries:
+                            session_num = entry.get('session_number', '?')
+                            session_date = entry.get('session_date', '')[:10]
+                            session_id = entry.get('session_id')
+                            
+                            if session_id:
+                                time_portion = session_id.split('_')[-1] if '_' in session_id else session_id[-6:]
+                                lines.append(f"### Session {session_num} — {session_date} ({time_portion})")
+                            else:
+                                lines.append(f"### Session {session_num} — {session_date}")
+                            lines.append("")
+                            
+                            what_happened = entry.get('what_happened', [])
+                            if what_happened:
+                                lines.append("**What Happened:**")
+                                for bullet in what_happened:
+                                    lines.append(f"- {bullet}")
+                                lines.append("")
+                            
+                            manual_entries = entry.get('manual_entries')
+                            if manual_entries:
+                                lines.append("**Manual Entries & Notable Moments:**")
+                                lines.append("")
+                                for manual_entry in manual_entries:
+                                    lines.append(f"#### {manual_entry['title']}")
+                                    lines.append("")
+                                    lines.append(f"{manual_entry['description']}")
+                                    lines.append("")
+                                    if manual_entry.get('notes'):
+                                        lines.append(f"*GM Notes: {manual_entry['notes']}*")
+                                        lines.append("")
+                            
+                            session_notes = entry.get('session_notes')
+                            if session_notes:
+                                lines.append("**Session Notes:**")
+                                lines.append("")
+                                lines.append(session_notes)
+                                lines.append("")
+                    
+                    markdown_content = "\n".join(lines)
+                    
+                    # Always provide download button
+                    st.download_button(
+                        label="📥 Download Campaign History",
+                        data=markdown_content,
+                        file_name=Path(history_path).name,
+                        mime="text/markdown",
+                        use_container_width=True,
+                        key="header_download_campaign_history"
+                    )
+                    
+                    # Also try local write
+                    try:
+                        path = Path(history_path)
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                        path.write_text(markdown_content)
+                        st.info(f"✓ Also saved to: {history_path}")
+                    except Exception:
+                        st.info(f"Note: Could not write to {history_path} - use download button above")
+            
+            st.divider()
+            
+            # Latest Session Export
+            st.caption("**Export Latest Session (Markdown)**")
+            session_num = len(campaign.ledger)
+            if session_num > 0:
+                normalized_name = campaign.name.lower().replace(' ', '_').replace('/', '_')
+                campaign_dir = normalize_campaign_name_to_dir(campaign.name)
+                padded_num = str(session_num).zfill(3)
+                default_session_path = f"campaigns/{campaign_dir}/{normalized_name}_session_{padded_num}_{datetime.now().strftime('%Y%m%d')}.md"
+                
+                session_path = st.text_input(
+                    "Latest session path",
+                    value=default_session_path,
+                    key="header_session_export_path",
+                    help="Path for session markdown file"
+                )
+                
+                if st.button("📥 Export Latest Session", use_container_width=True, key="header_export_session"):
+                    if session_path and campaign.ledger:
+                        entry = campaign.ledger[-1]
+                        
+                        # Generate session markdown
+                        lines = []
+                        session_num = entry.get('session_number', '?')
+                        session_date = entry.get('session_date', '')[:10]
+                        lines.append(f"# {campaign.name} — Session {session_num}")
+                        lines.append(f"*Session date: {session_date}*")
+                        lines.append("")
+                        
+                        # Collect referenced factions
+                        referenced_faction_ids = set()
+                        manual_entries = entry.get('manual_entries', [])
+                        if manual_entries:
+                            for manual_entry in manual_entries:
+                                if manual_entry.get('related_factions'):
+                                    referenced_faction_ids.update(manual_entry['related_factions'])
+                        
+                        # Show faction context
+                        if referenced_faction_ids and campaign.campaign_state:
+                            lines.append("## Factions (current status)")
+                            lines.append("")
+                            for fid in sorted(referenced_faction_ids):
+                                if fid in campaign.campaign_state.factions:
+                                    faction = campaign.campaign_state.factions[fid]
+                                    if faction.is_active:
+                                        attention_band = faction.get_attention_band()
+                                        disp_label = faction.get_disposition_label().split()[1]
+                                        lines.append(f"**{faction.name}** *({attention_band}, {disp_label})*")
+                                        if faction.description:
+                                            lines.append(f"{faction.description}")
+                                        lines.append("")
+                            lines.append("")
+                        
+                        what_happened = entry.get('what_happened', [])
+                        if what_happened:
+                            lines.append("## What Happened")
+                            lines.append("")
+                            for bullet in what_happened:
+                                lines.append(f"- {bullet}")
+                            lines.append("")
+                        
+                        manual_entries = entry.get('manual_entries')
+                        if manual_entries:
+                            lines.append("## Manual Entries & Notable Moments")
+                            lines.append("")
+                            for manual_entry in manual_entries:
+                                lines.append(f"### {manual_entry['title']}")
+                                lines.append("")
+                                lines.append(f"{manual_entry['description']}")
+                                lines.append("")
+                                if manual_entry.get('notes'):
+                                    lines.append(f"*GM Notes: {manual_entry['notes']}*")
+                                    lines.append("")
+                        
+                        session_notes = entry.get('session_notes')
+                        if session_notes:
+                            lines.append("## Session Notes")
+                            lines.append("")
+                            lines.append(session_notes)
+                            lines.append("")
+                        
+                        markdown_content = "\n".join(lines)
+                        
+                        st.download_button(
+                            label="📥 Download Session",
+                            data=markdown_content,
+                            file_name=Path(session_path).name,
+                            mime="text/markdown",
+                            use_container_width=True,
+                            key="header_download_session"
+                        )
+                        
+                        try:
+                            path = Path(session_path)
+                            path.parent.mkdir(parents=True, exist_ok=True)
+                            path.write_text(markdown_content)
+                            st.info(f"✓ Also saved to: {session_path}")
+                        except Exception:
+                            st.info(f"Note: Could not write to {session_path} - use download button above")
+            else:
+                st.info("No sessions to export yet")
     
     st.divider()
     
@@ -2065,294 +2292,6 @@ def render_campaign_dashboard() -> None:
                 with st.expander(f"📦 Archived ({len(archived_items)})", expanded=False):
                     for item in archived_items:
                         _render_prep_item(campaign, item, show_unarchive=True)
-    
-    st.divider()
-    
-    # D: Markdown Export Section
-    with st.expander("📄 Export Campaign History", expanded=False):
-        st.caption("Export campaign history (Canon Summary + Ledger) as Markdown")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("**Campaign History Export**")
-            
-            # Default path for campaign history (save in campaign subdirectory)
-            normalized_name = campaign.name.lower().replace(' ', '_').replace('/', '_')
-            campaign_dir = normalize_campaign_name_to_dir(campaign.name)
-            default_history_path = f"campaigns/{campaign_dir}/{normalized_name}_campaign_history_{datetime.now().strftime('%Y%m%d')}.md"
-            
-            history_path = st.text_input(
-                "Export path",
-                value=default_history_path,
-                key="history_export_path",
-                help="Path for campaign history markdown file"
-            )
-            
-            if st.button("📥 Export Campaign History", use_container_width=True):
-                if history_path:
-                    # Generate markdown content
-                    lines = []
-                    lines.append(f"# {campaign.name}")
-                    lines.append(f"*Campaign history exported: {datetime.now().strftime('%Y-%m-%d %H:%M')}*")
-                    lines.append("")
-                    
-                    # Canon Summary
-                    lines.append("## Canon Summary")
-                    lines.append("")
-                    for bullet in campaign.canon_summary:
-                        lines.append(f"- {bullet}")
-                    lines.append("")
-                    
-                    # Factions Roster (story-facing: name + description, with human-readable bands)
-                    if campaign.campaign_state and campaign.campaign_state.factions:
-                        active_factions = {fid: f for fid, f in campaign.campaign_state.factions.items() if f.is_active}
-                        if active_factions:
-                            lines.append("## Factions")
-                            lines.append("")
-                            for fid, faction in active_factions.items():
-                                # Human-readable bands (not raw numbers)
-                                attention_band = faction.get_attention_band()
-                                disp_label = faction.get_disposition_label().split()[1]  # Remove emoji
-                                
-                                lines.append(f"**{faction.name}** *({attention_band}, {disp_label})*")
-                                
-                                # Include description (story-facing) but NOT notes (GM-private)
-                                if faction.description:
-                                    lines.append(f"{faction.description}")
-                                
-                                lines.append("")
-                    
-                    # Campaign Ledger (filter out invalid entries)
-                    if campaign.ledger:
-                        lines.append("## Campaign Ledger")
-                        lines.append("")
-                        
-                        # Filter: only include valid session entries (not admin actions or empty sessions)
-                        valid_entries = [
-                            e for e in campaign.ledger
-                            if e.get('entry_type') != 'admin_action'  # Exclude system audit entries
-                            and e.get('what_happened')  # Must have content
-                            and any(item.strip() for item in e.get('what_happened', []))  # At least one non-empty item
-                        ]
-                        
-                        for entry in valid_entries:
-                            session_num = entry.get('session_number', '?')
-                            session_date = entry.get('session_date', '')[:10]
-                            
-                            # Use session_id for disambiguation if present
-                            session_id = entry.get('session_id')
-                            if session_id:
-                                # Extract just the time portion for disambiguation
-                                time_portion = session_id.split('_')[-1] if '_' in session_id else session_id[-6:]
-                                lines.append(f"### Session {session_num} — {session_date} ({time_portion})")
-                            else:
-                                lines.append(f"### Session {session_num} — {session_date}")
-                            lines.append("")
-                            
-                            what_happened = entry.get('what_happened', [])
-                            if what_happened:
-                                lines.append("**What Happened:**")
-                                for bullet in what_happened:
-                                    lines.append(f"- {bullet}")
-                                lines.append("")
-                            
-                            # Manual entries - STORY-FACING ONLY (per export spec v0.1)
-                            manual_entries = entry.get('manual_entries')
-                            if manual_entries:
-                                lines.append("**Manual Entries & Notable Moments:**")
-                                lines.append("")
-                                for manual_entry in manual_entries:
-                                    lines.append(f"#### {manual_entry['title']}")
-                                    lines.append("")
-                                    lines.append(f"{manual_entry['description']}")
-                                    lines.append("")
-                                    
-                                    # Only include GM notes (story-facing)
-                                    if manual_entry.get('notes'):
-                                        lines.append(f"*GM Notes: {manual_entry['notes']}*")
-                                        lines.append("")
-                                    
-                                    # EXCLUDED per export spec: tags, severity, related_factions/scars, pressure/heat deltas
-                            
-                            # Session notes if present
-                            session_notes = entry.get('session_notes')
-                            if session_notes:
-                                lines.append("**Session Notes:**")
-                                lines.append("")
-                                lines.append(session_notes)
-                                lines.append("")
-                            
-                            # EXCLUDED per export spec v0.1:
-                            # - State Changes (numeric deltas are system-facing)
-                            # - Metadata section (severity/cutoff/tags/scenario all system-facing)
-                            # - Content Sources (system-facing attribution)
-                    
-                    markdown_content = "\n".join(lines)
-                    
-                    # Always provide download button
-                    st.download_button(
-                        label="📥 Download Campaign History",
-                        data=markdown_content,
-                        file_name=Path(history_path).name,
-                        mime="text/markdown",
-                        use_container_width=True,
-                        key="download_campaign_history"
-                    )
-                    
-                    # Also try local write if possible
-                    try:
-                        path = Path(history_path)
-                        path.parent.mkdir(parents=True, exist_ok=True)
-                        path.write_text(markdown_content)
-                        st.info(f"✓ Also saved to: {history_path}")
-                    except Exception as e:
-                        st.info(f"Note: Could not write to {history_path} - use download button above")
-        
-        with col2:
-            st.markdown("**Session Export (Optional)**")
-            
-            # Default path for most recent session (save in campaign subdirectory)
-            session_num = len(campaign.ledger)
-            if session_num > 0:
-                normalized_name = campaign.name.lower().replace(' ', '_').replace('/', '_')
-                campaign_dir = normalize_campaign_name_to_dir(campaign.name)
-                padded_num = str(session_num).zfill(3)
-                default_session_path = f"campaigns/{campaign_dir}/{normalized_name}_session_{padded_num}_{datetime.now().strftime('%Y%m%d')}.md"
-                
-                session_path = st.text_input(
-                    "Export path",
-                    value=default_session_path,
-                    key="session_export_path",
-                    help="Path for session markdown file"
-                )
-                
-                if st.button("📥 Export Last Session", use_container_width=True):
-                    if session_path and campaign.ledger:
-                        # Get last session
-                        entry = campaign.ledger[-1]
-                        
-                        # Generate GM-useful markdown content
-                        lines = []
-                        session_num = entry.get('session_number', '?')
-                        session_date = entry.get('session_date', '')[:10]
-                        lines.append(f"# {campaign.name} — Session {session_num}")
-                        lines.append(f"*Session date: {session_date}*")
-                        lines.append("")
-                        
-                        # Collect referenced factions from this session
-                        referenced_faction_ids = set()
-                        
-                        # From manual entries (explicit references)
-                        manual_entries = entry.get('manual_entries', [])
-                        if manual_entries:
-                            for manual_entry in manual_entries:
-                                if manual_entry.get('related_factions'):
-                                    referenced_faction_ids.update(manual_entry['related_factions'])
-                        
-                        # Fallback: scan text ONLY if no explicit related_factions
-                        # Conservative whole-word matching to avoid false positives
-                        if not referenced_faction_ids and manual_entries and campaign.campaign_state:
-                            import re
-                            for manual_entry in manual_entries:
-                                title_text = manual_entry.get('title', '')
-                                desc_text = manual_entry.get('description', '')
-                                combined_text = f"{title_text} {desc_text}".lower()
-                                
-                                # Only check active factions with attention > 0
-                                for fid, faction in campaign.campaign_state.factions.items():
-                                    if faction.is_active and faction.attention > 0:
-                                        # Normalized whole-word match (avoid false positives)
-                                        faction_name_normalized = faction.name.lower().strip()
-                                        # Word boundary pattern: faction name as complete word(s)
-                                        pattern = r'\b' + re.escape(faction_name_normalized) + r'\b'
-                                        if re.search(pattern, combined_text):
-                                            referenced_faction_ids.add(fid)
-                        
-                        # Show faction context for referenced factions (current status)
-                        if referenced_faction_ids and campaign.campaign_state:
-                            lines.append("## Factions (current status)")
-                            lines.append("")
-                            
-                            for fid in sorted(referenced_faction_ids):
-                                if fid in campaign.campaign_state.factions:
-                                    faction = campaign.campaign_state.factions[fid]
-                                    if faction.is_active:
-                                        # Human-readable bands
-                                        attention_band = faction.get_attention_band()
-                                        disp_label = faction.get_disposition_label().split()[1]  # Remove emoji
-                                        
-                                        lines.append(f"**{faction.name}** *({attention_band}, {disp_label})*")
-                                        
-                                        # Include description (story-facing) but NOT notes (GM-private)
-                                        if faction.description:
-                                            lines.append(f"{faction.description}")
-                                        
-                                        lines.append("")
-                            
-                            lines.append("")
-                        
-                        what_happened = entry.get('what_happened', [])
-                        if what_happened:
-                            lines.append("## What Happened")
-                            lines.append("")
-                            for bullet in what_happened:
-                                lines.append(f"- {bullet}")
-                            lines.append("")
-                        
-                        # Manual entries - STORY-FACING ONLY (per export spec v0.1)
-                        manual_entries = entry.get('manual_entries')
-                        if manual_entries:
-                            lines.append("## Manual Entries & Notable Moments")
-                            lines.append("")
-                            for manual_entry in manual_entries:
-                                lines.append(f"### {manual_entry['title']}")
-                                lines.append("")
-                                lines.append(f"{manual_entry['description']}")
-                                lines.append("")
-                                
-                                # Only include GM notes (story-facing)
-                                if manual_entry.get('notes'):
-                                    lines.append(f"*GM Notes: {manual_entry['notes']}*")
-                                    lines.append("")
-                                
-                                # EXCLUDED per export spec: tags, severity, related_factions/scars, pressure/heat deltas
-                        
-                        # Session notes if present
-                        session_notes = entry.get('session_notes')
-                        if session_notes:
-                            lines.append("## Session Notes")
-                            lines.append("")
-                            lines.append(session_notes)
-                            lines.append("")
-                        
-                        # EXCLUDED per export spec v0.1:
-                        # - State Changes & Mechanics (numeric deltas are system-facing)
-                        # - Session Metadata (severity/cutoff/tags/scenario all system-facing)
-                        # - Content Sources (system-facing attribution)
-                        
-                        markdown_content = "\n".join(lines)
-                        
-                        # Always provide download button
-                        st.download_button(
-                            label="📥 Download Session",
-                            data=markdown_content,
-                            file_name=Path(session_path).name,
-                            mime="text/markdown",
-                            use_container_width=True,
-                            key="download_session"
-                        )
-                        
-                        # Also try local write if possible
-                        try:
-                            path = Path(session_path)
-                            path.parent.mkdir(parents=True, exist_ok=True)
-                            path.write_text(markdown_content)
-                            st.info(f"✓ Also saved to: {session_path}")
-                        except Exception as e:
-                            st.info(f"Note: Could not write to {session_path} - use download button above")
-            else:
-                st.info("No sessions to export yet")
     
     st.divider()
     
