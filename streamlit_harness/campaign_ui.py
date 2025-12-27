@@ -1169,6 +1169,7 @@ def render_campaign_dashboard() -> None:
     col_header, col_help = st.columns([10, 2])
     with col_header:
         st.subheader("🎲 Content Packs")
+        st.caption("Packs apply per generator (Event/Loot)")
     with col_help:
         if st.button("❓ Help", key="content_pack_help_btn", help="How to create your own packs"):
             st.session_state.show_pack_help = not st.session_state.get("show_pack_help", False)

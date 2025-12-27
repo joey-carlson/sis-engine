@@ -1,0 +1,1366 @@
+{
+  "name": "Core Loot Situations",
+  "generator_type": "loot",
+  "description": "Setting-neutral resource shock situations (gain + consequence)",
+  "entries": [
+    {
+      "event_id": "loot_cache_01",
+      "title": "Concealed Stockpile",
+      "tags": [
+        "opportunity",
+        "visibility",
+        "cost"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "confined",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath",
+        "engage"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "heat": [
+          0,
+          2
+        ],
+        "cost": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "A hidden cache of supplies — enough to ease shortages, but moving it will be noticed.",
+        "sensory": [
+          "intact containers",
+          "dust-free placement",
+          "deliberate concealment"
+        ],
+        "immediate_choice": [
+          "Take it all now and risk attention",
+          "Take only what you can carry quietly"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_relic_01",
+      "title": "Artifact of Interest",
+      "tags": [
+        "information",
+        "opportunity",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "planar",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath",
+        "engage"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.7,
+      "cooldown": {
+        "event": 4,
+        "tags": {
+          "information": 2,
+          "social_friction": 1
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          2,
+          4
+        ],
+        "opportunity": [
+          1,
+          3
+        ],
+        "heat": [
+          1,
+          3
+        ]
+      },
+      "fiction": {
+        "prompt": "A relic of unknown function; powerful interests will want to know who controls it.",
+        "sensory": [
+          "strange weight",
+          "unnatural preservation",
+          "faint resonance"
+        ],
+        "immediate_choice": [
+          "Secure it and deal with attention",
+          "Document it and leave it in place"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_windfall_01",
+      "title": "Sudden Windfall",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "cost": [
+          -2,
+          -1
+        ],
+        "heat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "An unexpected gain solves one problem but creates three new expectations.",
+        "sensory": [
+          "easy acquisition",
+          "watching eyes",
+          "unspoken assumptions"
+        ],
+        "immediate_choice": [
+          "Accept the windfall and the obligations",
+          "Refuse and maintain independence"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_salvage_01",
+      "title": "Valuable Salvage",
+      "tags": [
+        "opportunity",
+        "time_pressure",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "derelict",
+        "industrial",
+        "sea"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "time_pressure": [
+          0,
+          2
+        ],
+        "heat": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Intact equipment lies exposed, scavengers will converge soon.",
+        "sensory": [
+          "functioning components",
+          "minimal damage",
+          "obvious value"
+        ],
+        "immediate_choice": [
+          "Claim it before others arrive",
+          "Mark it for coordinated retrieval"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_contested_01",
+      "title": "Contested Resource",
+      "tags": [
+        "opportunity",
+        "social_friction",
+        "cost"
+      ],
+      "allowed_environments": [
+        "populated",
+        "open",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "engage",
+        "aftermath"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "social_friction": 2,
+          "opportunity": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          1,
+          3
+        ],
+        "cost": [
+          1,
+          3
+        ],
+        "threat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Multiple parties have claim to the same resource, negotiation or force will decide it.",
+        "sensory": [
+          "territorial posturing",
+          "stated rights",
+          "calculating stares"
+        ],
+        "immediate_choice": [
+          "Assert dominance",
+          "Propose shared access"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_intel_01",
+      "title": "Actionable Intelligence",
+      "tags": [
+        "information",
+        "opportunity",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "information": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          3,
+          5
+        ],
+        "opportunity": [
+          1,
+          3
+        ],
+        "time_pressure": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Documents or messages reveal vulnerabilities or opportunities, but they have a shelf life.",
+        "sensory": [
+          "detailed records",
+          "recent timestamps",
+          "names and locations"
+        ],
+        "immediate_choice": [
+          "Act on it immediately",
+          "Verify before committing"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_key_access_01",
+      "title": "Access Credentials",
+      "tags": [
+        "opportunity",
+        "information",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "information": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "information": [
+          1,
+          2
+        ],
+        "heat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Keys, codes, or permissions open new routes, but their use will be logged or noticed.",
+        "sensory": [
+          "intact credentials",
+          "valid authorization",
+          "temporary window"
+        ],
+        "immediate_choice": [
+          "Use them now while valid",
+          "Hold for critical moment"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_leverage_01",
+      "title": "Leverage Material",
+      "tags": [
+        "information",
+        "opportunity",
+        "obligation"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.7,
+      "cooldown": {
+        "event": 4,
+        "tags": {
+          "information": 2,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          2,
+          4
+        ],
+        "opportunity": [
+          2,
+          3
+        ],
+        "heat": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Evidence or secrets that give power over someone, using it will create enemies or debts.",
+        "sensory": [
+          "incriminating records",
+          "compromising evidence",
+          "dangerous knowledge"
+        ],
+        "immediate_choice": [
+          "Use it as leverage immediately",
+          "Store it for future negotiation"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_tools_01",
+      "title": "Specialized Equipment",
+      "tags": [
+        "opportunity",
+        "cost",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "industrial",
+        "derelict",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          3
+        ],
+        "cost": [
+          -1,
+          0
+        ],
+        "heat": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Tools or gear that enable new approaches, but carrying them changes your profile.",
+        "sensory": [
+          "functional equipment",
+          "recognizable design",
+          "professional grade"
+        ],
+        "immediate_choice": [
+          "Incorporate it into operations",
+          "Trade it for something less conspicuous"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_debt_paid_01",
+      "title": "Debt Instrument",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "obligation": 3
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "information": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Documentation of owed favors or debts, calling them in creates obligations elsewhere.",
+        "sensory": [
+          "signed agreements",
+          "witnessed promises",
+          "recorded terms"
+        ],
+        "immediate_choice": [
+          "Collect what's owed",
+          "Use it as future leverage"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_medical_01",
+      "title": "Medical Supplies",
+      "tags": [
+        "opportunity",
+        "cost",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 1.0,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "cost": [
+          -2,
+          -1
+        ],
+        "time_pressure": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Intact medical resources address immediate injuries, but their source will be missed.",
+        "sensory": [
+          "sealed packages",
+          "clear labels",
+          "tracked inventory"
+        ],
+        "immediate_choice": [
+          "Use them now",
+          "Save for critical need"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_transport_01",
+      "title": "Unattended Vehicle",
+      "tags": [
+        "opportunity",
+        "positioning",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "open"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        7
+      ],
+      "weight": 0.7,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "positioning": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "position_shift": [
+          2,
+          4
+        ],
+        "heat": [
+          1,
+          3
+        ]
+      },
+      "fiction": {
+        "prompt": "Transport that dramatically changes mobility, but it's tracked or distinctive.",
+        "sensory": [
+          "running engine",
+          "recognizable profile",
+          "fuel gauge"
+        ],
+        "immediate_choice": [
+          "Take it and accept visibility",
+          "Strip it for parts"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_contact_01",
+      "title": "Contact Information",
+      "tags": [
+        "information",
+        "opportunity",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "information": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          2,
+          3
+        ],
+        "opportunity": [
+          1,
+          3
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Names and methods to reach useful people, but making contact reveals your situation.",
+        "sensory": [
+          "written addresses",
+          "coded introductions",
+          "trusted channels"
+        ],
+        "immediate_choice": [
+          "Reach out immediately",
+          "Verify reliability first"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_safe_haven_01",
+      "title": "Temporary Shelter",
+      "tags": [
+        "opportunity",
+        "positioning",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          3
+        ],
+        "cost": [
+          -1,
+          0
+        ],
+        "time_pressure": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "A secure space to rest and regroup, but it won't stay secret long.",
+        "sensory": [
+          "defensible position",
+          "obscured entrance",
+          "temporary safety"
+        ],
+        "immediate_choice": [
+          "Use it for full recovery",
+          "Quick rest and move on"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_currency_01",
+      "title": "Liquid Assets",
+      "tags": [
+        "opportunity",
+        "visibility",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          3,
+          5
+        ],
+        "cost": [
+          -2,
+          -1
+        ],
+        "heat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Fungible resources that ease immediate needs, but spending them creates patterns.",
+        "sensory": [
+          "negotiable value",
+          "traceable markers",
+          "economic freedom"
+        ],
+        "immediate_choice": [
+          "Spend freely and solve problems",
+          "Hoard and stay invisible"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_map_01",
+      "title": "Route Intelligence",
+      "tags": [
+        "information",
+        "positioning",
+        "opportunity"
+      ],
+      "allowed_environments": [
+        "open",
+        "derelict",
+        "populated"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "information": 2,
+          "positioning": 1
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          2,
+          4
+        ],
+        "opportunity": [
+          1,
+          2
+        ],
+        "position_shift": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Charts or knowledge of hidden routes, but using them reveals you know more than you should.",
+        "sensory": [
+          "detailed markings",
+          "insider knowledge",
+          "restricted information"
+        ],
+        "immediate_choice": [
+          "Use the routes immediately",
+          "Verify accuracy first"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_favor_owed_01",
+      "title": "Favor Owed to You",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        5
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "information": [
+          0,
+          2
+        ],
+        "cost": [
+          0,
+          1
+        ]
+      },
+      "fiction": {
+        "prompt": "Someone credible owes you aid, but calling it in makes the debt public.",
+        "sensory": [
+          "witnessed promise",
+          "remembered obligation",
+          "understood terms"
+        ],
+        "immediate_choice": [
+          "Collect the favor now",
+          "Save it for greater need"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_components_01",
+      "title": "Rare Components",
+      "tags": [
+        "opportunity",
+        "cost",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "industrial",
+        "derelict",
+        "confined"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "cost": [
+          0,
+          2
+        ],
+        "time_pressure": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Materials or parts that enable repairs or upgrades, but sourcing them will raise questions.",
+        "sensory": [
+          "specific compatibility",
+          "known scarcity",
+          "traceable origins"
+        ],
+        "immediate_choice": [
+          "Use them and accept scrutiny",
+          "Trade them for something safer"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_patron_attention_01",
+      "title": "Patron's Interest",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "social_friction"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.7,
+      "cooldown": {
+        "event": 4,
+        "tags": {
+          "opportunity": 2,
+          "obligation": 3
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          3,
+          5
+        ],
+        "cost": [
+          -2,
+          -1
+        ],
+        "heat": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Someone powerful offers backing, but their support comes with unspoken expectations.",
+        "sensory": [
+          "formal offer",
+          "calculated generosity",
+          "implied strings"
+        ],
+        "immediate_choice": [
+          "Accept the patronage",
+          "Maintain independence"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_escape_route_01",
+      "title": "Overlooked Exit",
+      "tags": [
+        "opportunity",
+        "positioning",
+        "information"
+      ],
+      "allowed_environments": [
+        "confined",
+        "derelict",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "engage",
+        "aftermath"
+      ],
+      "severity_band": [
+        1,
+        5
+      ],
+      "weight": 0.9,
+      "cooldown": {
+        "event": 2,
+        "tags": {
+          "opportunity": 2,
+          "positioning": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "position_shift": [
+          2,
+          3
+        ],
+        "information": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "An unguarded route that changes the tactical picture, but using it teaches opponents.",
+        "sensory": [
+          "hidden passage",
+          "structural gap",
+          "overlooked access"
+        ],
+        "immediate_choice": [
+          "Use it now",
+          "Save it for emergency"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_witness_silence_01",
+      "title": "Witness Cooperation",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          3
+        ],
+        "heat": [
+          -2,
+          -1
+        ],
+        "cost": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Someone willing to stay quiet or misremember, but their silence isn't free.",
+        "sensory": [
+          "understood agreement",
+          "calculated cooperation",
+          "implicit price"
+        ],
+        "immediate_choice": [
+          "Accept their terms",
+          "Compel silence another way"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_timing_window_01",
+      "title": "Time Advantage",
+      "tags": [
+        "opportunity",
+        "information",
+        "time_pressure"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial",
+        "derelict"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "information": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "information": [
+          1,
+          3
+        ],
+        "time_pressure": [
+          1,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "You learn of an opportunity before others, but the window is short and using it declares your knowledge.",
+        "sensory": [
+          "early warning",
+          "insider timing",
+          "brief advantage"
+        ],
+        "immediate_choice": [
+          "Act before others know",
+          "Share information for goodwill"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_safe_passage_01",
+      "title": "Granted Safe Passage",
+      "tags": [
+        "opportunity",
+        "obligation",
+        "positioning"
+      ],
+      "allowed_environments": [
+        "populated",
+        "open"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        5
+      ],
+      "weight": 0.8,
+      "cooldown": {
+        "event": 3,
+        "tags": {
+          "opportunity": 2,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          3
+        ],
+        "position_shift": [
+          1,
+          2
+        ],
+        "cost": [
+          -1,
+          0
+        ]
+      },
+      "fiction": {
+        "prompt": "Permission to move through contested ground, but the grant creates implied alliance.",
+        "sensory": [
+          "formal permission",
+          "witnessed agreement",
+          "noted passage"
+        ],
+        "immediate_choice": [
+          "Use it and accept the association",
+          "Find another route"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_reputation_boost_01",
+      "title": "Credibility Moment",
+      "tags": [
+        "opportunity",
+        "social_friction",
+        "visibility"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        2,
+        6
+      ],
+      "weight": 0.7,
+      "cooldown": {
+        "event": 4,
+        "tags": {
+          "opportunity": 2,
+          "social_friction": 1
+        }
+      },
+      "effect_vector_template": {
+        "opportunity": [
+          2,
+          4
+        ],
+        "information": [
+          1,
+          2
+        ],
+        "heat": [
+          0,
+          2
+        ]
+      },
+      "fiction": {
+        "prompt": "Your actions earned respect or fear, doors open easier but expectations rise.",
+        "sensory": [
+          "changed treatment",
+          "deference shown",
+          "reputation spreads"
+        ],
+        "immediate_choice": [
+          "Leverage the reputation",
+          "Stay low despite the advantage"
+        ]
+      }
+    },
+    {
+      "event_id": "loot_blackmail_material_01",
+      "title": "Compromising Evidence",
+      "tags": [
+        "information",
+        "opportunity",
+        "obligation"
+      ],
+      "allowed_environments": [
+        "populated",
+        "industrial"
+      ],
+      "allowed_scene_phases": [
+        "aftermath"
+      ],
+      "severity_band": [
+        3,
+        7
+      ],
+      "weight": 0.6,
+      "cooldown": {
+        "event": 4,
+        "tags": {
+          "information": 3,
+          "obligation": 2
+        }
+      },
+      "effect_vector_template": {
+        "information": [
+          3,
+          5
+        ],
+        "opportunity": [
+          2,
+          4
+        ],
+        "heat": [
+          1,
+          3
+        ]
+      },
+      "fiction": {
+        "prompt": "Material that gives power over someone important, but possessing it makes you a target.",
+        "sensory": [
+          "documented secrets",
+          "undeniable evidence",
+          "dangerous knowledge"
+        ],
+        "immediate_choice": [
+          "Use it immediately for maximum impact",
+          "Hold it as insurance"
+        ]
+      }
+    }
+  ]
+}

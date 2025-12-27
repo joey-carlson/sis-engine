@@ -742,28 +742,37 @@ def main() -> None:
             with col1:
                 st.markdown(f"**🎯 Campaign Context:** {context.campaign_name}")
                 
-                # Show active content packs with entry counts
+                # Show active content packs with entry counts and type badges
                 current_campaign_id = st.session_state.get("current_campaign_id")
                 if current_campaign_id:
                     from streamlit_harness.campaign_ui import Campaign
+                    from spar_engine.content import get_pack_metadata
                     campaign = Campaign.load(current_campaign_id)
                     if campaign and campaign.enabled_content_packs:
-                        # Calculate total entries
+                        # Calculate total entries and collect pack metadata
                         total_entries = 0
-                        pack_names = []
+                        pack_displays = []
                         for pack_path in campaign.enabled_content_packs:
                             try:
                                 pack_entries = load_pack(pack_path)
+                                metadata = get_pack_metadata(pack_path)
                                 total_entries += len(pack_entries)
-                                pack_names.append(Path(pack_path).stem.replace('_', ' ').title())
+                                
+                                # Add type badge
+                                gen_icon = {"event": "⚔️", "loot": "💰", "rumor": "💬", "npc": "👤"}.get(
+                                    metadata.get("generator_type", "event"), "📦"
+                                )
+                                pack_name = metadata.get("name", Path(pack_path).stem.replace('_', ' ').title())
+                                pack_displays.append(f"{gen_icon} {pack_name}")
                             except Exception:
-                                pack_names.append(Path(pack_path).stem.replace('_', ' ').title())
+                                pack_name = Path(pack_path).stem.replace('_', ' ').title()
+                                pack_displays.append(f"📦 {pack_name}")
                         
-                        if len(pack_names) == 1:
-                            st.caption(f"📦 Pack: {pack_names[0]} ({total_entries} entries)")
+                        if len(pack_displays) == 1:
+                            st.caption(f"Pack: {pack_displays[0]} ({total_entries} entries)")
                         else:
-                            packs_display = " + ".join(pack_names)
-                            st.caption(f"📦 Packs: {packs_display} ({total_entries} entries)")
+                            packs_display = " + ".join(pack_displays)
+                            st.caption(f"Packs: {packs_display} ({total_entries} entries)")
                 
                 # Faction spotlight (with full names, not just IDs)
                 if context.suggested_factions and context.faction_influence_notes:
@@ -1120,7 +1129,22 @@ def main() -> None:
                 
                 if current_campaign_id:
                     from streamlit_harness.campaign_ui import Campaign
+                    from spar_engine.content import get_pack_metadata
                     campaign = Campaign.load(current_campaign_id)
+                    
+                    # Check for multiple loot packs
+                    if campaign and campaign.enabled_content_packs:
+                        loot_pack_count = 0
+                        for pack_path in campaign.enabled_content_packs:
+                            try:
+                                metadata = get_pack_metadata(pack_path)
+                                if metadata.get("generator_type") == "loot":
+                                    loot_pack_count += 1
+                            except Exception:
+                                pass
+                        
+                        if loot_pack_count > 1:
+                            st.caption(f"💡 Multiple loot voices active ({loot_pack_count} packs)")
                     
                     if campaign and campaign.campaign_state:
                         cs = campaign.campaign_state
