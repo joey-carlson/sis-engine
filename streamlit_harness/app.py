@@ -1214,24 +1214,30 @@ def main() -> None:
                 
                 except ValueError as e:
                     # Content exhaustion - show helpful message instead of crashing
-                    if "No content entries available" in str(e):
+                    error_msg = str(e)
+                    if "No content entries available" in error_msg or "No loot entries available" in error_msg:
                         st.error("⚠️ Content Exhausted")
+                        
+                        # Customize message based on generator type
+                        gen_name = "loot" if use_loot_gen else "events"
                         st.warning(
-                            f"Generated {len(batch_events)} of {n} events before running out of available content.\n\n"
+                            f"Generated {len(batch_events)} of {n} {gen_name} before running out of available content.\n\n"
                             "**Possible causes:**\n"
                             "- Tag filters too restrictive\n"
-                            "- Tag cooldowns from previous events\n"
-                            "- Not enough ticking between events\n\n"
+                            "- Tag cooldowns from previous generations\n"
+                            "- Not enough ticking between generations\n"
+                            "- Limited content pack size\n\n"
                             "**Try:**\n"
                             "- Broaden include tags or remove exclude tags\n"
                             "- Increase 'Ticks between events' to expire cooldowns\n"
                             "- Reset session state to clear cooldowns\n"
-                            "- Generate fewer events at once"
+                            "- Generate fewer items at once\n"
+                            "- Add more content to the pack"
                         )
-                        # Save partial batch if any events were generated
+                        # Save partial batch if any were generated
                         if batch_events:
                             hs.last_batch = batch_events
-                            st.info(f"Partial batch saved: {len(batch_events)} events generated")
+                            st.info(f"Partial batch saved: {len(batch_events)} {gen_name} generated")
                     else:
                         # Re-raise other ValueErrors
                         raise
