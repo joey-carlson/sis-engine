@@ -29,7 +29,7 @@
     "name": "Display name for the scenario (used in UI and reports)",
     "description": "Detailed purpose and context",
     "output_basename": "Clean filename base for results (e.g., 'phase_validation_normal'). If omitted, auto-generated from name.",
-    "presets": "Array of environment presets to test (matrix mode). Options: dungeon, city, wilderness, ruins",
+    "presets": "Array of environment presets to test (matrix mode). Options: confined, populated, open, derelict",
     "phases": "Array of scene phases to test (matrix mode). Options: approach, engage, aftermath",
     "rarity_modes": "Array of rarity modes to test (matrix mode). Options: calm, normal, spiky",
     "scene_sequence": "Ordered array of scene objects (campaign mode only). Each scene requires: preset, phase, rarity_mode. Optional per-scene overrides: batch_size, include_tags, exclude_tags",

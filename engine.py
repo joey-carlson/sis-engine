@@ -4,9 +4,9 @@
 This is a thin wrapper around `spar_engine.engine.generate_event`.
 
 Examples (zsh):
-  python3 engine.py --scene-phase engage --env dungeon --confinement 0.8 --connectivity 0.2 --visibility 0.7 --party-band mid --seed 42
+  python3 engine.py --scene-phase engage --env confined --confinement 0.8 --connectivity 0.2 --visibility 0.7 --party-band mid --seed 42
   python3 engine.py --scene myscene --scene-phase approach --env city --tone noir --include-tags hazard,visibility --count 5
-  python3 engine.py --event hazard_smoke_01 --scene-phase engage --env dungeon --count 1
+  python3 engine.py --event hazard_smoke_01 --scene-phase engage --env confined --count 1
 
 Stateful run (persist across invocations):
   python3 engine.py --state-in state.json --state-out state.json --tick-mode turn --ticks 1
@@ -58,7 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--scene-phase", choices=["approach", "engage", "aftermath"], default="engage")
     p.add_argument("--scene-preset", choices=["confined", "populated", "open", "derelict"], default=None,
                    help="Optional preset that sets morphology defaults and env if env not provided.")
-    p.add_argument("--env", default="", help="Comma-separated environment tags, e.g. dungeon,ruins")
+    p.add_argument("--env", default="", help="Comma-separated environment tags, e.g. confined,derelict")
     p.add_argument("--tone", default="gritty", help="Comma-separated tone tags, e.g. gritty,noir")
     p.add_argument("--spotlight", default="combat", help="Comma-separated spotlight tags, e.g. combat,stealth")
     p.add_argument("--party-band", choices=["low", "mid", "high", "unknown"], default="unknown")
