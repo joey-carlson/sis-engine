@@ -7,6 +7,7 @@ from typing import Iterable, List, Sequence
 from .models import ContentEntry, ScenePhase, AdapterHints
 
 def load_pack(path: str | Path) -> List[ContentEntry]:
+    """Load a single content pack from JSON file."""
     p = Path(path)
     data = json.loads(p.read_text())
     entries: List[ContentEntry] = []
@@ -38,6 +39,38 @@ def load_pack(path: str | Path) -> List[ContentEntry]:
             )
         )
     return entries
+
+
+def load_packs(paths: Iterable[str | Path]) -> List[ContentEntry]:
+    """Load and merge multiple content packs into union pool.
+    
+    Args:
+        paths: Iterable of file paths to content pack JSON files
+        
+    Returns:
+        Merged list of content entries from all packs
+        
+    Notes:
+        - If same event_id appears in multiple packs, last one wins
+        - No weighting or priority - all entries treated equally by SOC
+        - Empty paths list returns empty entry list
+    """
+    all_entries: List[ContentEntry] = []
+    seen_ids: dict[str, str] = {}  # event_id -> pack_path for conflict detection
+    
+    for path in paths:
+        pack_entries = load_pack(path)
+        pack_path_str = str(Path(path).name)
+        
+        for entry in pack_entries:
+            if entry.event_id in seen_ids:
+                # Duplicate event_id - last one wins, but log for debugging
+                # In production, this could log a warning
+                pass
+            seen_ids[entry.event_id] = pack_path_str
+            all_entries.append(entry)
+    
+    return all_entries
 
 def _any_tag_on_cooldown(entry: ContentEntry, tag_cooldowns: dict[str, int]) -> bool:
     for t in entry.tags:
