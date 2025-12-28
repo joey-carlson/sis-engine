@@ -1,6 +1,6 @@
 # SPAR Tool Parking Lot (Post-v1.0)
 
-_Last updated: 2025-12-26_
+_Last updated: 2025-12-28_
 
 This is the single source of truth for **deferred** work. Everything here is optional and additive; it is not required for v1.0 to function.
 
@@ -42,7 +42,39 @@ This is the single source of truth for **deferred** work. Everything here is opt
 
 ## Later (valuable, but wait for demand)
 
-### 4) Campaign story web view (read-only)
+### 4) Campaign Creation as Pressure Orientation (Spiral-Native Framing)
+**Why:** Campaign creation should declare what pressure exists and how Spirals tighten, not just collect setup data.
+**What:** Reframe campaign creation UX from "setup" to "pressure orientation."
+- Introduce Voice Profile selection at creation time (optional, default = mixed)
+- Prompt initial situation in pressure terms (scarcity, attention, obligation, instability)
+- Microcopy: "Describe the situation your players are stepping into. What's already unstable?"
+**Notes:** No new knobs or steps, just reframing. Aligns with SOC + Spirals philosophy.
+
+### 5) Story-Facing Exports Emphasizing Pressure & Irreversibility (Spiral-Native Framing)
+**Why:** SPAR campaign history should read as "Here is how the world hardened over time," not just chronological events.
+**What:** Evolve session and campaign exports to foreground lasting consequences, newly activated Spirals, and irreversible changes.
+- Add structural sections: "Lasting Consequences", "New Pressures Introduced", "Escalation Signals"
+- Session exports answer: What changed that can't be ignored? Who cares now? What pressure shifted?
+- Campaign history emphasizes accumulation and transformation
+**Notes:** No new data required, mostly structural emphasis. Must remain story-facing and readable.
+
+### 6) Pattern-Aware Authoring Guidance v2 (Spiral-Native Framing)
+**Why:** Community content must scale under pressure without collapsing into noise.
+**What:** Update content pack templates and tutorials to teach pattern thinking, reuse under SOC, and authoring for batch planning (25-50 events).
+- Teach "write for reuse, not novelty" - entries should feel different the second time
+- Teach "pressure, not plot" - frame situations as friction/instability, not plot points
+- Introduce Event Patterns conceptually without forcing schema adoption
+**Notes:** Helps community content align with Spirals automatically.
+
+### 7) Default loot pack UX customization
+**Why:** Currently hardcoded as `data/one_loot_table.json` in Campaign dataclass. Users should be able to easily set their preferred default.
+**What:** Add UI for setting default content packs per campaign type or globally.
+- Campaign creation wizard: "Choose default loot pack" dropdown
+- Settings page: Set global default packs (event + loot)
+- Templates: "Urban campaign", "Space opera", etc. with pre-selected packs
+**Current workaround:** Users can manually add/remove packs after campaign creation in dashboard.
+
+### 5) Campaign story web view (read-only)
 **Why:** Exports are clean; web view is presentation-layer value.  
 **What:** Render story-facing campaign history and sessions as a browsable timeline.
 - Filters: factions, scars, threads
