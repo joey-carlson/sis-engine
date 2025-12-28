@@ -1,1 +1,1 @@
-"""Streamlit harness for SPAR engine testing and development."""
+"""Streamlit harness for SiS engine testing and development."""

@@ -1,10 +1,10 @@
-# SPAR Engine v0.1 Contract
+# SiS Engine v0.1 Contract
 ## Encounter Complications Engine
 
 **Status:** Draft v0.1
 
 **Purpose**  
-This document defines the system-agnostic contract for the SPAR Engine, focused on generating encounter complications. It is intended to serve as a foundational architecture and requirements reference for all future SPAR tooling. Game systems such as D&D act purely as adapters layered on top of this engine.
+This document defines the system-agnostic contract for the SiS (Spirals in Spirals) Engine, focused on generating encounter complications. It serves as the foundational architecture and requirements reference for all SiS-powered tooling. Game systems (D&D, GURPS, SPAR, etc.) act purely as adapters layered on top of this engine.
 
 The core design principle is **material independence with macro-constraint control**: the engine operates on state, distributions, and cutoffs without embedding any system-specific mechanics.
 

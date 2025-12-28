@@ -1,6 +1,6 @@
-"""SPAR Campaign Mechanics Layer v0.2
+"""SiS Campaign Mechanics Layer v0.2
 
-Optional campaign-level state tracking that sits above the SPAR Engine.
+Optional campaign-level state tracking that sits above the SiS Engine.
 Tracks long-term pressure, attention, and consequences across multiple scenes.
 
 Version History:

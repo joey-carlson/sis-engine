@@ -1,8 +1,8 @@
-# SPAR Tool Engineering Rules v0.1
+# SiS Tool Engineering Rules v0.1
 
 ## Status
 Draft v0.1  
-Applies to all architecture, engine, UI, testing, and QA work for the SPAR procedural tooling project.
+Applies to all architecture, engine, UI, testing, and QA work for the SiS (Spirals in Spirals) procedural tooling project.
 
 This document serves the same role as a ClineRules file: it defines how work is designed, implemented, tested, documented, and evolved over time. These rules are binding unless explicitly revised and versioned.
 
@@ -14,7 +14,7 @@ This document serves the same role as a ClineRules file: it defines how work is 
 
 SiS (Spirals in Spirals) is built on Self-Organized Criticality principles. This is not optional decoration—it is the load-bearing structure that makes procedural generation feel emergent rather than arbitrary.
 
-### What SOC Means in SPAR Terms
+### What SOC Means in SiS Terms
 
 Systems that:
 1. **Accumulate pressure gradually** from player decisions and campaign state
@@ -122,7 +122,7 @@ Before adding any new feature, ask:
 ## 01 – Documentation & Versioning Rules
 
 - Architecture, Requirements, and Implementation are **separate artifacts**.
-- The SPAR Engine Contract is authoritative for engine behavior.
+- The SiS Engine Contract is authoritative for engine behavior.
 - Any change to engine behavior requires:
   - A version bump
   - A changelog entry
@@ -151,11 +151,11 @@ Before adding any new feature, ask:
 
 ---
 
-## 02 – Core SPAR Engine Design Rules
+## 02 – Core SiS Engine Design Rules
 
 - The engine must remain **system-agnostic** at all times.
 - No system-specific mechanics (DCs, damage, stats, XP, etc.) may appear in engine logic.
-- Game systems (D&D, SPAR-native, others) are implemented **only as adapters**.
+- Game systems (D&D, GURPS, SPAR, etc.) are implemented **only as adapters**.
 - Engine outputs:
   - severity
   - effect vectors

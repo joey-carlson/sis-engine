@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI runner for the SPAR Engine v0.1 (encounter complications).
+"""CLI runner for the SiS Engine v0.1 (encounter complications).
 
 This is a thin wrapper around `spar_engine.engine.generate_event`.
 
@@ -48,8 +48,8 @@ def _scene_preset(preset: str) -> Tuple[Constraints, str]:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="spar-engine",
-        description="Run the SPAR Engine v0.1 (encounter complications) from the CLI.",
+        prog="sis-engine",
+        description="Run the SiS Engine v0.1 (encounter complications) from the CLI.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 

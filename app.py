@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Streamlit UI for SPAR Engine v0.1 - Rapid Prototyping Interface
+Streamlit UI for SiS Engine v0.1 - Rapid Prototyping Interface
 
 This provides an interactive web interface for testing and exploring
-the SPAR encounter complications engine.
+the SiS encounter complications engine.
 """
 
 import streamlit as st
@@ -23,12 +23,12 @@ def load_content():
 
 def main():
     st.set_page_config(
-        page_title="SPAR Engine v0.1",
+        page_title="SiS Engine v0.1",
         page_icon="🎲",
         layout="wide"
     )
 
-    st.title("🎲 SPAR Engine v0.1 - Encounter Complications")
+    st.title("🎲 SiS Engine v0.1 - Encounter Complications")
     st.markdown("*A system-agnostic procedural encounter complications engine for TTRPGs*")
 
     # Load content
@@ -229,7 +229,7 @@ def main():
 
     # Footer
     st.markdown("---")
-    st.caption("SPAR Engine v0.1 - Built for rapid prototyping and testing")
+    st.caption("SiS Engine v0.1 - Built for rapid prototyping and testing")
 
 
 if __name__ == "__main__":
