@@ -14,7 +14,7 @@ Version History:
 
 ## What Is This Tool?
 
-SiS Tool Engine is a **pressure-driven campaign management system** for tabletop RPGs. Built on the Spirals in Spirals (SiS) framework, it helps you run narrative-focused campaigns where consequences accumulate, factions remember, and tension builds organically over time.
+Built on the Spirals in Spirals (SiS) storytelling and RPG framework, the SiS Tool Engine is a **pressure-driven campaign management system** for tabletop RPGs. This tool helps you run narrative-focused campaigns where consequences accumulate, factions remember, and tension builds organically over time.
 
 Think of it as your campaign's memory and conscience—tracking what can't be undone, surfacing what matters, and injecting complications that feel earned rather than arbitrary.
 
@@ -36,7 +36,7 @@ SiS works with any game system and any setting:
 
 ### Example Setting: SPAR
 
-**SPAR (Serial Pulp Adventures Reborn)** is one campaign setting built on SiS—specifically a pulp/noir setting (1920s-1940s era) with themes of decay, corruption, and revelation. The SiS Tool Engine includes SPAR content packs as examples, but the engine itself is setting-neutral.
+**SPAR (Serial Pulp Adventures Reborn)** is one campaign setting built on SiS—specifically. It's a pulp/noir setting (1920s-1940s era) with themes of decay, corruption, and revelation. The SiS Tool Engine includes SPAR content packs as examples, but the engine itself is setting-neutral.
 
 You don't need to run SPAR to use SiS. You can create your own setting-specific content packs for your preferred genre.
 
@@ -227,7 +227,7 @@ Collections of complications/loot you can mix and match:
 
 ---
 
-## What SPAR Doesn't Do
+## What SiS Doesn't Do
 
 **Not a Virtual Tabletop:**
 - No maps, tokens, or combat tracker
@@ -248,12 +248,12 @@ Collections of complications/loot you can mix and match:
 
 ## Philosophy in Practice
 
-**SPAR's Core Mantra:**
-> SPAR does not decide what happens. SPAR decides when accumulated pressure can no longer be ignored.
+**SiS's Core Mantra:**
+> SiS does not decide what happens. SiS decides when accumulated pressure can no longer be ignored.
 
 **What This Means for You:**
 - You play the game normally
-- SPAR tracks what you can't ignore
+- SiS tracks what you can't ignore
 - Complications feel like consequences, not random events
 - Critical moments emerge, they aren't scheduled
 
