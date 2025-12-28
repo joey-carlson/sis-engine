@@ -542,13 +542,36 @@ When this design is approved and implementation begins:
 
 ---
 
-## Open Questions for Designer
+## Designer Decisions (Locked for v0.1)
 
-1. **Spiral Type Coverage:** Are 4 Spiral types sufficient, or should we plan for more?
-2. **Profile Count:** Should we start with 4 presets or expand to 6-8?
-3. **Tag Vocabulary Extension:** Do we need new tags to support Spirals, or is existing vocabulary sufficient?
-4. **Event Generator Timing:** Should Event generator v2.0 get profiles simultaneously with Loot v1.1, or separately?
-5. **Content Pack Interaction:** Should some packs declare Spiral affinity, or remain neutral?
+**From Designer Review 2025-12-28:**
+
+1. **Spiral Type Coverage:** ✅ **4 Spiral types LOCKED**
+   - Attention, Obligation, Dependency, Reputation are orthogonal and complete
+   - Cover social, structural, informational, and identity pressure
+   - Do not add more until real play exposes missing pressure vector
+
+2. **Profile Count:** ✅ **4 presets LOCKED**
+   - Transactional, Volatile, Stabilizing, Erosion provide wide tonal range
+   - More than 4 increases choice anxiety
+   - Add new presets only when real campaign can't be expressed with existing
+
+3. **Tag Vocabulary Extension:** ❌ **NO new tags for v0.1 or v1.x**
+   - Existing tags provide sufficient expressive power
+   - Profiles must work by biasing existing tags only
+   - Adding tags would fragment content and undermine backward compatibility
+   - If Spiral can't be expressed, it's content phrasing issue not schema issue
+
+4. **Event Generator Timing:** ✅ **Separately - Loot first, Events later**
+   - Loot Generator v1.1: Introduce Voice Profiles
+   - Event Generator: Follow after observing Loot in play
+   - Learn tuning lessons from Loot before applying to Events
+
+5. **Content Pack Interaction:** 🚫 **Not for v0.1 - Future consideration**
+   - Packs express Spiral affinity implicitly via tags/phrasing
+   - No explicit Spiral metadata on packs yet
+   - Keeps authors focused on writing good situations
+   - Revisit in v2.x if packs consistently fight selected profiles
 
 ---
 
