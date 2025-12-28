@@ -559,6 +559,39 @@ def run_matrix_scenario(
     return report
 
 
+def render_user_guide() -> None:
+    """Render the user guide from docs/USER_GUIDE.md."""
+    st.title("📖 SPAR Tool Engine: User Guide")
+    
+    # Read and display the user guide markdown
+    user_guide_path = Path("docs/USER_GUIDE.md")
+    
+    if user_guide_path.exists():
+        try:
+            content = user_guide_path.read_text()
+            # Remove the HTML comment header (version history)
+            if content.startswith("<!--"):
+                # Find the end of the comment
+                comment_end = content.find("-->")
+                if comment_end != -1:
+                    content = content[comment_end + 3:].strip()
+            
+            # Remove the markdown title since we already have it in st.title()
+            lines = content.split("\n")
+            # Skip first line if it's a markdown h1 title
+            if lines and lines[0].startswith("# "):
+                content = "\n".join(lines[1:])
+            
+            st.markdown(content)
+            
+        except Exception as e:
+            st.error(f"Failed to load user guide: {e}")
+            st.info("User guide should be available at: docs/USER_GUIDE.md")
+    else:
+        st.warning("User guide not found at docs/USER_GUIDE.md")
+        st.info("The user guide provides an overview of SPAR Tool Engine, how it works, and common use cases.")
+
+
 def run_campaign_scenario(
     scenario: Dict[str, Any],
     entries,
@@ -694,14 +727,14 @@ def main() -> None:
     if "mode_index" not in st.session_state:
         st.session_state.mode_index = 0  # Default to Campaign Manager
     
-    mode_options = ["🎲 Campaign Manager", "⚡ Generators"]
+    mode_options = ["🎲 Campaign Manager", "⚡ Generators", "📖 User Guide"]
     mode = st.radio(
         "Mode",
         mode_options,
         index=st.session_state.mode_index,
         horizontal=True,
         label_visibility="collapsed",
-        help="Campaign Manager: Multi-campaign management with living state. Generators: Multi-domain generation (Events, Loot, etc.) with scenario validation."
+        help="Campaign Manager: Multi-campaign management with living state. Generators: Multi-domain generation (Events, Loot, etc.) with scenario validation. User Guide: Learn about SPAR Tool Engine."
     )
     
     # Update index when user changes mode
@@ -711,6 +744,11 @@ def main() -> None:
     if mode == "🎲 Campaign Manager":
         from streamlit_harness.campaign_ui import render_campaign_ui
         render_campaign_ui()
+        return
+    
+    # Render user guide if in guide mode
+    if mode == "📖 User Guide":
+        render_user_guide()
         return
     
     # Otherwise render generators workspace
