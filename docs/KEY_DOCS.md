@@ -2,6 +2,11 @@
 
 This project is governed by a small set of documents. If you are new to the repo, start here.
 
+## For Users (Start Here)
+
+1. **USER_GUIDE.md** (`/docs/USER_GUIDE.md`)
+   High-level overview for GMs and campaign runners. Explains what SPAR Tool Engine is, how it works (SOC and Pressure Spirals), common use cases, and 5-minute quickstart. Read this first if you're new.
+
 ## Core governance
 
 1. **SPAR Tool Engineering Rules v0.1**  
