@@ -42,7 +42,30 @@ This is the single source of truth for **deferred** work. Everything here is opt
 
 ## Later (valuable, but wait for demand)
 
-### 4) Campaign Creation as Pressure Orientation (Spiral-Native Framing)
+### 4) Living Campaign / Multi-Table Support (Convention & Shared World Continuity)
+**What:** Enhance the SiS Tool Engine to support multiple tables running the same module or scenario, with outcomes feeding into a shared campaign state.
+
+**Why (Spiral framing):** Each table injects pressure into the same world. Long-term canon emerges from cumulative pressure, not a single authoritative run.
+
+**Conceptual capabilities (not requirements yet):**
+- Session "instances" linked to a shared campaign
+- Aggregation of faction attention, pressure, and scars across tables
+- Ability to record conflicting or partial outcomes
+- Organizer-level review before global canon shifts
+- Exportable "world state briefings" for future tables
+
+**Non-goals:**
+- No attempt to reconcile events into a single linear story
+- No forced canon resolution
+- No real-time syncing between tables
+
+**Notes:**
+- This is a coordination and UX problem more than a generator problem
+- SiS's pressure model already supports this conceptually
+- Tooling should amplify emergence, not centralize authority
+- Current manual coordination workflow (Use Case 5 in USER_GUIDE.md) is functional today
+
+### 5) Campaign Creation as Pressure Orientation (Spiral-Native Framing)
 **Why:** Campaign creation should declare what pressure exists and how Spirals tighten, not just collect setup data.
 **What:** Reframe campaign creation UX from "setup" to "pressure orientation."
 - Introduce Voice Profile selection at creation time (optional, default = mixed)
