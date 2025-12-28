@@ -175,6 +175,35 @@ Different campaigns emphasize different Spirals. A noir detective campaign might
 
 ---
 
+### Use Case 5: Living & Convention Campaigns
+
+**Goal:** Run convention modules or living campaigns where multiple tables play in the same shared world, with outcomes from different tables feeding into global consequences.
+
+**The Core Concept:**  
+In living campaigns, **many tables inject pressure into the same world.** Each table's session is a local perturbation. Factions, pressure, and scars persist globally. Canon emerges from aggregate pressure accumulation, not from a single authoritative run.
+
+**Why SiS Excels Here:**
+- Tracks pressure, not scripted outcomes
+- Allows contradictory local events without conflict
+- Accumulates global consequences organically
+- No single table "decides canon"—pressure decides
+
+**Workflow (Manual Coordination, Works Today):**
+1. Create a campaign representing the shared world
+2. Track factions, pressure, and long-term scars centrally
+3. After each table runs a session:
+   - Record session outcomes
+   - Note which factions were affected
+   - Record any new scars or shifts
+4. Use generators to respond to global pressure changes
+5. Export updated campaign state as a briefing for future tables
+
+**Result:** Multiple tables contribute to the same evolving world. Global consequences feel earned, not imposed. You can do this today with manual coordination between GMs and organizers.
+
+**Note:** Dedicated multi-table tooling (session merging, conflict resolution, organizer review workflows) is planned for future development once real-world demand patterns are understood.
+
+---
+
 ## Key Concepts (Quick Reference)
 
 ### Pressure (0-10)
