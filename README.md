@@ -14,6 +14,19 @@ SPAR is a campaign management tool with integrated multi-domain generators for t
 
 **Design Philosophy:** System-agnostic, narrative-first, consequence-driven. No item stats, no mechanics rules, no genre lock.
 
+### Self-Organized Criticality (SOC) Foundation
+
+SPAR is built on **Self-Organized Criticality** principles—the same mathematical framework that describes sandpile avalanches, earthquakes, and forest fires. This creates emergent narrative drama:
+
+- **Pressure accumulates** from player decisions and campaign state
+- **Release is uneven** (many small events, rare critical moments)
+- **No external tuning** (the system self-organizes near critical thresholds)
+- **Non-linear effects** (small actions can cascade; big actions might do little)
+
+**Core Mantra:** SPAR does not decide what happens. SPAR decides when accumulated pressure can no longer be ignored.
+
+This is not optional decoration—it's the load-bearing structure that makes procedural generation feel intentional rather than arbitrary. See `docs/engineering_rules.md` Rule 00 for complete SOC compliance checklist.
+
 ---
 
 ## Quick Start
