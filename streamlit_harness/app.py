@@ -561,7 +561,7 @@ def run_matrix_scenario(
 
 def render_user_guide() -> None:
     """Render the user guide from docs/USER_GUIDE.md."""
-    st.title("📖 SPAR Tool Engine: User Guide")
+    st.title("📖 SiS Tool Engine: User Guide")
     
     # Read and display the user guide markdown
     user_guide_path = Path("docs/USER_GUIDE.md")
@@ -714,7 +714,7 @@ def run_campaign_scenario(
 
 
 def main() -> None:
-    st.set_page_config(page_title="SPAR Engine Harness v0.1", layout="wide")
+    st.set_page_config(page_title="SiS Tool Engine v1.0", layout="wide")
     init_persistent_paths()
     hs = get_hs()
     

@@ -10,9 +10,9 @@ This document serves the same role as a ClineRules file: it defines how work is 
 
 ## 00 – Self-Organized Criticality (SOC) Foundation
 
-**Core Philosophy:** SPAR does not decide what happens. SPAR decides when accumulated pressure can no longer be ignored.
+**Core Philosophy:** SiS does not decide what happens. SiS decides when accumulated pressure can no longer be ignored.
 
-SPAR is built on Self-Organized Criticality principles. This is not optional decoration—it is the load-bearing structure that makes procedural generation feel emergent rather than arbitrary.
+SiS (Spirals in Spirals) is built on Self-Organized Criticality principles. This is not optional decoration—it is the load-bearing structure that makes procedural generation feel emergent rather than arbitrary.
 
 ### What SOC Means in SPAR Terms
 

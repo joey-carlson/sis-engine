@@ -1,10 +1,11 @@
 <!--
 Version History:
-- v0.1 (2025-12-28): Initial user-facing guide for SPAR Tool Engine
+- v0.1 (2025-12-28): Initial user-facing guide (originally as SPAR Tool Engine, corrected to SiS)
 -->
 
-# SPAR Tool Engine: User Guide
+# SiS Tool Engine: User Guide
 
+**Powered by Spirals in Spirals (SiS)**  
 **For Game Masters and Campaign Runners**  
 **Version:** 1.0  
 **Last Updated:** 2025-12-28
@@ -13,9 +14,21 @@ Version History:
 
 ## What Is This Tool?
 
-SPAR Tool Engine is a **pressure-driven campaign management system** for tabletop RPGs. It helps you run narrative-focused campaigns where consequences accumulate, factions remember, and tension builds organically over time.
+SiS Tool Engine is a **pressure-driven campaign management system** for tabletop RPGs. Built on the Spirals in Spirals (SiS) framework, it helps you run narrative-focused campaigns where consequences accumulate, factions remember, and tension builds organically over time.
 
 Think of it as your campaign's memory and conscience—tracking what can't be undone, surfacing what matters, and injecting complications that feel earned rather than arbitrary.
+
+### What is SPAR?
+
+**SPAR (Serial Pulp Adventures Reborn)** is a campaign setting built on the SiS system. It's one example of how to use SiS—a pulp/noir setting with specific themes, factions, and narrative voice.
+
+The SiS Tool Engine is system-agnostic. You can use it with:
+- SPAR (pulp/noir campaigns)
+- D&D, GURPS, VtM, or other RPG systems
+- Your own homebrew settings
+- Any genre or tone
+
+SPAR content packs provide SPAR-specific complications and loot, but the underlying SiS engine works for any campaign.
 
 ---
 
@@ -45,7 +58,7 @@ Think of it as your campaign's memory and conscience—tracking what can't be un
 
 ### The Sandpile Principle (SOC)
 
-SPAR uses a concept called **Self-Organized Criticality**—the same math that describes sandpile avalanches. Here's what that means for you:
+SiS uses a concept called **Self-Organized Criticality**—the same math that describes sandpile avalanches. Here's what that means for you:
 
 **Pressure accumulates gradually:**
 - From player decisions
@@ -67,14 +80,14 @@ SPAR uses a concept called **Self-Organized Criticality**—the same math that d
 
 ### Pressure Spirals (How Consequences Route)
 
-Pressure in SPAR flows through four channels we call **Pressure Spirals:**
+Pressure in SiS flows through four channels we call **Pressure Spirals:**
 
 1. **Attention Spiral** - Being watched compounds; secrets become impossible
 2. **Obligation Spiral** - Debts accumulate; autonomy erodes
 3. **Dependency Spiral** - Systems fail; infrastructure crumbles
 4. **Reputation Spiral** - Past actions haunt present choices
 
-Different campaigns emphasize different Spirals. A noir detective campaign might lean Obligation. A heist campaign might lean Attention. SPAR lets you bias which Spirals dominate without forcing outcomes.
+Different campaigns emphasize different Spirals. A noir detective campaign might lean Obligation. A heist campaign might lean Attention. SiS lets you bias which Spirals dominate without forcing outcomes.
 
 ### Why This Feels Different
 
@@ -83,7 +96,7 @@ Different campaigns emphasize different Spirals. A noir detective campaign might
 - "Here's a complication because it's turn 3"
 - GM manually decides escalation
 
-**SPAR:**
+**SiS:**
 - "Here's what pressure looks like right now"
 - "This complication emerged from your campaign state"
 - System tracks escalation; GM interprets results
@@ -125,7 +138,7 @@ Different campaigns emphasize different Spirals. A noir detective campaign might
 
 ### Use Case 3: Importing Existing Campaign Notes
 
-**Goal:** Structure your freeform campaign notes into SPAR's tracking system.
+**Goal:** Structure your freeform campaign notes into SiS's tracking system.
 
 **Workflow:**
 1. Copy/paste your campaign narrative
@@ -140,10 +153,10 @@ Different campaigns emphasize different Spirals. A noir detective campaign might
 
 ### Use Case 4: System-Agnostic Play
 
-**Goal:** Use SPAR with D&D, GURPS, your homebrew, or SPAR RPG itself.
+**Goal:** Use SiS with D&D, GURPS, your homebrew, SPAR RPG, or any other system.
 
 **Workflow:**
-1. SPAR outputs situations, not mechanics
+1. SiS outputs situations, not mechanics
 2. You interpret severity in your system's terms
 3. Tags guide what kind of complication it is
 4. Effect vectors suggest fictional impact
@@ -299,13 +312,14 @@ You've now tracked your first session. Repeat for session 2, and watch pressure/
 No. You can use just the generators for one-shots or scene-level complications. Campaigns add memory and long-term consequence tracking.
 
 ### "Does this work with my game system?"
-Yes. SPAR is system-agnostic. It generates situations, not mechanics. You interpret severity, tags, and effects in your system's terms.
+Yes. SiS is system-agnostic. It generates situations, not mechanics. You interpret severity, tags, and effects in your system's terms. SPAR is one example setting that runs on SiS.
 
 ### "How much content is included?"
-- 107 core event complications
+- 107 core event complications (setting-neutral)
 - 27 loot situations (15 core + 12 Salvage & Black Market)
+- SPAR-specific packs available for pulp/noir campaigns
 - More packs coming (Urban Intrigue, Horror Pressure, etc.)
-- You can author your own packs
+- You can author your own setting-specific packs
 
 ### "What's the learning curve?"
 - **Basic generation:** 5 minutes
@@ -314,16 +328,16 @@ Yes. SPAR is system-agnostic. It generates situations, not mechanics. You interp
 - **Content authoring:** 1 hour with templates
 
 ### "Can I import my existing campaign notes?"
-Yes. The history parser extracts structure from freeform narrative. Works with bullet lists, session logs, and natural language.
+Yes. The history parser extracts structure from freeform narrative. Works with bullet lists, session logs, and natural language from any game system.
 
 ### "What if I want more control?"
-SPAR is designed around emergence, not control. If you want to manually set escalation, schedule encounters, or force specific outcomes, this tool will fight you. If you want pressure to build and break naturally, SPAR is for you.
+SiS is designed around emergence, not control. If you want to manually set escalation, schedule encounters, or force specific outcomes, this tool will fight you. If you want pressure to build and break naturally, SiS is for you.
 
 ---
 
 ## Design Philosophy (The Why)
 
-SPAR Tool Engine started from a simple question:
+SiS Tool Engine started from a simple question:
 
 > "Can we make procedural generation feel intentional?"
 
@@ -334,12 +348,12 @@ This isn't just interesting math. It's the difference between:
 - "Loot because reward table" vs. "This resource comes with strings"
 - "Boss fight at session 5" vs. "Everything has been building to this"
 
-SPAR tracks pressure so you don't have to. It remembers consequences so the world feels alive. It generates complications that answer "Why now?" instead of "Why not?"
+SiS tracks pressure so you don't have to. It remembers consequences so the world feels alive. It generates complications that answer "Why now?" instead of "Why not?"
 
 **That's the tool's purpose: Make emergence legible for humans running campaigns.**
 
 ---
 
 **Guide Version:** v0.1  
-**SPAR Tool Engine:** v1.0  
+**SiS Tool Engine:** v1.0  
 **For Support:** See docs/KEY_DOCS.md or GitHub issues

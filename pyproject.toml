@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spar-tool-engine"
+name = "sis-tool-engine"
 version = "1.0.0"
-description = "SPAR Tool Engine v1.0 - Campaign memory system with faction influence"
+description = "SiS Tool Engine v1.0 - Spirals in Spirals pressure-driven campaign management system"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []

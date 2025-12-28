@@ -1,10 +1,10 @@
-# SPAR - Campaign Manager & Multi-Generator System v1.0
+# SiS Tool Engine v1.0
 
-**Situation, Pressure, and Response** — A living campaign management system with multi-domain narrative generators.
+**Spirals in Spirals** — A pressure-driven campaign management system with multi-domain narrative generators.
 
-## What is SPAR?
+## What is SiS?
 
-SPAR is a campaign management tool with integrated multi-domain generators for tabletop RPGs. It provides:
+SiS (Spirals in Spirals) is a campaign management tool with integrated multi-domain generators for tabletop RPGs. It provides:
 
 - **Campaign Manager**: Multi-campaign state tracking with factions, pressure, heat, scars, and session history
 - **Event Generator**: SOC-based complication generator for approach/engage/aftermath phases
@@ -16,16 +16,20 @@ SPAR is a campaign management tool with integrated multi-domain generators for t
 
 ### Self-Organized Criticality (SOC) Foundation
 
-SPAR is built on **Self-Organized Criticality** principles—the same mathematical framework that describes sandpile avalanches, earthquakes, and forest fires. This creates emergent narrative drama:
+SiS is built on **Self-Organized Criticality** principles—the same mathematical framework that describes sandpile avalanches, earthquakes, and forest fires. This creates emergent narrative drama:
 
 - **Pressure accumulates** from player decisions and campaign state
 - **Release is uneven** (many small events, rare critical moments)
 - **No external tuning** (the system self-organizes near critical thresholds)
 - **Non-linear effects** (small actions can cascade; big actions might do little)
 
-**Core Mantra:** SPAR does not decide what happens. SPAR decides when accumulated pressure can no longer be ignored.
+**Core Mantra:** SiS does not decide what happens. SiS decides when accumulated pressure can no longer be ignored.
 
 This is not optional decoration—it's the load-bearing structure that makes procedural generation feel intentional rather than arbitrary. See `docs/engineering_rules.md` Rule 00 for complete SOC compliance checklist.
+
+### What is SPAR?
+
+**SPAR (Serial Pulp Adventures Reborn)** is a campaign setting built on SiS—a pulp/noir setting with specific themes, factions, and narrative voice. SPAR content packs are provided as an example implementation, but SiS works with any setting or game system.
 
 ---
 
