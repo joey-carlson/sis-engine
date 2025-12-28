@@ -18,17 +18,27 @@ SiS Tool Engine is a **pressure-driven campaign management system** for tabletop
 
 Think of it as your campaign's memory and conscience—tracking what can't be undone, surfacing what matters, and injecting complications that feel earned rather than arbitrary.
 
-### What is SPAR?
+### The SiS System
 
-**SPAR (Serial Pulp Adventures Reborn)** is a campaign setting built on the SiS system. It's one example of how to use SiS—a pulp/noir setting with specific themes, factions, and narrative voice.
+**Spirals in Spirals (SiS)** is the underlying framework—a system-agnostic approach to managing narrative pressure in any tabletop RPG. The core concept:
 
-The SiS Tool Engine is system-agnostic. You can use it with:
-- SPAR (pulp/noir campaigns)
-- D&D, GURPS, VtM, or other RPG systems
-- Your own homebrew settings
-- Any genre or tone
+- Pressure accumulates from player decisions
+- Consequences route through different channels (Attention, Obligation, Dependency, Reputation)
+- Critical moments emerge organically rather than being scheduled
+- The system tracks what you can't ignore
 
-SPAR content packs provide SPAR-specific complications and loot, but the underlying SiS engine works for any campaign.
+SiS works with any game system and any setting:
+- Fantasy (D&D, Pathfinder)
+- Modern/Horror (Call of Cthulhu, VtM)
+- Sci-fi (Traveller, Stars Without Number)
+- Your own homebrew
+- **SPAR** (pulp/noir, see below)
+
+### Example Setting: SPAR
+
+**SPAR (Serial Pulp Adventures Reborn)** is one campaign setting built on SiS—specifically a pulp/noir setting (1920s-1940s era) with themes of decay, corruption, and revelation. The SiS Tool Engine includes SPAR content packs as examples, but the engine itself is setting-neutral.
+
+You don't need to run SPAR to use SiS. You can create your own setting-specific content packs for your preferred genre.
 
 ---
 

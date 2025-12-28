@@ -134,7 +134,7 @@ class Campaign:
     ledger: List[Dict[str, Any]] = field(default_factory=list)
     sources: List[Source] = field(default_factory=list)
     prep_queue: List[PrepItem] = field(default_factory=list)
-    enabled_content_packs: List[str] = field(default_factory=lambda: ["data/core_complications.json", "data/core_loot_situations.json"])
+    enabled_content_packs: List[str] = field(default_factory=lambda: ["data/core_complications.json", "data/one_loot_table.json"])
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -443,8 +443,8 @@ def _render_prep_item(campaign: Campaign, item: PrepItem, show_unarchive: bool =
 
 def render_campaign_selector() -> None:
     """Campaign selector page (1 click to open campaign)."""
-    st.title("🎲 SPAR Campaigns")
-    st.caption("Manage multiple living campaigns with persistent state")
+    st.title("🎲 Campaign Manager")
+    st.caption("Manage multiple living campaigns with persistent state (powered by SiS)")
     
     # Action buttons
     col1, col2 = st.columns(2)

@@ -752,8 +752,8 @@ def main() -> None:
         return
     
     # Otherwise render generators workspace
-    st.title("SPAR Generators")
-    st.caption("Multi-domain generation (Events, Loot, etc.) and scenario validation. Not a product UI.")
+    st.title("SiS Generators")
+    st.caption("Multi-domain generation (Events, Loot, etc.) powered by Spirals in Spirals engine. Development harness.")
     
     # Campaign Context Strip (v0.3: Faction Influence + v0.4: Multi-pack display)
     # Ensure context is loaded when campaign is selected

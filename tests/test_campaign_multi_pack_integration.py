@@ -14,7 +14,7 @@ from spar_campaign import CampaignState
 
 
 def test_campaign_default_has_core_pack():
-    """New campaigns default to both core event and loot packs."""
+    """New campaigns default to core event pack and One Loot Table."""
     campaign = Campaign(
         campaign_id="test_123",
         name="Test Campaign",
@@ -22,8 +22,8 @@ def test_campaign_default_has_core_pack():
         last_played="2025-01-01T00:00:00",
     )
     
-    # Multi-generator pack system v1.0: defaults include both core packs
-    assert campaign.enabled_content_packs == ["data/core_complications.json", "data/core_loot_situations.json"]
+    # Multi-generator pack system v1.0: defaults to core_complications + one_loot_table
+    assert campaign.enabled_content_packs == ["data/core_complications.json", "data/one_loot_table.json"]
     assert len(campaign.enabled_content_packs) == 2
 
 
