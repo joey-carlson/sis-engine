@@ -308,6 +308,46 @@ VoiceProfile → ContextBundle → tag_bias_weights → weighted_choice()
 **Content Location:**
 - `data/voice_profiles.json` - Profile definitions (future)
 
+### Bias Weight Specification (Designer-Level Tuning)
+
+**Magnitude Philosophy:**
+- Bias weights must be **subtle but perceptible**
+- Target: Noticeable over 1-2 sessions, not per-roll
+- Range: 5-15% per tag level
+- Compound effect when entries have multiple biased tags
+
+**Approved Weight Multipliers:**
+
+```python
+# Tag bias multipliers (applied to entry base weight during selection)
+BIAS_MULTIPLIERS = {
+    "heavy": 1.15,    # 15% boost - strongest emphasis
+    "moderate": 1.10, # 10% boost - noticeable accent
+    "light": 1.05,    # 5% boost - subtle nudge
+}
+```
+
+**Compounding Example:**
+```
+Entry with tags ["opportunity", "visibility", "cost"]
+Profile: Transactional (heavy: opportunity/cost, moderate: visibility)
+
+Base weight: 1.0
+Voice weight: 1.0 × 1.15 (opportunity) × 1.15 (cost) × 1.10 (visibility)
+            = 1.0 × 1.46 = 1.46
+
+Result: 46% more likely to be selected than unbiased entry
+```
+
+**Rationale:**
+- Single heavy tag: 15% boost (barely noticeable)
+- Two heavy tags: 32% boost (starting to feel thematic)
+- Three heavy tags: 52% boost (clearly emphasized)
+- Variety preserved: unbiased entries still selected ~40% of time
+
+**Anti-Pattern Guard:**
+If >70% of generated results share the same tags, bias is too strong. Reduce multipliers.
+
 ### Integration Pattern (Future Implementation)
 
 ```python
@@ -319,15 +359,15 @@ def compute_context_bundle(
     # Existing severity weights from pressure
     severity_weights = calculate_severity_weights(state.pressure)
     
-    # NEW: Tag bias from voice profile
+    # NEW: Tag bias from voice profile (subtle multipliers)
     tag_bias_weights = {}
     if voice_profile:
         for tag in voice_profile.tag_bias.heavy:
-            tag_bias_weights[tag] = 2.0  # Strong emphasis
+            tag_bias_weights[tag] = 1.15  # 15% boost
         for tag in voice_profile.tag_bias.moderate:
-            tag_bias_weights[tag] = 1.5  # Moderate emphasis
+            tag_bias_weights[tag] = 1.10  # 10% boost
         for tag in voice_profile.tag_bias.light:
-            tag_bias_weights[tag] = 1.2  # Subtle emphasis
+            tag_bias_weights[tag] = 1.05  # 5% boost
     
     return ContextBundle(
         # ... existing fields ...
@@ -352,25 +392,28 @@ def compute_context_bundle(
 - 30% Attention → Resources draw eyes
 - 10% Other → Variety
 
-**Tag Bias Application:**
+**Tag Bias Application (Subtle Multipliers):**
 ```
 Available loot entries after filtering: 10
-- Entry A: tags=["opportunity", "visibility"]
-  Base weight: 1.0
-  Voice weight: 1.0 * 2.0 (opportunity=heavy) * 1.5 (visibility=moderate) = 3.0
-  
-- Entry B: tags=["information", "cost"]
-  Base weight: 1.0
-  Voice weight: 1.0 * 1.2 (information=light) * 2.0 (cost=heavy) = 2.4
-  
-- Entry C: tags=["hazard", "terrain"]
-  Base weight: 1.0
-  Voice weight: 1.0 * 1.0 (no bias) = 1.0
 
-Weighted selection favors A > B > C
+Entry A: tags=["opportunity", "visibility"]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.15 (opportunity=heavy) × 1.10 (visibility=moderate)
+             = 1.0 × 1.265 = 1.27
+  
+Entry B: tags=["information", "cost"]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.05 (information=light) × 1.15 (cost=heavy)
+             = 1.0 × 1.208 = 1.21
+  
+Entry C: tags=["hazard", "terrain"]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.0 (no bias) = 1.0
+
+Weighted selection slightly favors A > B > C
 ```
 
-**Result:** Transactional campaigns see more opportunity-with-cost entries, fewer pure hazards.
+**Result:** Transactional campaigns see ~27% more opportunity-with-visibility loot, ~21% more cost-information loot. Hazards still appear but less frequently. Over 5-10 rolls, the Transactional feel emerges without dominating.
 
 ---
 
@@ -381,22 +424,29 @@ Weighted selection favors A > B > C
 - 25% Reputation → Actions echo
 - 15% Other
 
-**Tag Bias Application:**
+**Tag Bias Application (Subtle Multipliers):**
 ```
 Available event entries: 15
-- "Gear Failure" [attrition, hazard]
-  Voice weight: 1.0 * 2.0 (attrition=heavy) * 2.0 (hazard=heavy) = 4.0
-  
-- "Rival Interferes" [social_friction, reinforcements]
-  Voice weight: 1.0 * 1.5 (social_friction=moderate) = 1.5
-  
-- "Sudden Opening" [opportunity, positioning]
-  Voice weight: 1.0 * 1.2 (opportunity=light) = 1.2
 
-Weighted selection heavily favors "Gear Failure"
+"Gear Failure" [attrition, hazard]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.15 (attrition=heavy) × 1.15 (hazard=heavy)
+             = 1.0 × 1.32 = 1.32
+  
+"Rival Interferes" [social_friction, reinforcements]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.10 (social_friction=moderate) × 1.0 (no bias)
+             = 1.0 × 1.10 = 1.10
+  
+"Sudden Opening" [opportunity, positioning]
+  Base weight: 1.0
+  Voice weight: 1.0 × 1.05 (opportunity=light) × 1.0 (no bias)
+             = 1.0 × 1.05 = 1.05
+
+Weighted selection slightly favors Gear Failure > Rival > Opening
 ```
 
-**Result:** Erosion campaigns feel brittle, unreliable, crumbling.
+**Result:** Erosion campaigns see ~32% more system-failure events, ~10% more social complications. Opportunities still occur but less frequently. The campaign feels brittle and unreliable without monotony.
 
 ---
 
