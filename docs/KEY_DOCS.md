@@ -5,14 +5,14 @@ This project is governed by a small set of documents. If you are new to the repo
 ## For Users (Start Here)
 
 1. **USER_GUIDE.md** (`/docs/USER_GUIDE.md`)
-   High-level overview for GMs and campaign runners. Explains what SPAR Tool Engine is, how it works (SOC and Pressure Spirals), common use cases, and 5-minute quickstart. Read this first if you're new.
+   High-level overview for GMs and campaign runners. Explains what SiS Tool Engine is, how it works (SOC and Pressure Spirals), common use cases, and 5-minute quickstart. Read this first if you're new.
 
 ## Core governance
 
-1. **SPAR Tool Engineering Rules v0.1**  
+1. **SiS Tool Engineering Rules v0.1**
    Process rules for architecture, implementation, testing, and versioning.
 
-2. **SPAR Engine v0.1 Contract (Encounter Complications)**  
+2. **SiS Engine v0.1 Contract (Encounter Complications)**
    Authoritative interface/behavior contract for the engine core.
 
 ## Tooling

@@ -5,7 +5,7 @@
 
 ## What Are Campaigns?
 
-Campaigns in SPAR Tool Engine are persistent world-state tracking systems that capture long-term consequences across multiple sessions. They transform one-shot complications into evolving narrative arcs.
+Campaigns in SiS Tool Engine are persistent world-state tracking systems that capture long-term consequences across multiple sessions. They transform one-shot complications into evolving narrative arcs.
 
 ### Why Use Campaigns?
 

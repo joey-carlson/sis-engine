@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document describes the technical architecture of Campaign integration with SPAR Tool Engine. It covers data models, flow patterns, persistence, and design decisions.
+This document describes the technical architecture of Campaign integration with SiS Tool Engine. It covers data models, flow patterns, persistence, and design decisions.
 
 ## System Components
 
@@ -852,4 +852,4 @@ All campaign code follows:
 
 **Architecture Version**: 0.1  
 **Last Reviewed**: 2025-12-25  
-**Maintainer**: SPAR Tool Engine Team
+**Maintainer**: SiS Tool Engine Team

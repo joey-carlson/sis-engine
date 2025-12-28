@@ -1,4 +1,4 @@
-# SPAR Tool Parking Lot (Post-v1.0)
+# SiS Tool Parking Lot (Post-v1.0)
 
 _Last updated: 2025-12-28_
 
@@ -51,7 +51,7 @@ This is the single source of truth for **deferred** work. Everything here is opt
 **Notes:** No new knobs or steps, just reframing. Aligns with SOC + Spirals philosophy.
 
 ### 5) Story-Facing Exports Emphasizing Pressure & Irreversibility (Spiral-Native Framing)
-**Why:** SPAR campaign history should read as "Here is how the world hardened over time," not just chronological events.
+**Why:** SiS campaign history should read as "Here is how the world hardened over time," not just chronological events.
 **What:** Evolve session and campaign exports to foreground lasting consequences, newly activated Spirals, and irreversible changes.
 - Add structural sections: "Lasting Consequences", "New Pressures Introduced", "Escalation Signals"
 - Session exports answer: What changed that can't be ignored? Who cares now? What pressure shifted?
