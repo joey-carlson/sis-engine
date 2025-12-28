@@ -8,7 +8,106 @@ This document serves the same role as a ClineRules file: it defines how work is 
 
 ---
 
-## 00 – General Operating Principles
+## 00 – Self-Organized Criticality (SOC) Foundation
+
+**Core Philosophy:** SPAR does not decide what happens. SPAR decides when accumulated pressure can no longer be ignored.
+
+SPAR is built on Self-Organized Criticality principles. This is not optional decoration—it is the load-bearing structure that makes procedural generation feel emergent rather than arbitrary.
+
+### What SOC Means in SPAR Terms
+
+Systems that:
+1. **Accumulate pressure gradually** from player decisions and campaign state
+2. **Release pressure in uneven bursts** (many small, few large outcomes)
+3. **Self-organize without external tuning** (no GM-controlled escalation dials)
+4. **Naturally settle near critical thresholds** (tension maintained, not eliminated)
+5. **Produce non-linear effects** (small actions can trigger big releases; big actions might do little)
+
+**Metaphor:** Sandpile. You don't decide when an avalanche happens. You just keep adding grains.
+
+### SOC Compliance Checklist
+
+Any new feature must satisfy these non-negotiable properties:
+
+**1. Pressure accumulates implicitly**
+- Builds from play decisions, not GM manual adjustment
+- Emerges from campaign state (heat, faction attention, scars, dependency)
+- Observable but not directly steerable
+
+**2. Release is uneven (heavy-tailed distribution)**
+- Many small outcomes, fewer medium ones, rare large ones
+- Severity sampling must preserve power-law shape
+- Tests must validate distribution properties
+
+**3. Big outcomes feel earned, not triggered**
+- No "boss fight at level 5" scheduling
+- No deterministic milestone rewards
+- Cutoffs fire rarely and convert to narrative beats
+- Critical moments emerge from accumulated context
+
+**4. No explicit tuning knobs exposed**
+- Expose inputs (presets), not outcomes (sliders)
+- Calm/Normal/Spiky are modes, not scalar dials
+- Voice Profiles bias selection, they don't control results
+- Campaign context is advisory, not deterministic
+
+**5. Local actions have non-local effects**
+- Small decisions can cascade unpredictably
+- Loot relieves pressure locally while spiking it elsewhere
+- Faction reactions delay across sessions
+- Infrastructure dependencies create vulnerability chains
+
+### SOC Violation Patterns (Red Flags)
+
+Watch for these anti-patterns that would compromise SOC:
+- ❌ Hard thresholds exposed to GMs for tuning
+- ❌ Guaranteed "big moments" scheduling
+- ❌ Linear progression systems (level gates, reward ladders)
+- ❌ Mode switches that rewrite underlying math
+- ❌ Content gating by player tier or campaign phase
+- ❌ Deterministic milestone triggers
+
+### The Critical Test
+
+Before adding any new feature, ask:
+
+**"Does this add pressure, or does it explain pressure?"**
+- If it **explains** → probably SOC-safe (diagnostics, context, advisory bias)
+- If it **controls** → suspect (hard thresholds, deterministic triggers, outcome dials)
+
+**"Does this bias inputs, or control outputs?"**
+- If it **biases inputs** → SOC-safe (Voice Profiles, campaign context)
+- If it **controls outputs** → SOC violation (guaranteed outcomes, forced escalation)
+
+### SOC in Practice (Current System Validation)
+
+**Event Generator:** ✅ SOC-compliant
+- Pressure from scene constraints + campaign state
+- Heavy-tailed severity sampling
+- Cutoffs for finite-size safety
+- Many small events, rare critical ones
+
+**Loot Generator:** ✅ SOC-compliant
+- Pressure redistribution (relief ↔ obligation)
+- Conservative baseline prevents runaway escalation
+- Non-deterministic resource shocks
+- No reward tables or linear progression
+
+**Campaign System:** ✅ SOC-compliant
+- Pressure/heat accumulate from play outcomes
+- Faction attention emerges from visibility
+- Scars persist without manual tracking
+- Advisory pattern throughout (suggests, never enforces)
+
+**Voice Profiles:** ✅ SOC-safe
+- Bias which pressure channels fill first
+- Don't control when/how pressure releases
+- Subtle magnitude (5-15% range)
+- "Reshaping surface, not changing gravity"
+
+---
+
+## 01 – General Operating Principles
 
 - Design before implementation. Architecture and contracts come first.
 - Prefer **simple, inspectable systems** over clever or opaque solutions.

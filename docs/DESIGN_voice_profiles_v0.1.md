@@ -511,27 +511,46 @@ Campaign → Context Bundle → Generator
 
 ## Alignment with SPAR Tool Engineering Rules
 
-**Rule 00 - General Principles:**
+**Rule 00 - SOC Foundation:**
+✅ Pressure accumulates implicitly (profiles don't add pressure, just route it)  
+✅ Release remains uneven (SOC severity sampling unchanged)  
+✅ Big outcomes feel earned (profiles can't trigger guaranteed results)  
+✅ No explicit tuning knobs (presets only, no sliders)  
+✅ Non-local effects preserved (profiles bias which channels fill, not when they break)
+
+**SOC Compliance Test:**
+- **"Does this add pressure, or explain pressure?"** → Explains (advisory bias)
+- **"Does this bias inputs, or control outputs?"** → Biases inputs (tag selection)
+- **"Is this reshaping surface or changing gravity?"** → Reshaping surface
+
+**Voice Profiles Maintain SOC Because:**
+- They don't control when pressure releases (still emergent from play)
+- They don't guarantee outcomes (just shift probabilities 5-15%)
+- They don't bypass heavy-tail distributions (SOC sampling untouched)
+- They don't eliminate variety (unbiased entries still ~40% of selections)
+- They bias which pressure channels accumulate first, not how they cascade
+
+**Rule 01 - General Principles:**
 ✅ Design before implementation (this document)  
 ✅ Simple, inspectable system (presets, not knobs)  
 ✅ Alternatives considered (see rejected approaches below)
 
-**Rule 01 - Documentation & Versioning:**
+**Rule 02 - Documentation & Versioning:**
 ✅ Architecture separate from implementation  
 ✅ Version in header (v0.1), not filename  
 ✅ Historical decisions preserved
 
-**Rule 02 - Core Engine Design:**
+**Rule 03 - Core Engine Design:**
 ✅ System-agnostic (Spirals work for any RPG)  
 ✅ No mechanics, only situation emphasis  
 ✅ Advisory pattern maintained
 
-**Rule 04 - Content & Adapters:**
+**Rule 05 - Content & Adapters:**
 ✅ Profiles bias selection, not distributions  
 ✅ Content packs unchanged  
 ✅ Cutoff logic untouched
 
-**Rule 08 - Collaboration Contract:**
+**Rule 09 - Collaboration Contract:**
 ✅ Flags risks: Tag bias could feel "samey" if over-tuned  
 ✅ Tradeoff: Flavor vs. variety must be balanced in implementation
 
