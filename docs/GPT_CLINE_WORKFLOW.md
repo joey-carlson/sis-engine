@@ -4,7 +4,7 @@ Date: 2025-12-22
 
 ## Overview
 
-This document establishes the collaborative workflow between ChatGPT (Designer persona) and Cline (Developer/QA persona) for the SPAR Tool Engine project.
+This document establishes the collaborative workflow between ChatGPT (Designer persona) and Cline (Developer/QA persona) for the SiS Tool Engine project.
 
 ## Roles and Responsibilities
 

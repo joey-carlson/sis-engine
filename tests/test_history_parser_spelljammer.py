@@ -22,7 +22,7 @@ from streamlit_harness.history_parser import (
 
 
 # Spelljammer campaign history (abbreviated for testing)
-SPELLJAMMER_HISTORY = """# Spelljammer Campaign History for SPAR Import
+SPELLJAMMER_HISTORY = """# Spelljammer Campaign History for SiS Import
 
 Notes:
 - Dates below are synthetic "Log Dates" for parsing tests

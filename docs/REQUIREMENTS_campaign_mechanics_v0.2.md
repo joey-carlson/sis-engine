@@ -318,7 +318,7 @@ campaign_state = apply_campaign_delta(campaign_state, delta)
 ## Related Documents
 
 - `docs/REQUIREMENTS_campaign_mechanics_v0.1.md` - Original v0.1 design
-- `docs/contract.md` - SPAR Engine v0.1 Contract (unchanged)
+- `docs/contract.md` - SiS Engine v0.1 Contract (unchanged)
 - `docs/engineering_rules.md` - Implementation standards
 - `examples/campaign_mechanics_v0.2_demo.py` - v0.2 demonstration
 - `spar_campaign/` - Implementation modules

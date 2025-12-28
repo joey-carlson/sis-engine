@@ -20,7 +20,7 @@ Voice Profiles are campaign-level presets that bias which **Spiral pressure type
 
 ## What Are Spirals? (Disambiguation)
 
-### Two Meanings of "Spiral" in SPAR
+### Two Meanings of "Spiral" in SiS
 
 1. **Spiral of Revelation™** (SPAR RPG Core Framework)
    - The 8-step narrative structure: Awakening → Catalyst → Threshold → Confrontation → Abyss → Epiphany → Ascent → Transformation
@@ -509,7 +509,7 @@ Campaign → Context Bundle → Generator
 
 ---
 
-## Alignment with SPAR Tool Engineering Rules
+## Alignment with SiS Tool Engineering Rules
 
 **Rule 00 - SOC Foundation:**
 ✅ Pressure accumulates implicitly (profiles don't add pressure, just route it)  
@@ -661,4 +661,4 @@ When this design is approved and implementation begins:
 
 **Design Version:** v0.1 (Draft)  
 **Next Step:** Designer review and approval before implementation  
-**Maintainer:** SPAR Tool Engine Team
+**Maintainer:** SiS Tool Engine Team

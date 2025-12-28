@@ -83,7 +83,7 @@ def analyze_campaign_rhythm(normal_report, spiky_report):
     
     lines.append("## Executive Summary")
     lines.append("")
-    lines.append("This analysis validates whether SPAR naturally creates pressure/release/recovery/renewed-tension")
+    lines.append("This analysis validates whether SiS naturally creates pressure/release/recovery/renewed-tension")
     lines.append("rhythms across multiple scenes WITHOUT requiring explicit campaign-level rules.")
     lines.append("")
     
@@ -254,7 +254,7 @@ def analyze_campaign_rhythm(normal_report, spiky_report):
     lines.append("- Ready for next design frontier:")
     lines.append("  - Campaign-level consequence mechanics (long-term clocks, scars, factions), OR")
     lines.append("  - Content richness passes (loot, factions, narrative arcs), OR")
-    lines.append("  - SPAR ↔ D&D adapter formalization")
+    lines.append("  - SiS ↔ D&D adapter formalization")
     lines.append("")
     lines.append("If rhythm needs adjustment:")
     lines.append("- Document specific issues")

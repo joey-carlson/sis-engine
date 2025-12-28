@@ -1,6 +1,6 @@
 {
   "$schema": "Scenario Definition Template v1.0",
-  "$description": "Template for creating SPAR Engine validation scenarios. Copy this file and modify the fields below.",
+  "$description": "Template for creating SiS Engine validation scenarios. Copy this file and modify the fields below.",
   
   "schema_version": "1.0",
   "execution_mode": "matrix",

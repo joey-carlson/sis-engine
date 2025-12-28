@@ -5,7 +5,7 @@
 
 ## Overview
 
-Successfully converted 400+ D&D items from community-sourced "One Loot Table" CSV into SPAR's consequence-driven loot format. The pack now serves as the default loot source for all new campaigns.
+Successfully converted 400+ D&D items from community-sourced "One Loot Table" CSV into SiS's consequence-driven loot format. The pack now serves as the default loot source for all new campaigns.
 
 ## What Was Built
 
@@ -35,11 +35,11 @@ Successfully converted 400+ D&D items from community-sourced "One Loot Table" CS
 
 **Philosophy:** Hybrid Translation (Option B)
 - Preserve item essence and descriptions
-- Add SPAR consequence-driven tags and severity scaling
+- Add SiS consequence-driven tags and severity scaling
 - Provide GM guidance for system-agnostic adaptation
 - Keep mechanical details as reference, not requirements
 
-### Rarity → SPAR Mapping
+### Rarity → SiS Mapping
 
 | D&D Rarity | Severity Band | Weight | Base Tags | Social Impact |
 |------------|--------------|---------|-----------|---------------|
@@ -70,7 +70,7 @@ Each item includes:
 ## Design Decisions
 
 ### 1. Why Hybrid Translation?
-Converts D&D items into SPAR situations while preserving enough detail for GMs to translate into their specific game systems. Balances SPAR's narrative philosophy with practical GM utility.
+Converts D&D items into SiS situations while preserving enough detail for GMs to translate into their specific game systems. Balances SiS's narrative philosophy with practical GM utility.
 
 ### 2. Why Not Pure Narrative?
 Pure narrative conversion would lose too much information. GMs asked for guidance on adapting classic items to various systems - hybrid approach delivers this.
@@ -90,7 +90,7 @@ Only rare+ items create social consequences. Mundane items = mundane consequence
 - Pack loads via content.py: ✓ 944 entries
 - All loot generation tests pass: ✓ 17/17
 - All campaign integration tests pass: ✓ 9/9
-- Structure matches SPAR format: ✓ Valid
+- Structure matches SiS format: ✓ Valid
 - GM guidance quality: ✓ Comprehensive
 
 ### Sample Quality Check
@@ -147,7 +147,7 @@ Only rare+ items create social consequences. Mundane items = mundane consequence
 - Pack loads <100ms
 
 ✅ **Design:**
-- Preserves SPAR consequence-driven philosophy
+- Preserves SiS consequence-driven philosophy
 - Scales social friction with rarity appropriately
 - Provides practical GM utility
 - Maintains system-agnostic approach
@@ -175,4 +175,4 @@ See `docs/PARKING_LOT.md` item #4:
 
 ## Conclusion
 
-One Loot Table successfully converted and integrated as default loot pack. GMs now have immediate access to 944 classic fantasy items with system-agnostic adaptation guidance, while maintaining SPAR's narrative-first philosophy.
+One Loot Table successfully converted and integrated as default loot pack. GMs now have immediate access to 944 classic fantasy items with system-agnostic adaptation guidance, while maintaining SiS's narrative-first philosophy.

@@ -735,4 +735,4 @@ Status: ✓ Balanced (each >= 20%)
 
 **Requirements Version:** v0.1 (Draft)  
 **Next Step:** Designer review, then implementation  
-**Maintainer:** SPAR Tool Engine Team
+**Maintainer:** SiS Tool Engine Team

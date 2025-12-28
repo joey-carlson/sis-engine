@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Convert One Loot Table CSV to SPAR loot pack format.
+Convert One Loot Table CSV to SiS loot pack format.
 Applies rarity-based conversion strategy with GM guidance.
 """
 
@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 
-# Rarity mapping to SPAR parameters
+# Rarity mapping to SiS parameters
 RARITY_MAP = {
     "Mundane": {
         "severity_band": [1, 3],
@@ -117,7 +117,7 @@ def extract_d_and_d_mechanics(properties: str, requirements: str, category: str)
 
 
 def generate_fiction_prompt(item_name: str, description: str, rarity: str, category: str) -> str:
-    """Generate SPAR-style fiction prompt from D&D item."""
+    """Generate SiS-style fiction prompt from D&D item."""
     # Extract narrative essence from description
     desc_lower = description.lower()
     
@@ -135,7 +135,7 @@ def generate_fiction_prompt(item_name: str, description: str, rarity: str, categ
 
 
 def generate_sensory_details(description: str, category: str, rarity: str) -> List[str]:
-    """Generate SPAR sensory details from item description."""
+    """Generate SiS sensory details from item description."""
     sensory = []
     
     # Add category-specific sensory if available
@@ -156,7 +156,7 @@ def generate_sensory_details(description: str, category: str, rarity: str) -> Li
 
 
 def generate_immediate_choices(category: str, rarity: str) -> List[str]:
-    """Generate SPAR immediate choice options."""
+    """Generate SiS immediate choice options."""
     # Get category-specific pattern if available
     if category in CATEGORY_ENHANCEMENTS:
         pattern = CATEGORY_ENHANCEMENTS[category]["choice_pattern"]
@@ -212,7 +212,7 @@ def generate_gm_guidance(item_name: str, description: str, category: str,
 
 def convert_csv_to_spar(csv_path: str, output_path: str):
     """Main conversion function."""
-    print(f"Converting {csv_path} to SPAR format...")
+    print(f"Converting {csv_path} to SiS format...")
     
     entries = []
     item_count = 0
@@ -301,7 +301,7 @@ def convert_csv_to_spar(csv_path: str, output_path: str):
             "author": "Converted from D&D One Loot Table",
             "item_count": item_count,
             "source": "Community-compiled D&D loot table",
-            "conversion_notes": "Items converted to SPAR consequence-driven format with GM adaptation guidance. Rarity scales from mundane utility to legendary reputation effects."
+            "conversion_notes": "Items converted to SiS consequence-driven format with GM adaptation guidance. Rarity scales from mundane utility to legendary reputation effects."
         },
         "entries": entries
     }

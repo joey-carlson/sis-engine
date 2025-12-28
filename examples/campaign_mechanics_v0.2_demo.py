@@ -39,7 +39,7 @@ def run_v02_demo():
     """Run 8-scene campaign demonstrating v0.2 features."""
     
     print("=" * 80)
-    print("SPAR Campaign Mechanics v0.2 - Demonstration")
+    print("SiS Campaign Mechanics v0.2 - Demonstration")
     print("Structured Scars • Faction Tracking • Long-Arc Bands")
     print("=" * 80)
     print()

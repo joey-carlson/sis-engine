@@ -19,7 +19,7 @@
 
 ### Major Release: Campaign Memory System
 
-SPAR Tool Engine v1.0 delivers a complete campaign memory system integrating event generation with persistent campaign state. The generator now "remembers" your campaign through faction attention tracking, deterministic influence scoring, and curated narrative exports.
+SiS Tool Engine v1.0 delivers a complete campaign memory system integrating event generation with persistent campaign state. The generator now "remembers" your campaign through faction attention tracking, deterministic influence scoring, and curated narrative exports.
 
 **Event Generator UI v1.0 (New):**
 - 3-layer progressive disclosure hierarchy separating GM controls from diagnostics
@@ -41,7 +41,7 @@ SPAR Tool Engine v1.0 delivers a complete campaign memory system integrating eve
 - UI helper text: "Environmental constraints, not genre"
 - Works equally for fantasy, sci-fi, noir, horror, post-apocalyptic, space opera
 - All 156 tests passing after migration
-- Aligns SPAR positioning as truly genre-agnostic system
+- Positions SPAR correctly as one campaign setting among many system
 
 **Campaign Management (Complete):**
 - Multi-campaign manager with living state tracking

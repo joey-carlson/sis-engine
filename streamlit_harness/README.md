@@ -1,6 +1,6 @@
 # Streamlit Harness (v0.1)
 
-Debug-first harness for the SPAR Engine v0.1.
+Debug-first harness for the SiS Engine v0.1.
 
 ## Run (zsh)
 

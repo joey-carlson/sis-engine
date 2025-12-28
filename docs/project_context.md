@@ -1,4 +1,4 @@
-# SPAR Procedural Engine – Project Context & Status
+# SiS Procedural Engine – Project Context & Status
 Version: v0.1-context
 Date: 2025-12-22
 
@@ -8,7 +8,7 @@ This project is the early-stage development of a **procedural encounter complica
 
 The guiding decision is:
 
-> **SPAR is the engine. Individual game systems (e.g., D&D) are adapters and content packs layered on top.**
+> **SiS is the engine. Individual game systems (e.g., D&D) are adapters and content packs layered on top.**
 
 This ensures long-term flexibility, reuse, and consistency across systems while keeping mechanics separate from procedural logic.
 
@@ -72,7 +72,7 @@ without entangling combat math or stat blocks.
 
 To prevent drift and technical debt, two foundational documents were created early:
 
-### 4.1 SPAR Engine v0.1 Contract
+### 4.1 SiS Engine v0.1 Contract
 Defines:
 - Inputs (scene context, state, selection filters)
 - Outputs (severity, effect vectors, fiction, state deltas)
@@ -83,7 +83,7 @@ This is the **authoritative engine interface**.
 
 ---
 
-### 4.2 SPAR Tool Engineering Rules v0.1
+### 4.2 SiS Tool Engineering Rules v0.1
 
 Modeled after a "ClineRules" file, this document defines:
 - Design philosophy
@@ -151,7 +151,7 @@ The engine is functional, deterministic, and safe by default with multiple inter
 
 ## 7. What Has *Not* Been Built Yet (By Design)
 
-- No system adapters (D&D mapping, SPAR-native mapping)
+- No system adapters (D&D mapping, setting-specific mapping)
 - No persistent campaign state across CLI runs
 - No content authoring UI
 - No React web interface (Streamlit serves as prototyping platform)

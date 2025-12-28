@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-This analysis validates whether SPAR naturally creates pressure/release/recovery/renewed-tension
+This analysis validates whether SiS naturally creates pressure/release/recovery/renewed-tension
 rhythms across multiple scenes WITHOUT requiring explicit campaign-level rules.
 
 ## Normal Mode Analysis
@@ -142,7 +142,7 @@ rhythms across multiple scenes WITHOUT requiring explicit campaign-level rules.
 
 ### Critical Question
 
-**Does SPAR feel like a living system over time?**
+**Does SiS feel like a living system over time?**
 
 **Answer**: **Partially**
 
@@ -182,7 +182,7 @@ If rhythm is sufficient:
 - Ready for next design frontier:
   - Campaign-level consequence mechanics (long-term clocks, scars, factions), OR
   - Content richness passes (loot, factions, narrative arcs), OR
-  - SPAR ↔ D&D adapter formalization
+  - SiS ↔ D&D adapter formalization
 
 If rhythm needs adjustment:
 - Document specific issues

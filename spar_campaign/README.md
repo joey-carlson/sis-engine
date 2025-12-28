@@ -1,4 +1,4 @@
-# SPAR Campaign Mechanics v0.2
+# SiS Campaign Mechanics v0.2
 
 **Optional campaign-level state tracking layer**
 
@@ -6,7 +6,7 @@
 
 ## Purpose
 
-This module provides campaign-scale state management that operates above the SPAR Engine, tracking pressure and consequences across multiple scenes without modifying engine internals.
+This module provides campaign-scale state management that operates above the SiS Engine, tracking pressure and consequences across multiple scenes without modifying engine internals.
 
 **Design principles**:
 - v0.1: "Scene mechanics create pressure. Campaign mechanics remember it."
@@ -246,7 +246,7 @@ All future work must preserve:
 
 - `docs/REQUIREMENTS_campaign_mechanics_v0.2.md` - v0.2 design (current)
 - `docs/REQUIREMENTS_campaign_mechanics_v0.1.md` - v0.1 design (foundation)
-- `docs/contract.md` - SPAR Engine v0.1 Contract (unchanged)
+- `docs/contract.md` - SiS Engine v0.1 Contract (unchanged)
 - `docs/engineering_rules.md` - Implementation standards
 - `examples/campaign_mechanics_v0.2_demo.py` - v0.2 demonstration
 - `examples/campaign_mechanics_demo.py` - v0.1 demonstration

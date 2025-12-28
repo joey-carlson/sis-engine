@@ -166,6 +166,6 @@ Options:
 2. **Use workaround**: Run phases manually in UI, tracking state across runs
 3. **Defer campaign validation** until runner supports it
 
-Given the task's importance for determining SPAR's next design frontier, Option 1 seems warranted.
+Given the task's importance for determining SiS's next design frontier, Option 1 seems warranted.
 
 What would you like me to do?

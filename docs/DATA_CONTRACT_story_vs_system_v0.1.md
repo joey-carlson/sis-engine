@@ -438,7 +438,7 @@ Answer YES to any:
 - Does it feed engine calculations?
 - Is it needed for deterministic replay?
 - Would changing it alter future generation?
-- Does it require understanding SPAR's implementation?
+- Does it require understanding SiS's implementation?
 
 If a field serves both, store in ledger but choose appropriate lens for each export type.
 
@@ -529,7 +529,7 @@ Games create two parallel records:
 1. **The Story**: What fictionally happened in the world
 2. **The Process**: How the game mechanics resolved it
 
-SPAR is a tool that generates The Process (events, complications, pressure).  
+SiS is a tool that generates The Process (events, complications, pressure).  
 The GM and players create The Story (how they responded, what it meant).
 
 The ledger must store both because:
@@ -543,7 +543,7 @@ But exports must choose because:
 
 ### The Read-Aloud Test
 
-If you can't read something aloud at your game table without needing to explain SPAR's internal mechanics, it's system-facing.
+If you can't read something aloud at your game table without needing to explain SiS's internal mechanics, it's system-facing.
 
 **System-facing**: "Severity 7.2, cutoff rate 0.3, pressure +4"  
 **Story-facing**: "The ambush forced a desperate retreat. Guards are now actively searching."

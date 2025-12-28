@@ -14,7 +14,7 @@ Version History:
 ## 1. Purpose & Scope
 
 ### Objective
-Introduce an optional campaign-level mechanics layer that tracks long-term pressure and consequences across multiple scenes without modifying core SPAR Engine behavior.
+Introduce an optional campaign-level mechanics layer that tracks long-term pressure and consequences across multiple scenes without modifying core SiS Engine behavior.
 
 ### Design Principle
 > Scene mechanics create pressure. Campaign mechanics remember it.
@@ -44,7 +44,7 @@ Introduce an optional campaign-level mechanics layer that tracks long-term press
 - Aftermath feels isolated rather than connected to campaign arc
 
 ### Gap Identified
-The SPAR Engine operates at scene timescale. We need a layer that operates at campaign timescale without replacing or overriding scene mechanics.
+The SiS Engine operates at scene timescale. We need a layer that operates at campaign timescale without replacing or overriding scene mechanics.
 
 ---
 
@@ -160,7 +160,7 @@ Campaign mechanics **MAY**:
          │
          ▼
 ┌─────────────────┐
-│  SPAR Engine    │ (generates events, untouched)
+│  SiS Engine     │ (generates events, untouched)
 └────────┬────────┘
          │
          ▼
@@ -352,7 +352,7 @@ This implementation is complete if:
 
 ## Related Documents
 
-- `docs/contract.md` - SPAR Engine v0.1 Contract (unchanged)
+- `docs/contract.md` - SiS Engine v0.1 Contract (unchanged)
 - `docs/engineering_rules.md` - Governs implementation approach
 - `examples/campaign_mechanics_demo.py` - Working demonstration
 - `spar_campaign/` - Implementation modules

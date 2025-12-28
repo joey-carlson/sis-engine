@@ -33,7 +33,7 @@ def run_campaign_demo():
     """Run a 6-scene campaign demonstrating long-term pressure tracking."""
     
     print("=" * 80)
-    print("SPAR Campaign Mechanics v0.1 - Demonstration")
+    print("SiS Campaign Mechanics v0.1 - Demonstration")
     print("=" * 80)
     print()
     

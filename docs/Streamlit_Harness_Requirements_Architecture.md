@@ -10,7 +10,7 @@ Version History:
 
 ## 1) Purpose
 
-Build a **debug-first Streamlit harness** for the SPAR Engine. This harness is not a "product UI," it is a **development and tuning instrument** that makes it easy to validate:
+Build a **debug-first Streamlit harness** for the SiS Engine. This harness is not a "product UI," it is a **development and tuning instrument** that makes it easy to validate:
 
 - severity distribution behavior (calm/normal/spiky + morphology sliders)
 - cutoff frequency and cutoff resolution behavior
