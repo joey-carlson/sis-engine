@@ -589,7 +589,7 @@ def render_user_guide() -> None:
             st.info("User guide should be available at: docs/USER_GUIDE.md")
     else:
         st.warning("User guide not found at docs/USER_GUIDE.md")
-        st.info("The user guide provides an overview of SPAR Tool Engine, how it works, and common use cases.")
+        st.info("The user guide provides an overview of SiS Tool Engine, how it works, and common use cases.")
 
 
 def run_campaign_scenario(
@@ -734,7 +734,7 @@ def main() -> None:
         index=st.session_state.mode_index,
         horizontal=True,
         label_visibility="collapsed",
-        help="Campaign Manager: Multi-campaign management with living state. Generators: Multi-domain generation (Events, Loot, etc.) with scenario validation. User Guide: Learn about SPAR Tool Engine."
+        help="Campaign Manager: Multi-campaign management with living state. Generators: Multi-domain generation (Events, Loot, etc.) with scenario validation. User Guide: Learn about SiS Tool Engine."
     )
     
     # Update index when user changes mode

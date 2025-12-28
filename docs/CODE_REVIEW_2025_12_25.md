@@ -5,8 +5,8 @@
 
 ## Review Standards Applied
 
-- `docs/engineering_rules.md` - SPAR Tool Engineering Rules v0.1
-- `docs/contract.md` - SPAR Engine v0.1 Contract
+- `docs/engineering_rules.md` - SiS Tool Engineering Rules v0.1
+- `docs/contract.md` - SiS Engine v0.1 Contract
 - `ClineRules.txt` - General engineering best practices
 
 ---

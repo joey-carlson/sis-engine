@@ -1,6 +1,6 @@
 <!--
 Version History:
-- v0.1 (2025-12-28): Initial user-facing guide (originally as SPAR Tool Engine, corrected to SiS)
+- v0.1 (2025-12-28): Initial user-facing guide
 -->
 
 # SiS Tool Engine: User Guide
